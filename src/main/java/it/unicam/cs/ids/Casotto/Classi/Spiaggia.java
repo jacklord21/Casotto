@@ -18,7 +18,7 @@ import java.util.Optional;
  *
  */
 @Service
-public class DefaultGestoreSpiaggia {
+public class Spiaggia {
 
     @Autowired
     OmbrelloneRepository ombrelloneRepository;
@@ -80,9 +80,10 @@ public class DefaultGestoreSpiaggia {
      * @param durata {@link Durata} temporale della prenotazione
      * @return una {@link List} contenente gli ombrelloni che risultano liberi in base ai parametri passati
      */
-    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata){
+    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){
         List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();
         ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));
+        ombrelloni.removeIf(ombrellone -> ombrellone.getNumero()!=numPersone);
         return ombrelloni;
     }
 
@@ -102,9 +103,12 @@ public class DefaultGestoreSpiaggia {
             throw new NullPointerException("I parametri passati sono nulli");
         }
         for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){
-            if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){
+            if(prenotazione.getDurata() == Durata.INTERO)
                 return true;
-            }
+            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
+                return true;
+            else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)
+                return true;
         }
         return false;
     }
@@ -172,4 +176,11 @@ public class DefaultGestoreSpiaggia {
     private boolean checkDurata(Prezzo prezzo, Durata durata){
         return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));
     }
+
+
+    public void updateQuantita(int nuovaQuantita, String oggetto) {
+        contatoreOggettiRepository.changeQuantita(nuovaQuantita, oggetto);
+    }
+
+
 }
