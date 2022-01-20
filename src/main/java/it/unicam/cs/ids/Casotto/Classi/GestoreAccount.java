@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class DefaultGestoreAccount {
+public class GestoreAccount {
 
     @Autowired
     AccountRepository accountRepository;
@@ -32,10 +32,14 @@ public class DefaultGestoreAccount {
      */
     public Account login(String email, String psw) {
         this.checkIsNull(email, psw);
+        Account result = null;
+
         if (accountRepository.existsByEmailIgnoreCase(email)) {
-            return accountRepository.findByEmailIgnoreCaseAndPassword(email, psw.hashCode());
+            result = accountRepository.findByEmailIgnoreCaseAndPassword(email, psw.hashCode());
         }
-        throw new IllegalArgumentException("L'email inserita non e' associata a nessun account");
+
+        return result;
+    //    throw new IllegalArgumentException("L'email inserita non e' associata a nessun account");
     }
 
     /**
@@ -54,7 +58,7 @@ public class DefaultGestoreAccount {
      */
     public boolean registration(Utente utente, Livello livello, String email, String psw){
         this.checkIsNull(utente, email, psw, livello);
-        if(accountRepository.existsByEmailIgnoreCase(email)){
+        if(accountRepository.existsByEmailIgnoreCase(email)) {
             return false;
         }
         utenteRepository.save(utente);

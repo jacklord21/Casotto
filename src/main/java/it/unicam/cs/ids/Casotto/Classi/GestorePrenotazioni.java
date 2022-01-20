@@ -14,13 +14,13 @@ import java.util.Objects;
  *
  */
 @Service
-public class DefaultGestorePrenotazioni{
+public class GestorePrenotazioni {
 
     @Autowired
     PrenotazioniRepository pr;
 
     @Autowired
-    DefaultGestoreSpiaggia gs;
+    Spiaggia gs;
 
     /**
      * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
