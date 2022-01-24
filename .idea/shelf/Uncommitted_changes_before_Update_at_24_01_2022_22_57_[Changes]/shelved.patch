@@ -1,0 +1,430 @@
+Index: src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java b/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java
+rename from src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java
+rename to src/main/java/it/unicam/cs/ids/Casotto/Casotto.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java	(date 1643022744120)
+@@ -1,10 +1,10 @@
+ package it.unicam.cs.ids.Casotto;
+ 
+ import it.unicam.cs.ids.Casotto.Classi.*;
+-import it.unicam.cs.ids.Casotto.Repository.AccountRepository;
+-import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
+-import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
+-import it.unicam.cs.ids.Casotto.Repository.UtenteRepository;
++import it.unicam.cs.ids.Casotto.Interazione.Acquisizione;
++import it.unicam.cs.ids.Casotto.Interazione.InteractionManager;
++import it.unicam.cs.ids.Casotto.Interazione.Menu;
++import it.unicam.cs.ids.Casotto.Repository.*;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.CommandLineRunner;
+ import org.springframework.boot.SpringApplication;
+@@ -12,64 +12,52 @@
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.stereotype.Controller;
+ 
+-import java.util.Scanner;
++import java.util.*;
+ 
+ @Controller
+ @SpringBootApplication
+-public class CasottoApplication {
++public class Casotto {
+ 
+ 	@Autowired
+ 	InteractionManager im;
+ 
+-	private static int menu() {
+-
+-		int choice;
+-		Scanner sc = new Scanner(System.in);
+-
+-		System.out.println("\nMenu'\n");
+-
+-		System.out.println("1. Registrazione");
+-		System.out.println("2. Login");
+-		System.out.println("3. Logout");
+-		System.out.println("4. Effettua una prenotazione");
+-		System.out.println("5. Visualizza storico prenotazione");
+-		System.out.println("6. Visualizza prenotazioni attive");
+-		System.out.println("0. Esci");
+-
+-		System.out.print("\nInsert a number: ");
+-		choice = sc.nextInt();
+-		return choice;
+-	}
+-
++	@Autowired
++	OmbrelloneRepository or;
+ 
+ 	public static void main(String[] args)  {
+-		SpringApplication.run(CasottoApplication.class, args);
++		SpringApplication.run(Casotto.class, args);
+ 	}
+ 
+ 	@Bean
+-	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or) {
++	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or, PrezzoRepository prr) {
+ 
+ 		return args -> {
+-
+-			int choice = menu();
++			String scelta = "";
++			Scanner sc = new Scanner(System.in);
++			Map<String, Map<String, Runnable>> menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
+ 
+-			while(true) {
+-				switch (choice) {
+-					case 1: im.registration();
+-						break;
+-					case 2: im.login();
+-						break;
+-					case 3: im.logout();
+-						break;
+-					case 4:
+-					case 5:
+-					case 6:
+-					case 0: System.exit(0);
+-					default:
+-						System.err.println("Error: invalid choice!!!");
++			while (true) {
++				System.out.println("\n\n\nMenu'\n");
++				for (Map.Entry<String, Map<String, Runnable>> e : menu.entrySet())
++					System.out.println(e.getKey() + ". " + Objects.requireNonNull(e.getValue().entrySet().stream().findFirst().orElse(null)).getKey());
++
++				do {
++					if (!scelta.isEmpty())
++						System.out.print("Scelta NON valida. Riprova: ");
++
++					System.out.print("\nInserisci un numero: ");
++					scelta = sc.next();
+ 				}
+-				choice = menu();
++				while (!menu.containsKey(scelta));
++
++				Objects.requireNonNull(menu.get(scelta).entrySet().stream().findFirst().orElse(null)).getValue().run();
++				menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
++				scelta = "";
+ 			}
+ 		};
+ 	}
++
++	private Menu cambiaMenu(Account account) {
++		return (account==null) ? Menu::menuInizio : (account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente : Menu::menuGestore;
++	}
+ }
+\ No newline at end of file
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.ContatoreOggettiRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.time.LocalDate;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\nimport java.util.Optional;\r\n\r\n/**\r\n * Classe che rappresenta un gestore spiaggia, che permette di effettuare le operazioni\r\n * connesse\r\n *\r\n */\r\n@Service\r\npublic class Spiaggia {\r\n\r\n    @Autowired\r\n    OmbrelloneRepository ombrelloneRepository;\r\n\r\n    @Autowired\r\n    PrezzoRepository prezzoRepository;\r\n\r\n    @Autowired\r\n    PrenotazioniRepository prenotazioneRepository;\r\n\r\n    @Autowired\r\n    ContatoreOggettiRepository contatoreOggettiRepository;\r\n\r\n    /**\r\n     * Metodo che calcola il prezzo totale di una prenotazione in base al prezzo dell'{@link Ombrellone} e alla\r\n     * quantit&agrave; di sdraie e lettini presenti nella prenotazione\r\n     *\r\n     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo totale\r\n     *\r\n     * @throws NullPointerException se la {@link Prenotazione} passata &egrave; nulla\r\n     *\r\n     * @return il prezzo totale della prenotazione\r\n     */\r\n    public double getPrezzoTotale(Prenotazione prenotazione){\r\n\r\n        if(Objects.isNull(prenotazione)) throw new NullPointerException(\"La prenotazione passata è nulla\");\r\n\r\n        double prezzoFinale = 0.0;\r\n        for(Ombrellone ombrellone: prenotazione.getOmbrelloni())\r\n            prezzoFinale += this.getPrezzoOmbrellone(ombrellone, prenotazione.getDataPrenotazione(), prenotazione.getDurata()).getPrezzo();\r\n\r\n        prezzoFinale += contatoreOggettiRepository.findByOggetto(\"Lettini\").getPrezzo()*prenotazione.getLettini();\r\n        prezzoFinale += contatoreOggettiRepository.findByOggetto(\"Sdraie\").getPrezzo()* prenotazione.getSdraie();\r\n        return prezzoFinale;\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di ottenere il {@link Prezzo} di un {@link Ombrellone} in una determinata data (passata come\r\n     * parametro). Il {@link Prezzo} viene cercato in base alla data intera e, se non viene trovato, viene cercato\r\n     * solamente in base al mese\r\n     *\r\n     * @param ombrellone {@link Ombrellone} del quel cercare il {@link Prezzo}\r\n     * @param dataPrenotazione data in cui si vuole effettuare la {@link Prenotazione}\r\n     * @param durata {@link Durata} temporale della prenotazione\r\n     * @return  il prezzo dell'{@link Ombrellone} passato\r\n     */\r\n    public Prezzo getPrezzoOmbrellone(Ombrellone ombrellone, LocalDate dataPrenotazione, Durata durata) {\r\n        Optional<Prezzo> prezzo = this.checkDataCorrente(prezzoRepository.findByOmbrelloniId(ombrellone.getId()), dataPrenotazione, durata);\r\n        if(prezzo.isPresent()) return prezzo.get();\r\n\r\n        prezzo = this.checkMeseCorrente(prezzoRepository.findByOmbrelloniId(ombrellone.getId()), dataPrenotazione, durata);\r\n        return prezzo.orElse(null);\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di conoscere gli ombrelloni liberi nella data indicata e per una certa {@link Durata} temporale\r\n     *\r\n     * @param dataPrenotazione data nella quale si vogliono conoscere gli ombrelloni liberi\r\n     * @param durata {@link Durata} temporale della prenotazione\r\n     * @return una {@link List} contenente gli ombrelloni che risultano liberi in base ai parametri passati\r\n     */\r\n    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){\r\n        List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();\r\n        ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));\r\n        ombrelloni.removeIf(ombrellone -> ombrellone.getNumero()!=numPersone);\r\n        return ombrelloni;\r\n    }\r\n\r\n    /**\r\n     * Verifica se un {@link Ombrellone} &egrave; disponibile nella data indicata, in base alla {@link Durata} temporale\r\n     *\r\n     * @param ombrellone {@link Ombrellone} del quale verificare la disponibilit&agrave;\r\n     * @param dataPrenotazione data nella quale verificare la disponibilit&agrave; dell'{@link Ombrellone}\r\n     * @param durata durata temporale per la quale verificare la disponibilit&agrave; dell'{@link Ombrellone}\r\n     *\r\n     * @throws NullPointerException se almeno UNO dei parametri passati &egrave; nullo\r\n     *\r\n     * @return true se l'ombrellone &egrave; disponibile, false altrimenti\r\n     */\r\n    public boolean notIsFree(Ombrellone ombrellone, LocalDate dataPrenotazione, Durata durata){\r\n        if(ombrellone == null || dataPrenotazione == null || durata == null){\r\n            throw new NullPointerException(\"I parametri passati sono nulli\");\r\n        }\r\n        for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO)\r\n                return true;\r\n            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)\r\n                return true;\r\n            else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)\r\n                return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n    /**\r\n     * Metodo che calcola il numero di lettini ancora disponibili. Si estrae da ogni prenotazione (con data uguale a\r\n     * quella passata come parametro e con {@link Durata} pari a 'INTERO' o alla durata passata come parametro) il\r\n     * numero di lettini associati, che vengono sommati in un accumulatore. La quantit&agrave; ottenuta viene sottratta\r\n     * dal totale delle lettini disponibili\r\n     *\r\n     * @param dataPrenotazione data della prenotazione\r\n     * @param durata durata della prenotazione\r\n     * @return il numero di lettini disponibili\r\n     */\r\n    public int lettiniDisponibili(LocalDate dataPrenotazione, Durata durata){\r\n        int oggettiOccupati = 0;\r\n        int quantitaTotale = contatoreOggettiRepository.findByOggetto(\"lettini\").getQuantita();\r\n\r\n        for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){\r\n                oggettiOccupati += prenotazione.getLettini();\r\n            }\r\n        }\r\n        return quantitaTotale-oggettiOccupati;\r\n    }\r\n\r\n    /**\r\n     * Metodo che calcola il numero di sdraie ancora disponibili. Si estrae da ogni prenotazione (con data uguale a\r\n     * quella passata come parametro e con {@link Durata} pari a 'INTERO' o alla durata passata come parametro) il\r\n     * numero di sdraie associate, che vengono sommate in un accumulatore. La quantit&agrave; ottenuta viene sottratta\r\n     * dal totale delle sdraie disponibili\r\n     *\r\n     * @param dataPrenotazione data della prenotazione\r\n     * @param durata durata della prenotazione\r\n     * @return il numero di sdraie disponibili\r\n     */\r\n    public int sdraieDisponibili(LocalDate dataPrenotazione, Durata durata) {\r\n        int oggettiOccupati = 0;\r\n        int quantitaTotale = contatoreOggettiRepository.findByOggetto(\"sdraie\").getQuantita();\r\n\r\n        for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){\r\n                oggettiOccupati += prenotazione.getSdraie();\r\n            }\r\n        }\r\n        return quantitaTotale-oggettiOccupati;\r\n    }\r\n\r\n    private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){\r\n        return prezzi.stream()\r\n                .filter(p -> p.getDataInizio() != null && p.getDataFine() != null)\r\n                .filter(p -> p.getDataInizio().compareTo(dataPrenotazione) <= 0 &&\r\n                        p.getDataFine().compareTo(dataPrenotazione) >= 0)\r\n                .filter(p -> this.checkDurata(p, durata)).findFirst();\r\n    }\r\n\r\n    private Optional<Prezzo> checkMeseCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){\r\n        return prezzi.stream()\r\n                .filter(p -> p.getMeseInizio() != 0 && p.getMeseFine() != 0)\r\n                .filter(p -> p.getMeseInizio() <= dataPrenotazione.getMonthValue() &&\r\n                        p.getMeseFine() >= dataPrenotazione.getMonthValue())\r\n                .filter(p -> this.checkDurata(p, durata)).findFirst();\r\n    }\r\n\r\n    private boolean checkDurata(Prezzo prezzo, Durata durata){\r\n        return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));\r\n    }\r\n\r\n\r\n    public void updateQuantita(int nuovaQuantita, String oggetto) {\r\n        contatoreOggettiRepository.changeQuantita(nuovaQuantita, oggetto);\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java	(date 1642759039418)
+@@ -83,7 +83,6 @@
+     public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){
+         List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();
+         ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));
+-        ombrelloni.removeIf(ombrellone -> ombrellone.getNumero()!=numPersone);
+         return ombrelloni;
+     }
+ 
+@@ -103,12 +102,12 @@
+             throw new NullPointerException("I parametri passati sono nulli");
+         }
+         for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){
+-            if(prenotazione.getDurata() == Durata.INTERO)
++            if(prenotazione.getDurata() == Durata.INTERO || (durata==Durata.INTERO && (prenotazione.getDurata()==Durata.MATTINO || prenotazione.getDurata()==Durata.POMERIGGIO)))
+                 return true;
+-            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
++/*            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
+                 return true;
+             else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)
+-                return true;
++                return true;*/
+         }
+         return false;
+     }
+@@ -157,6 +156,10 @@
+         return quantitaTotale-oggettiOccupati;
+     }
+ 
++    public List<Ombrellone> getAllOmbrelloni() {
++        return this.ombrelloneRepository.findAll();
++    }
++
+     private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){
+         return prezzi.stream()
+                 .filter(p -> p.getDataInizio() != null && p.getDataFine() != null)
+@@ -176,11 +179,4 @@
+     private boolean checkDurata(Prezzo prezzo, Durata durata){
+         return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));
+     }
+-
+-
+-    public void updateQuantita(int nuovaQuantita, String oggetto) {
+-        contatoreOggettiRepository.changeQuantita(nuovaQuantita, oggetto);
+-    }
+-
+-
+-}
++}
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" project-jdk-name=\"15\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/.idea/misc.xml	(date 1642601999650)
+@@ -1,5 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="JavadocGenerationManager">
++    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../../VPProjects/casotto" />
++  </component>
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="15" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
+Index: src/test/java/it/unicam/cs/ids/Casotto/CasottoApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/it/unicam/cs/ids/Casotto/CasottoApplicationTests.java b/src/test/java/it/unicam/cs/ids/Casotto/CasottoTests.java
+rename from src/test/java/it/unicam/cs/ids/Casotto/CasottoApplicationTests.java
+rename to src/test/java/it/unicam/cs/ids/Casotto/CasottoTests.java
+--- a/src/test/java/it/unicam/cs/ids/Casotto/CasottoApplicationTests.java	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/src/test/java/it/unicam/cs/ids/Casotto/CasottoTests.java	(date 1641474438027)
+@@ -4,7 +4,7 @@
+ import org.springframework.boot.test.context.SpringBootTest;
+ 
+ @SpringBootTest
+-class CasottoApplicationTests {
++class CasottoTests {
+ 
+ 	@Test
+ 	void contextLoads() {
+Index: src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Repository;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.ContatoreOggetti;\r\nimport org.springframework.data.repository.CrudRepository;\r\nimport org.springframework.stereotype.Repository;\r\nimport javax.persistence.Entity;\r\n\r\n/**\r\n * {@link Repository} per l'{@link Entity} {@link ContatoreOggetti}\r\n *\r\n */\r\npublic interface ContatoreOggettiRepository extends CrudRepository<ContatoreOggetti, Long> {\r\n\r\n    /**\r\n     * Query che restituisce il {@link ContatoreOggetti} con associata la descrizione indicata\r\n     *\r\n     * @param oggetto descrizione dell'oggetto\r\n     * @return il {@link ContatoreOggetti} con associata la descrizione indicata, o null se questo non esiste\r\n     */\r\n    ContatoreOggetti findByOggetto(String oggetto);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java b/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java	(date 1642673365053)
+@@ -1,14 +1,20 @@
+ package it.unicam.cs.ids.Casotto.Repository;
+ 
+ import it.unicam.cs.ids.Casotto.Classi.ContatoreOggetti;
++import org.springframework.data.jpa.repository.Modifying;
++import org.springframework.data.jpa.repository.Query;
+ import org.springframework.data.repository.CrudRepository;
++import org.springframework.data.repository.query.Param;
+ import org.springframework.stereotype.Repository;
++import org.springframework.transaction.annotation.Transactional;
++
+ import javax.persistence.Entity;
+ 
+ /**
+  * {@link Repository} per l'{@link Entity} {@link ContatoreOggetti}
+  *
+  */
++@Transactional
+ public interface ContatoreOggettiRepository extends CrudRepository<ContatoreOggetti, Long> {
+ 
+     /**
+@@ -18,4 +24,9 @@
+      * @return il {@link ContatoreOggetti} con associata la descrizione indicata, o null se questo non esiste
+      */
+     ContatoreOggetti findByOggetto(String oggetto);
++
++    @Modifying
++    @Query("update ContatoreOggetti set quantita = :quantita where oggetto = :oggetto")
++    void changeQuantita(@Param("quantita") int nuovaQuantita, @Param("oggetto") String oggetto);
++
+ }
+Index: build/resources/main/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># suppress inspection \"UnusedProperty\" for whole file\r\n\r\nspring.jpa.generate-ddl=true\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.datasource.url=jdbc:mysql://localhost:3306/casotto?createDatabaseIfNotExist=true\r\nspring.datasource.driver-class-name =com.mysql.cj.jdbc.Driver\r\nspring.datasource.username=root\r\nspring.datasource.password=\r\nspring.jpa.show-sql= true\r\nspring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL5Dialect\r\nspring.jpa.properties.hibernate.enable_lazy_load_no_trans=true\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/build/resources/main/application.properties b/build/resources/main/application.properties
+--- a/build/resources/main/application.properties	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/build/resources/main/application.properties	(date 1642678760740)
+@@ -9,3 +9,4 @@
+ spring.jpa.show-sql= true
+ spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL5Dialect
+ spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
++spring.jpa.properties.hibernate.show_sql = false
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># suppress inspection \"UnusedProperty\" for whole file\r\n\r\nspring.jpa.generate-ddl=true\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.datasource.url=jdbc:mysql://localhost:3306/casotto?createDatabaseIfNotExist=true\r\nspring.datasource.driver-class-name =com.mysql.cj.jdbc.Driver\r\nspring.datasource.username=root\r\nspring.datasource.password=\r\nspring.jpa.show-sql= true\r\nspring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL5Dialect\r\nspring.jpa.properties.hibernate.enable_lazy_load_no_trans=true\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/src/main/resources/application.properties	(date 1642678609183)
+@@ -9,3 +9,4 @@
+ spring.jpa.show-sql= true
+ spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL5Dialect
+ spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
++spring.jpa.properties.hibernate.show_sql = false
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e044db9b-05ef-4b90-a42d-06c9973a3058\" name=\"Changes\" comment=\"Implementazione classi entità con le relative enum\">\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/file-system.probe\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/file-system.probe\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"JpbToolWindowState\">\r\n    <option name=\"myId2FirstActivated\">\r\n      <map>\r\n        <entry key=\"com.haulmont.jpb.jpaInspector\" value=\"true\" />\r\n        <entry key=\"com.haulmont.jpb.jpaPalette\" value=\"true\" />\r\n        <entry key=\"com.haulmont.jpb.jpaStructure\" value=\"true\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.haulmont.jpb.jpaInspector\" value=\"false\" />\r\n        <entry key=\"com.haulmont.jpb.jpaPalette\" value=\"false\" />\r\n        <entry key=\"com.haulmont.jpb.jpaStructure\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"22dx3ELdjfWQW1gByHTFPfGsk60\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.keymap\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Leira\\Documents\\programmi\\java\\Casotto\\src\\main\\java\\it\\unicam\\cs\\ids\\Casotto\\Repository\" />\r\n      <recent name=\"C:\\Users\\Leira\\Documents\\programmi\\java\\Casotto\\src\\main\\java\\it\\unicam\\cs\\ids\\Casotto\\Classi\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"CasottoApplication\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.unicam.cs.ids.Casotto.CasottoApplication\" />\r\n      <module name=\"Casotto.main\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.unicam.cs.ids.Casotto.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.CasottoApplication\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e044db9b-05ef-4b90-a42d-06c9973a3058\" name=\"Changes\" comment=\"\" />\r\n      <created>1640181066337</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1640181066337</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Implementazione classi entità con le relative enum\">\r\n      <created>1640611963076</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1640611963076</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"First Commit\" />\r\n    <MESSAGE value=\"Implementazione classi entità con le relative enum\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Implementazione classi entità con le relative enum\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 2b025213e5ca68a6e984b59c7e94cb6b6c1fc106)
++++ b/.idea/workspace.xml	(date 1643030259273)
+@@ -4,9 +4,25 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Implementazione classi entità con le relative enum">
++    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Rinominati gestori entità">
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prenotazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prenotazione.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/test/java/it/unicam/cs/ids/Casotto/CasottoApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/it/unicam/cs/ids/Casotto/CasottoTests.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -18,6 +34,14 @@
+       <ProjectState />
+     </projectState>
+   </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++        <option value="Interface" />
++      </list>
++    </option>
++  </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+@@ -65,8 +89,8 @@
+     </key>
+   </component>
+   <component name="RunManager">
+-    <configuration name="CasottoApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+-      <option name="MAIN_CLASS_NAME" value="it.unicam.cs.ids.Casotto.CasottoApplication" />
++    <configuration name="Casotto" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="it.unicam.cs.ids.Casotto.Casotto" />
+       <module name="Casotto.main" />
+       <extension name="coverage">
+         <pattern>
+@@ -78,11 +102,6 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
+-    <recent_temporary>
+-      <list>
+-        <item itemvalue="Application.CasottoApplication" />
+-      </list>
+-    </recent_temporary>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -100,7 +119,49 @@
+       <option name="project" value="LOCAL" />
+       <updated>1640611963076</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Implementazione dei gestori delle entità">
++      <created>1640681372452</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1640681372452</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Implementazione dei gestori delle entità">
++      <created>1640681381538</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1640681381538</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Implementazione repository">
++      <created>1640685515371</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1640685515371</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Modifica application.properties per la creazione automatica del database nel caso quest'ultimo non esista">
++      <created>1642608305505</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1642608305505</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Fix application.properties per evitare la cancellazione dei dati presenti nel database a ogni esecuzione del programma">
++      <created>1642610768484</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1642610768484</updated>
++    </task>
++    <task id="LOCAL-00007" summary="Rinominati gestori entità">
++      <created>1642676726010</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1642676726010</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -118,6 +179,12 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="First Commit" />
+     <MESSAGE value="Implementazione classi entità con le relative enum" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Implementazione classi entità con le relative enum" />
++    <MESSAGE value="Implementazione dei gestori delle entità" />
++    <MESSAGE value="Implementazione repository" />
++    <MESSAGE value="Modifica application.properties per la creazione automatica del database nel caso quest'ultimo non esista" />
++    <MESSAGE value="Fix application.properties per evitare la cancellazione dei dati presenti nel database a ogni esecuzione del programma" />
++    <MESSAGE value="Fix metodo Spiaggia.notIsFree" />
++    <MESSAGE value="Rinominati gestori entità" />
++    <option name="LAST_COMMIT_MESSAGE" value="Rinominati gestori entità" />
+   </component>
+ </project>
+\ No newline at end of file
