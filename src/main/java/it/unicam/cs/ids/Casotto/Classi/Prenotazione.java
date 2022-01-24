@@ -78,6 +78,7 @@ public class Prenotazione {
         this.sdraie = sdraie;
         this.prezzo = 0;
         this.account = account;
+        this.ombrelloni = new HashSet<>();
     }
 
     /**
@@ -153,12 +154,12 @@ public class Prenotazione {
     }
 
 
-/*    public void addOmbrelloni(Set<Ombrellone> ombrelloni){
+    public void addOmbrelloni(Set<Ombrellone> ombrelloni){
         this.ombrelloni.addAll(ombrelloni);
     }
 
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
-    }*/
+    }
 
 }
