@@ -83,7 +83,6 @@ public class Spiaggia {
     public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){
         List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();
         ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));
-        ombrelloni.removeIf(ombrellone -> ombrellone.getNumero()!=numPersone);
         return ombrelloni;
     }
 
@@ -103,12 +102,12 @@ public class Spiaggia {
             throw new NullPointerException("I parametri passati sono nulli");
         }
         for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){
-            if(prenotazione.getDurata() == Durata.INTERO)
+            if(prenotazione.getDurata() == Durata.INTERO || (durata==Durata.INTERO && (prenotazione.getDurata()==Durata.MATTINO || prenotazione.getDurata()==Durata.POMERIGGIO)))
                 return true;
-            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
+/*            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
                 return true;
             else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)
-                return true;
+                return true;*/
         }
         return false;
     }
@@ -157,6 +156,10 @@ public class Spiaggia {
         return quantitaTotale-oggettiOccupati;
     }
 
+    public List<Ombrellone> getAllOmbrelloni() {
+        return this.ombrelloneRepository.findAll();
+    }
+
     private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){
         return prezzi.stream()
                 .filter(p -> p.getDataInizio() != null && p.getDataFine() != null)
@@ -176,11 +179,4 @@ public class Spiaggia {
     private boolean checkDurata(Prezzo prezzo, Durata durata){
         return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));
     }
-
-
-    public void updateQuantita(int nuovaQuantita, String oggetto) {
-        contatoreOggettiRepository.changeQuantita(nuovaQuantita, oggetto);
-    }
-
-
 }
