@@ -4,8 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Implementazione classi entità con le relative enum">
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.">
+      <change afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/md5-checksums.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/sha1-checksums.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Stato.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Tipo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ProdottoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/RichiestaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +62,7 @@
     </option>
   </component>
   <component name="ProjectId" id="22dx3ELdjfWQW1gByHTFPfGsk60" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -56,7 +73,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -118,6 +135,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="Implementazione classi entità con le relative enum" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementazione classi entità con le relative enum" />
+    <MESSAGE value="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti." />
   </component>
 </project>
