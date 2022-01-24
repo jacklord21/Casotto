@@ -1,5 +1,8 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
+
+import it.unicam.cs.ids.Casotto.Repository.OrdinazioneRepository;
+import it.unicam.cs.ids.Casotto.Repository.RichiestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

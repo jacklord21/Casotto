@@ -1,4 +1,4 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
 import java.util.ArrayList;
 import java.util.List;
