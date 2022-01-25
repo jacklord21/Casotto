@@ -1,5 +1,6 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
+import it.unicam.cs.ids.Casotto.Repository.ProdottoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,21 +29,20 @@ public class GestoreProdotti {
         this.modificaQuantitaProdotto(prodotto, quantita);
     }
 
-    public boolean decrementoQuantitaProdotto(Prodotto prodotto, int quantita){
-        return this.modificaQuantitaProdotto(prodotto, quantita * -1);
+    public void decrementoQuantitaProdotto(Prodotto prodotto, int quantita){
+        this.modificaQuantitaProdotto(prodotto, quantita * -1);
     }
 
-    private boolean modificaQuantitaProdotto(Prodotto prodotto, int quantita){
+    private void modificaQuantitaProdotto(Prodotto prodotto, int quantita){
         this.checkIsNull(prodotto, quantita);
         if(!prodottoRepository.existsById(prodotto.getId())){
             throw new IllegalArgumentException("Il prodotto passato non esiste");
         }
         if(!this.isPresent(prodotto, quantita)){
-            return false;
+            return;
         }
         prodotto.setQuantita(prodotto.getQuantita()+quantita);
         prodottoRepository.save(prodotto);
-        return true;
     }
 
     public boolean aggiuntaProdotto(String oggetto, long prezzo, int quantita, Tipo tipo){

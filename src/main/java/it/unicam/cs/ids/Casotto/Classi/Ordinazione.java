@@ -1,4 +1,4 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ public class Ordinazione {
     private Stato stato;
 
     @OneToMany(mappedBy = "ordinazione", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Richiesta> prodotti = new HashSet<>();
+    private final Set<Richiesta> prodotti = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ombrellone_id", nullable = false)

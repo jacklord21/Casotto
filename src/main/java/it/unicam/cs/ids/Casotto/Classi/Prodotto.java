@@ -1,4 +1,4 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class Prodotto {
     private Tipo tipo;
 
     @OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Richiesta> richieste = new HashSet<>();
+    private final Set<Richiesta> richieste = new HashSet<>();
 
     public Prodotto() {
     }

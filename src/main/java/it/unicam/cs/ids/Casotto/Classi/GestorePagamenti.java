@@ -1,4 +1,4 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class GestorePagamenti {
             throw new IllegalArgumentException("Denaro insufficente");
         }
         gestoreOrdinazione.setStato(ordinazione, Stato.PAGATO);
-        return denaro- ordinazione.getPrezzoTot();
+        return denaro - ordinazione.getPrezzoTot();
     }
 
     public String creazioneScontrino(Ordinazione ordinazione){

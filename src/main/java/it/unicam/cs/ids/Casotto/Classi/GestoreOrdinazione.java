@@ -1,5 +1,7 @@
-package it.unicam.cs.ids2122.Casotto;
+package it.unicam.cs.ids.Casotto.Classi;
 
+import it.unicam.cs.ids.Casotto.Repository.OrdinazioneRepository;
+import it.unicam.cs.ids.Casotto.Repository.RichiestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +11,17 @@ import java.util.List;
 @Service
 public class GestoreOrdinazione {
 
+    private final GestoreProdotti gestoreProdotti;
+
     @Autowired
     OrdinazioneRepository ordinazioneRepository;
 
     @Autowired
     RichiestaRepository richiestaRepository;
+
+    GestoreOrdinazione(){
+        this.gestoreProdotti = new GestoreProdotti();
+    }
 
     public List<Richiesta> getRichiesteOf(Ordinazione ordinazione){
         this.checkIsNull(ordinazione);
@@ -23,15 +31,22 @@ public class GestoreOrdinazione {
         return richiestaRepository.findByOrdinazioneId(ordinazione.getId());
     }
 
+    public List<Ordinazione> getRichiesteWith(Stato stato){
+        this.checkIsNull(stato);
+        return ordinazioneRepository.findByStato(stato);
+    }
+
     public Ordinazione creaOrdinazione(List<Richiesta> richieste, Ombrellone ombrellone){
         this.checkIsNull(richieste, ombrellone);
         Ordinazione ordinazione = new Ordinazione(ombrellone);
+        if(this.checkProdotti(richieste)) return null;
         if(!this.needImpostaPrezzo(richieste)){
             ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));
         }
         ordinazioneRepository.save(ordinazione);
         for(Richiesta richiesta: richieste){
             richiesta.setOrdinazione(ordinazione);
+            gestoreProdotti.decrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
         }
         richiestaRepository.saveAll(richieste);
         return ordinazione;
@@ -41,6 +56,9 @@ public class GestoreOrdinazione {
         this.checkIsNull(ordinazione);
         if(!ordinazioneRepository.existsById(ordinazione.getId())){
             return false;
+        }
+        for(Richiesta richiesta: richiestaRepository.findByOrdinazioneId(ordinazione.getId())){
+            gestoreProdotti.incrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
         }
         ordinazioneRepository.deleteById(ordinazione.getId());
         return true;
@@ -86,11 +104,20 @@ public class GestoreOrdinazione {
     public boolean needImpostaPrezzo(List<Richiesta> richieste){
         this.checkIsNull(richieste);
         for(Richiesta richiesta: richieste){
-            if(richiesta.getPrezzo() == 0){
+            if(!richiesta.getModifiche().isEmpty()){
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkProdotti(List<Richiesta> richieste){
+        for(Richiesta richiesta: richieste){
+            if(!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())){
+                return false;
+            }
+        }
+        return true;
     }
 
     private double getPrezzoTotaleRichieste(List<Richiesta> richieste){

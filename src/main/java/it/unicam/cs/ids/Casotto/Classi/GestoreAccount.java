@@ -62,7 +62,7 @@ public class GestoreAccount {
             return false;
         }
         utenteRepository.save(utente);
-        accountRepository.save(new Account(utente, livello, email, psw));
+        accountRepository.save(new Account(email, psw, 0, livello, utente));
         return true;
     }
 
