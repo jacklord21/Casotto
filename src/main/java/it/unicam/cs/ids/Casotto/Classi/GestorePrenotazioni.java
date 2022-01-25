@@ -59,6 +59,7 @@ public class GestorePrenotazioni {
                 || prenotazione.getSdraie()>gs.sdraieDisponibili(prenotazione.getDataPrenotazione(), prenotazione.getDurata()))
             throw new IllegalArgumentException("Sdraie o lettini non disponibili");
 
+        prenotazione.setPrezzo(gs.getPrezzoTotale(prenotazione));
         pr.save(prenotazione);
         return true;
     }
