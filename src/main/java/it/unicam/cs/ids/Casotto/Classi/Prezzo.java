@@ -113,4 +113,13 @@ public class Prezzo {
     public Durata getDurata() {
         return durata;
     }
+
+
+
+
+    public String toString() {
+        return "PREZZO\nId: " + this.getId() + "\nData inizio: " + this.getDataInizio() + "\nData fine: " + this.getDataFine() +
+                "\nMese inizio: " + this.getMeseInizio() + "Mese fine: " + this.getMeseFine() +
+                "\nDurata temporale: " + this.getDurata() + "\nPrezzo: " + this.getPrezzo() + "\n";
+    }
 }

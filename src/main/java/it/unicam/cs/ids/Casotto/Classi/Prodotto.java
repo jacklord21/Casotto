@@ -59,4 +59,15 @@ public class Prodotto {
     public Tipo getTipo() {
         return tipo;
     }
+
+
+    @Override
+    public String toString() {
+
+        return "\nPRODOTTO" +
+                "\n\tDescrizione: " + this.oggetto +
+                "\n\tQuantità disponibile: " + this.getQuantita() +
+                "\n\tPrezzo unitario: € " + this.getPrezzo() + "\n";
+    }
+
 }

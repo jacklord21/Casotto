@@ -162,4 +162,29 @@ public class Prenotazione {
         this.prezzo = prezzo;
     }
 
+
+    @Override
+    public String toString() {
+
+        return "\nPRENOTAZIONE"+
+                "\n\tId: " + this.getId() +
+                "\n\tOmbrelloni: " + getStringaOmbrelloni() +
+                "\n\tData prenotazione: " + this.getDataPrenotazione() +
+                "\n\tPrezzo: " + this.getPrezzo() +
+                "\n\tLettini: " + this.getLettini() +
+                "\n\tSdraie: " + this.getSdraie() + "\n";
+    }
+
+
+
+    private String getStringaOmbrelloni() {
+
+        String ris = "";
+
+        for(Ombrellone o : this.getOmbrelloni())
+            ris = ris.concat(o.toString() + ", ");
+
+        return ris.substring(0, ris.length()-2);
+    }
+
 }
