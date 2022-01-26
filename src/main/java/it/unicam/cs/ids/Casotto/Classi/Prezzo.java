@@ -118,8 +118,10 @@ public class Prezzo {
 
 
     public String toString() {
-        return "PREZZO\nId: " + this.getId() + "\nData inizio: " + this.getDataInizio() + "\nData fine: " + this.getDataFine() +
-                "\nMese inizio: " + this.getMeseInizio() + "Mese fine: " + this.getMeseFine() +
-                "\nDurata temporale: " + this.getDurata() + "\nPrezzo: " + this.getPrezzo() + "\n";
+        return "PREZZO" +
+                "\n\tId: " + this.getId() +
+                "\n\tData inizio: " + this.getDataInizio() + "\n\tData fine: " + this.getDataFine() +
+                "\n\tMese inizio: " + this.getMeseInizio() + "\n\tMese fine: " + this.getMeseFine() +
+                "\n\tDurata temporale: " + this.getDurata() + "\n\tPrezzo: " + this.getPrezzo();
     }
 }
