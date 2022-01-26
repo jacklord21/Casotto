@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 /**
  * {@link Repository} per l'{@link Entity} {@link Utente}
@@ -22,4 +23,6 @@ public interface UtenteRepository extends CrudRepository<Utente, Long>{
      * @return l'{@link Utente} proprietario dell'{@link Account}, o null se questo non esiste
      */
     Utente findByAccountId(long accountID);
+
+    boolean existsByNomeAndCognomeAndDataNascita(String nome, String cognome, LocalDate dataNascita);
 }
