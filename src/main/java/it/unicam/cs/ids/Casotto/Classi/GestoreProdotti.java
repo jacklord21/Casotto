@@ -86,10 +86,10 @@ public class GestoreProdotti {
         return prodottoRepository.findById(prodotto.getId()).getQuantita() >= quantita;
     }
 
-    private void checkIsNull(Object ... objects){
+    private void checkIsNull(Object ... objects) {
         for(Object obj: objects){
             if(obj == null){
-                throw new NullPointerException("I paramentri passati sono nulli");
+                throw new NullPointerException("I parametri passati sono nulli");
             }
         }
     }
