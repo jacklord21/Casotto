@@ -34,9 +34,8 @@ public class GestoreAccount {
         this.checkIsNull(email, psw);
         Account result = null;
 
-        if (accountRepository.existsByEmailIgnoreCase(email)) {
+        if (accountRepository.existsByEmailIgnoreCase(email))
             result = accountRepository.findByEmailIgnoreCaseAndPassword(email, psw.hashCode());
-        }
 
         return result;
     //    throw new IllegalArgumentException("L'email inserita non e' associata a nessun account");
@@ -58,12 +57,16 @@ public class GestoreAccount {
      */
     public boolean registration(Utente utente, Livello livello, String email, String psw){
         this.checkIsNull(utente, email, psw, livello);
-        if(accountRepository.existsByEmailIgnoreCase(email)) {
+/*        if(accountRepository.existsByEmailIgnoreCase(email)) {
             return false;
-        }
+        }*/
         utenteRepository.save(utente);
         accountRepository.save(new Account(email, psw, 0, livello, utente));
         return true;
+    }
+
+    public boolean checkIfUserExists(Utente u) {
+        return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());
     }
 
     /**
@@ -141,10 +144,11 @@ public class GestoreAccount {
      *
      * @return l'{@link Utente} associato all'account
      */
-    public Utente getUtente(Account account){
+    public Utente getUtente(Account account) {
         this.checkIsNull(account);
         if(!accountRepository.existsById(account.getId())){
-            throw new IllegalArgumentException("L'account passato non esiste");
+            return null;
+         //   throw new IllegalArgumentException("L'account passato non esiste");
         }
         return utenteRepository.findByAccountId(account.getId());
     }
