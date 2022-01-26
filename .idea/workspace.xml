@@ -4,28 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" afterDir="false" />
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Sovrascrittura metodo toString">
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prezzo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prezzo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Stato.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Stato.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Tipo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Tipo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ProdottoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ProdottoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/RichiestaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/RichiestaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PartecipaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PartecipaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,13 +43,6 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -72,7 +72,6 @@
     </option>
   </component>
   <component name="ProjectId" id="22dx3ELdjfWQW1gByHTFPfGsk60" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -83,7 +82,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -127,87 +126,57 @@
       <option name="project" value="LOCAL" />
       <updated>1640611963076</updated>
     </task>
-    <task id="LOCAL-00002" summary="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.">
-      <created>1642696155387</created>
+    <task id="LOCAL-00002" summary="Creazione interfaccia per i vari Menù e della classe Acquisizione per l'acquisizione dei vari dati da tastiera.">
+      <created>1643061799757</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1642696155387</updated>
+      <updated>1643061799757</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Aggiornata in Casotto la modalità di visualizzazione dei menù e selezione delle voci">
+      <created>1643061958152</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1643061958152</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Aggiornamento file application.properties per impedire la visualizzazione delle query sql effettuate da spring boot">
+      <created>1643062017094</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1643062017094</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Rimozione del filtro che, nel metodo Spiaggia.getOmbrelloniLiberi, rimuove gli ombrelloni con capienza uguale al numero dei partecipanti">
+      <created>1643062305975</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1643062305975</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Correzione dichiarazione packages e imports">
+      <created>1643063014019</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1643063014019</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Ricaricamento ContatoreOggettiRepository">
+      <created>1643063138978</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1643063138978</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Eliminazione import inutilizzati">
+      <created>1643063309405</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1643063309405</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
-  </component>
-  <component name="UnknownFeatures">
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-params" />
-    <option featureType="dependencySupport" implementationName="java:jakarta.xml.bind:jakarta.xml.bind-api" />
-    <option featureType="dependencySupport" implementationName="java:org.slf4j:jul-to-slf4j" />
-    <option featureType="dependencySupport" implementationName="java:org.hamcrest:hamcrest" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-data-jpa" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
-    <option featureType="dependencySupport" implementationName="java:net.bytebuddy:byte-buddy-agent" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.platform:junit-platform-engine" />
-    <option featureType="dependencySupport" implementationName="java:com.zaxxer:HikariCP" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-aspects" />
-    <option featureType="dependencySupport" implementationName="java:org.jboss:jandex" />
-    <option featureType="dependencySupport" implementationName="java:net.minidev:accessors-smart" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-test" />
-    <option featureType="dependencySupport" implementationName="java:org.aspectj:aspectjweaver" />
-    <option featureType="dependencySupport" implementationName="java:com.jayway.jsonpath:json-path" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-beans" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-test" />
-    <option featureType="dependencySupport" implementationName="java:com.fasterxml:classmate" />
-    <option featureType="dependencySupport" implementationName="java:org.hibernate.common:hibernate-commons-annotations" />
-    <option featureType="dependencySupport" implementationName="java:org.hibernate:hibernate-core" />
-    <option featureType="dependencySupport" implementationName="java:org.glassfish.jaxb:jaxb-runtime" />
-    <option featureType="dependencySupport" implementationName="java:org.skyscreamer:jsonassert" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-jpa" />
-    <option featureType="dependencySupport" implementationName="java:ch.qos.logback:logback-classic" />
-    <option featureType="dependencySupport" implementationName="java:org.mockito:mockito-junit-jupiter" />
-    <option featureType="dependencySupport" implementationName="java:jakarta.activation:jakarta.activation-api" />
-    <option featureType="dependencySupport" implementationName="java:org.glassfish.jaxb:txw2" />
-    <option featureType="dependencySupport" implementationName="java:org.opentest4j:opentest4j" />
-    <option featureType="dependencySupport" implementationName="java:org.objenesis:objenesis" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-tx" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-engine" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-jcl" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-logging" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-aop" />
-    <option featureType="dependencySupport" implementationName="java:ch.qos.logback:logback-core" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-test" />
-    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-to-slf4j" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.platform:junit-platform-commons" />
-    <option featureType="dependencySupport" implementationName="java:jakarta.annotation:jakarta.annotation-api" />
-    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter" />
-    <option featureType="dependencySupport" implementationName="java:org.jboss.logging:jboss-logging" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-orm" />
-    <option featureType="dependencySupport" implementationName="java:org.slf4j:slf4j-api" />
-    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm" />
-    <option featureType="dependencySupport" implementationName="java:antlr:antlr" />
-    <option featureType="dependencySupport" implementationName="java:org.yaml:snakeyaml" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-autoconfigure" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-context" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-test-autoconfigure" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-expression" />
-    <option featureType="dependencySupport" implementationName="java:com.sun.istack:istack-commons-runtime" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-aop" />
-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-api" />
-    <option featureType="dependencySupport" implementationName="java:net.minidev:json-smart" />
-    <option featureType="dependencySupport" implementationName="java:mysql:mysql-connector-java" />
-    <option featureType="dependencySupport" implementationName="java:org.assertj:assertj-core" />
-    <option featureType="dependencySupport" implementationName="java:com.vaadin.external.google:android-json" />
-    <option featureType="dependencySupport" implementationName="java:org.apiguardian:apiguardian-api" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-jdbc" />
-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-jdbc" />
-    <option featureType="dependencySupport" implementationName="java:org.mockito:mockito-core" />
-    <option featureType="dependencySupport" implementationName="java:jakarta.transaction:jakarta.transaction-api" />
-    <option featureType="dependencySupport" implementationName="java:com.sun.activation:jakarta.activation" />
-    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-api" />
-    <option featureType="dependencySupport" implementationName="java:org.xmlunit:xmlunit-core" />
-    <option featureType="dependencySupport" implementationName="java:net.bytebuddy:byte-buddy" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -224,7 +193,13 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="Implementazione classi entità con le relative enum" />
-    <MESSAGE value="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti." />
+    <MESSAGE value="Creazione interfaccia per i vari Menù e della classe Acquisizione per l'acquisizione dei vari dati da tastiera." />
+    <MESSAGE value="Aggiornata in Casotto la modalità di visualizzazione dei menù e selezione delle voci" />
+    <MESSAGE value="Aggiornamento file application.properties per impedire la visualizzazione delle query sql effettuate da spring boot" />
+    <MESSAGE value="Rimozione del filtro che, nel metodo Spiaggia.getOmbrelloniLiberi, rimuove gli ombrelloni con capienza uguale al numero dei partecipanti" />
+    <MESSAGE value="Correzione dichiarazione packages e imports" />
+    <MESSAGE value="Ricaricamento ContatoreOggettiRepository" />
+    <MESSAGE value="Eliminazione import inutilizzati" />
+    <option name="LAST_COMMIT_MESSAGE" value="Eliminazione import inutilizzati" />
   </component>
 </project>
