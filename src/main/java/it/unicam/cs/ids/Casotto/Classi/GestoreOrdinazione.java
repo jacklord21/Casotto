@@ -5,23 +5,22 @@ import it.unicam.cs.ids.Casotto.Repository.RichiestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class GestoreOrdinazione {
 
-    private final GestoreProdotti gestoreProdotti;
+    @Autowired
+    private GestoreProdotti gestoreProdotti;
 
     @Autowired
-    OrdinazioneRepository ordinazioneRepository;
+    private OrdinazioneRepository ordinazioneRepository;
 
     @Autowired
-    RichiestaRepository richiestaRepository;
+    private RichiestaRepository richiestaRepository;
 
-    GestoreOrdinazione(){
-        this.gestoreProdotti = new GestoreProdotti();
-    }
 
     public List<Richiesta> getRichiesteOf(Ordinazione ordinazione){
         this.checkIsNull(ordinazione);
@@ -31,23 +30,26 @@ public class GestoreOrdinazione {
         return richiestaRepository.findByOrdinazioneId(ordinazione.getId());
     }
 
-    public List<Ordinazione> getRichiesteWith(Stato stato){
+    public List<Ordinazione> getOrdinazioneWith(Stato stato) {
         this.checkIsNull(stato);
-        return ordinazioneRepository.findByStato(stato);
+        return ordinazioneRepository.findByStatoAndData(stato, LocalDate.now());
     }
 
     public Ordinazione creaOrdinazione(List<Richiesta> richieste, Ombrellone ombrellone){
         this.checkIsNull(richieste, ombrellone);
         Ordinazione ordinazione = new Ordinazione(ombrellone);
-        if(this.checkProdotti(richieste)) return null;
-        if(!this.needImpostaPrezzo(richieste)){
-            ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));
-        }
+
+        if(!this.checkProdotti(richieste)) return null;
+        if(!this.areThereRequiredChanges(richieste)) ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));
+
         ordinazioneRepository.save(ordinazione);
-        for(Richiesta richiesta: richieste){
+        this.setStato(ordinazione, Stato.DA_PAGARE);
+        ordinazioneRepository.save(ordinazione);
+        for(Richiesta richiesta: richieste) {
             richiesta.setOrdinazione(ordinazione);
             gestoreProdotti.decrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
         }
+
         richiestaRepository.saveAll(richieste);
         return ordinazione;
     }
@@ -74,12 +76,15 @@ public class GestoreOrdinazione {
         return true;
     }
 
-    public double ricalcolaPrezzoFinale(Ordinazione ordinazione){
+    public double ricalcolaPrezzoFinale(Ordinazione ordinazione) {
         this.checkIsNull(ordinazione);
         if(ordinazione.getPrezzoTot() != 0){
             return ordinazione.getPrezzoTot();
         }
-        return this.getPrezzoTotaleRichieste(richiestaRepository.findByOrdinazioneId(ordinazione.getId()));
+
+        ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richiestaRepository.findByOrdinazioneId(ordinazione.getId())));
+        ordinazioneRepository.save(ordinazione);
+        return ordinazione.getPrezzoTot();
     }
 
     public List<Richiesta> listaRichiesteConModifiche(Ordinazione ordinazione){
@@ -101,26 +106,22 @@ public class GestoreOrdinazione {
         ordinazioneRepository.save(ordinazione);
     }
 
-    public boolean needImpostaPrezzo(List<Richiesta> richieste){
+    private boolean areThereRequiredChanges(List<Richiesta> richieste) {
         this.checkIsNull(richieste);
-        for(Richiesta richiesta: richieste){
-            if(!richiesta.getModifiche().isEmpty()){
-                return true;
-            }
-        }
+        for(Richiesta richiesta: richieste)
+            if(!richiesta.getModifiche().isEmpty()) return true;
+
         return false;
     }
 
-    private boolean checkProdotti(List<Richiesta> richieste){
-        for(Richiesta richiesta: richieste){
-            if(!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())){
-                return false;
-            }
-        }
+    private boolean checkProdotti(List<Richiesta> richieste) {
+        for (Richiesta richiesta : richieste)
+            if (!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())) return false;
+
         return true;
     }
 
-    private double getPrezzoTotaleRichieste(List<Richiesta> richieste){
+    private double getPrezzoTotaleRichieste(List<Richiesta> richieste) {
         double prezzoFinale = 0;
         for(Richiesta richiesta: richieste){
             prezzoFinale+=richiesta.getPrezzo();
@@ -128,7 +129,7 @@ public class GestoreOrdinazione {
         return prezzoFinale;
     }
 
-    private void checkIsNull(Object ... objects){
+    private void checkIsNull(Object ... objects) {
         for(Object obj: objects){
             if(obj == null){
                 throw new NullPointerException("I paramentri passati sono nulli");
