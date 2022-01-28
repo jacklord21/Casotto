@@ -1,6 +1,5 @@
 package it.unicam.cs.ids.Casotto.Classi;
 
-import it.unicam.cs.ids.Casotto.Repository.ContatoreOggettiRepository;
 import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;
@@ -30,7 +29,8 @@ public class Spiaggia {
     PrenotazioniRepository prenotazioneRepository;
 
     @Autowired
-    ContatoreOggettiRepository contatoreOggettiRepository;
+    GestoreProdotti gestoreProdotti;
+
 
     /**
      * Metodo che calcola il prezzo totale di una prenotazione in base al prezzo dell'{@link Ombrellone} e alla
@@ -42,7 +42,7 @@ public class Spiaggia {
      *
      * @return il prezzo totale della prenotazione
      */
-    public double getPrezzoTotale(Prenotazione prenotazione){
+    public double getPrezzoTotale(Prenotazione prenotazione) {
 
         if(Objects.isNull(prenotazione)) throw new NullPointerException("La prenotazione passata è nulla");
 
@@ -50,8 +50,8 @@ public class Spiaggia {
         for(Ombrellone ombrellone: prenotazione.getOmbrelloni())
             prezzoFinale += this.getPrezzoOmbrellone(ombrellone, prenotazione.getDataPrenotazione(), prenotazione.getDurata()).getPrezzo();
 
-        prezzoFinale += contatoreOggettiRepository.findByOggetto("Lettini").getPrezzo()*prenotazione.getLettini();
-        prezzoFinale += contatoreOggettiRepository.findByOggetto("Sdraie").getPrezzo()* prenotazione.getSdraie();
+        prezzoFinale += this.gestoreProdotti.getPrezzoOf("lettini") * prenotazione.getLettini();
+        prezzoFinale += this.gestoreProdotti.getPrezzoOf("sdraie") * prenotazione.getSdraie();
         return prezzoFinale;
     }
 
@@ -124,7 +124,7 @@ public class Spiaggia {
      */
     public int lettiniDisponibili(LocalDate dataPrenotazione, Durata durata){
         int oggettiOccupati = 0;
-        int quantitaTotale = contatoreOggettiRepository.findByOggetto("lettini").getQuantita();
+        int quantitaTotale = this.gestoreProdotti.getQuantitaOf("lettini");
 
         for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){
             if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){
@@ -146,7 +146,7 @@ public class Spiaggia {
      */
     public int sdraieDisponibili(LocalDate dataPrenotazione, Durata durata) {
         int oggettiOccupati = 0;
-        int quantitaTotale = contatoreOggettiRepository.findByOggetto("sdraie").getQuantita();
+        int quantitaTotale = this.gestoreProdotti.getQuantitaOf("sdraie");
 
         for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){
             if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){
