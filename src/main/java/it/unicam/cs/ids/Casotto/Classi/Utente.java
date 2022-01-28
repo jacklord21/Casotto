@@ -72,6 +72,8 @@ public class Utente
         return this.nome;
     }
 
+    public void setNome(String nome) {this.nome = nome;}
+
     /**
      * Restituisce il cognome dell'utente
      *
@@ -81,6 +83,8 @@ public class Utente
         return this.cognome;
     }
 
+    public void setCognome(String cognome) {this.cognome = cognome;}
+
     /**
      * Restituisce la data di nascita dell'utente
      *
@@ -89,6 +93,8 @@ public class Utente
     public LocalDate getDataNascita() {
         return this.dataNascita;
     }
+
+    public void setDataNascita(LocalDate dataNascita) {this.dataNascita = dataNascita;}
 
     /**
      * Restituisce l'{@link Account} associato all'utente
