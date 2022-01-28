@@ -63,7 +63,7 @@ public class Prodotto {
 
     @Override
     public String toString() {
-        return "\nPRODOTTO[Descrizione: " + this.oggetto +" -- Quantità disponibile: " + this.getQuantita() +
+        return "PRODOTTO[Id: " + this.id + " -- Descrizione: " + this.oggetto +" -- Quantita' disponibile: " + this.getQuantita() +
                 " -- Prezzo unitario: " + this.getPrezzo() + " euro]";
     }
 

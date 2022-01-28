@@ -81,7 +81,7 @@ public class Richiesta {
 
         return "\nRICHIESTA" +
                 "\t\nId: " + this.getId() +
-                "\t\nProdotto: [ Descrizione: " + this.getProdotto().getOggetto() + ", Prezzo unitario: " + this.getProdotto().getPrezzo() + "]" +
+                "\t\n" + this.getProdotto().toString() +
                 "\t\nQuantita': " + this.getQuantita() +
                 "\t\nModifiche: " + ((this.getModifiche().isEmpty()) ? "nessuna" : this.getModifiche());
     }
