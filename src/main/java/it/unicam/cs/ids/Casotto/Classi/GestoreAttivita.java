@@ -81,7 +81,7 @@ public class GestoreAttivita {
     }
 
     public boolean cancellaPrenotazione(Account account, Attivita attivita){
-        return this.cancellaPrenotazione(partecipaRepository.findByPartecipantiIdAndAttivitaId(account.getId(), attivita.getId()));
+        return this.cancellaPrenotazione(partecipaRepository.findByPartecipanteIdAndAttivitaId(account.getId(), attivita.getId()));
     }
 
     public boolean cancellaPrenotazione(Partecipa iscrizione){
