@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
 public class GestoreProdotti {
 
     @Autowired
-    ProdottoRepository prodottoRepository;
+    private ProdottoRepository prodottoRepository;
 
     public List<Prodotto> getProdottiOf(List<Richiesta> richieste){
         List<Prodotto> prodotti = new ArrayList<>();
@@ -22,6 +22,14 @@ public class GestoreProdotti {
             prodotti.add(prodottoRepository.findByRichiesteId(richiesta.getId()));
         }
         return prodotti;
+    }
+
+    public int getQuantitaOf(String oggetto) {
+        return prodottoRepository.findByOggetto(oggetto).getQuantita();
+    }
+
+    public double getPrezzoOf(String oggetto) {
+        return prodottoRepository.findByOggetto(oggetto).getPrezzo();
     }
 
     public Prodotto getProdottoOf(Richiesta richiesta){
