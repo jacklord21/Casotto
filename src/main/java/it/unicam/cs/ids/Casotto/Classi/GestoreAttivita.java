@@ -24,6 +24,9 @@ public class GestoreAttivita {
     @Autowired
     PartecipaRepository partecipaRepository;
 
+    @Autowired
+    GestoreAccount gestoreAccount;
+
     public List<Attivita> getAllAttivitaOf(Account account){
         return partecipaRepository.findByPartecipanteId(account.getId())
                 .stream().map(p -> attivitaRepository.findByPartecipantiId(p.getId()))
@@ -39,7 +42,7 @@ public class GestoreAttivita {
                 .collect(Collectors.toList());
     }
 
-    public boolean thereIsAttivitaForToday(){
+    public boolean thereIsAttivitaForToday() {
         return !this.getAllAttivitaForToday().isEmpty();
     }
 
@@ -75,8 +78,8 @@ public class GestoreAttivita {
         }
         Partecipa iscrizione = new Partecipa(numPartecipanti, account, attivita);
         partecipaRepository.save(iscrizione);
-        account.setLivello(Livello.PARTECIPANTE);
-        accountRepository.save(account);
+        this.gestoreAccount.updateLivelloAccount(account, Livello.PARTECIPANTE);
+
         return true;
     }
 
@@ -84,7 +87,7 @@ public class GestoreAttivita {
         return this.cancellaPrenotazione(partecipaRepository.findByPartecipanteIdAndAttivitaId(account.getId(), attivita.getId()));
     }
 
-    public boolean cancellaPrenotazione(Partecipa iscrizione){
+    private boolean cancellaPrenotazione(Partecipa iscrizione) {
         Account account = accountRepository.findByIscrizioniId(iscrizione.getId());
         if(!partecipaRepository.existsById(iscrizione.getId())){
             throw new IllegalArgumentException("L'iscrizione passata non esiste");

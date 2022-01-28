@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.Casotto.Classi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,20 +9,26 @@ import java.util.List;
 @Service
 public class GestoreAcquisto {
 
-    private final GestoreProdotti gestoreProdotti;
-    private final List<Richiesta> richieste;
-    private final GestoreOrdinazione gestoreOrdinazione;
+    @Autowired
+    private GestoreProdotti gestoreProdotti;
+
+
+    private List<Richiesta> richieste;
+
+    @Autowired
+    private GestoreOrdinazione gestoreOrdinazione;
 
     public GestoreAcquisto() {
-        this.gestoreProdotti = new GestoreProdotti();
         this.richieste = new ArrayList<>();
-        this.gestoreOrdinazione = new GestoreOrdinazione();
+/*        this.gestoreProdotti = new GestoreProdotti();
+        this.gestoreOrdinazione = new GestoreOrdinazione();*/
     }
 
     public boolean addRichiesta(Prodotto prodotto, int quantita, String modifiche){
         if(!gestoreProdotti.isPresent(prodotto, quantita)){
             return false;
         }
+
         Richiesta richiesta = new Richiesta(prodotto, quantita, modifiche);
         richiesta.setPrezzo(prodotto.getPrezzo()*quantita);
         richieste.add(richiesta);
@@ -36,7 +43,7 @@ public class GestoreAcquisto {
         return this.richieste;
     }
 
-    public boolean cancellaRichiesta(Richiesta richiesta){
+    public boolean cancellaRichiesta(Richiesta richiesta) {
         return this.richieste.remove(richiesta);
     }
 
