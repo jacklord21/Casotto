@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class GestoreProdotti {
@@ -45,22 +48,27 @@ public class GestoreProdotti {
         prodottoRepository.save(prodotto);
     }
 
-    public boolean aggiuntaProdotto(String oggetto, long prezzo, int quantita, Tipo tipo){
+    public Prodotto creazioneProdotto(String oggetto, long prezzo, int quantita, Tipo tipo){
         this.checkIsNull(oggetto, prezzo, quantita);
-        if(prodottoRepository.existsByOggetto(oggetto)){
-            return false;
-        }
-        Prodotto prodotto = new Prodotto(oggetto, prezzo, quantita, tipo);
-        prodottoRepository.save(prodotto);
-        return true;
+        return new Prodotto(oggetto, prezzo, quantita, tipo);
     }
 
-    public boolean rimozioneProdotto(Prodotto prodotto){
+    public void rimozioneProdotto(Prodotto prodotto){
         this.checkIsNull(prodotto);
         if(!prodottoRepository.existsById(prodotto.getId())){
-            return false;
+            return;
         }
         prodottoRepository.deleteById(prodotto.getId());
+    }
+
+    public boolean modificheProdotti(HashMap<Prodotto, Boolean> modifiche){
+        for(Prodotto prodotto: modifiche.keySet()){
+            if(modifiche.get(prodotto)){
+                prodottoRepository.save(prodotto);
+            }else{
+                this.rimozioneProdotto(prodotto);
+            }
+        }
         return true;
     }
 
@@ -72,10 +80,15 @@ public class GestoreProdotti {
         return prodottoRepository.findByTipo(Tipo.CIBO);
     }
 
-    public List<Prodotto> getAll(){
+    public List<Prodotto> getAllAlimenti(){
         List<Prodotto> lista = this.getBevande();
         lista.addAll(this.getCibo());
         return lista;
+    }
+
+    public List<Prodotto> getAll(){
+        return StreamSupport.stream(prodottoRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public boolean isPresent(Prodotto prodotto, int quantita){
