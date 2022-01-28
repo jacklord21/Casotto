@@ -1,5 +1,6 @@
 package it.unicam.cs.ids.Casotto.Classi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,25 +9,28 @@ import java.util.List;
 @Service
 public class GestorePagamenti {
 
-    private final GestoreProdotti gestoreProdotti;
-    private final GestoreOrdinazione gestoreOrdinazione;
+    @Autowired
+    private GestoreProdotti gestoreProdotti;
+
+    @Autowired
+    private GestoreOrdinazione gestoreOrdinazione;
+
+    @Autowired
+    private GestoreAccount gestoreAccount;
+
+    @Autowired
+    private GestorePrenotazioni gestorePrenotazioni;
 
     public GestorePagamenti() {
-        this.gestoreProdotti = new GestoreProdotti();
-        this.gestoreOrdinazione = new GestoreOrdinazione();
     }
 
-    /**
-     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
-     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
-     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
-     *
-     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
-     * @param account {@link Account} del quale conoscere il saldo
-     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
-     */
-    public double prezzoFinale(Prenotazione prenotazione, Account account){
-        return (account.getSaldo()>prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
+    public boolean pagamentoPrenotazione(Prenotazione prenotazione, Account account) {
+        if(prenotazione.getPrezzo() >= account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, 0);
+        else if(prenotazione.getPrezzo() < account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, account.getSaldo() - prenotazione.getPrezzo());
+
+        //Pagamento "prezzoFinale"
+
+        return this.gestorePrenotazioni.registrazionePrenotazione(prenotazione);
     }
 
     public boolean pagamentoElettronico(Ordinazione ordinazione){
@@ -52,6 +56,8 @@ public class GestorePagamenti {
         }
         GestoreOrdinazione gestoreOrdinazione = new GestoreOrdinazione();
         List<String> scontrino = new ArrayList<>();
+
+        scontrino.add("Ordinazione: " + ordinazione.getId() + " Ombrellone: " + ordinazione.getOmbrellone().getId());
         for(Richiesta richiesta: gestoreOrdinazione.getRichiesteOf(ordinazione)){
             scontrino.add(gestoreProdotti.getProdottoOf(richiesta).getOggetto() +
                     "  " + richiesta.getQuantita() + "  " + richiesta.getPrezzo());

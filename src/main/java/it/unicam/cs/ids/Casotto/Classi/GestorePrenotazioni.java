@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +22,23 @@ public class GestorePrenotazioni {
     PrenotazioniRepository pr;
 
     @Autowired
+    GestoreAccount gestoreAccount;
+
+    @Autowired
     Spiaggia gs;
+
+    /**
+     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
+     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
+     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
+     *
+     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
+     * @param account {@link Account} del quale conoscere il saldo
+     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
+     */
+    public double prezzoFinale(Prenotazione prenotazione, Account account) {
+        return (account.getSaldo()>=prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
+    }
 
     /**
      * Metodo che permette di registrare una {@link Prenotazione}
@@ -95,7 +113,13 @@ public class GestorePrenotazioni {
      */
     public boolean cancellazionePrenotazione(Prenotazione prenotazione) {
         if(Objects.isNull(prenotazione) || !this.pr.existsById(prenotazione.getId())) return false;
-        pr.deleteById(prenotazione.getId());
+        LocalDateTime now = LocalDateTime.now();
+
+        if(now.until(prenotazione.getDataPrenotazione().atStartOfDay(), ChronoUnit.HOURS)<72) return false;
+
+        Account a = this.gestoreAccount.getAccountOf(prenotazione);
+        this.gestoreAccount.updateSaldoAccount(a, prenotazione.getPrezzo()+a.getSaldo());
+        this.pr.deleteById(prenotazione.getId());
         return true;
     }
 
