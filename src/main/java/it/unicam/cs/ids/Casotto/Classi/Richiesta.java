@@ -74,4 +74,15 @@ public class Richiesta {
     public void setModifiche(String modifiche) {
         this.modifiche = modifiche;
     }
+
+
+    @Override
+    public String toString() {
+
+        return "\nRICHIESTA" +
+                "\t\nId: " + this.getId() +
+                "\t\nProdotto: [ Descrizione: " + this.getProdotto().getOggetto() + ", Prezzo unitario: " + this.getProdotto().getPrezzo() + "]" +
+                "\t\nQuantita': " + this.getQuantita() +
+                "\t\nModifiche: " + ((this.getModifiche().isEmpty()) ? "nessuna" : this.getModifiche());
+    }
 }

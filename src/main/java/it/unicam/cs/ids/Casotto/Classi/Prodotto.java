@@ -63,11 +63,8 @@ public class Prodotto {
 
     @Override
     public String toString() {
-
-        return "\nPRODOTTO" +
-                "\n\tDescrizione: " + this.oggetto +
-                "\n\tQuantità disponibile: " + this.getQuantita() +
-                "\n\tPrezzo unitario: € " + this.getPrezzo() + "\n";
+        return "\nPRODOTTO[Descrizione: " + this.oggetto +" -- Quantità disponibile: " + this.getQuantita() +
+                " -- Prezzo unitario: " + this.getPrezzo() + " euro]";
     }
 
 }

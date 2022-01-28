@@ -1,8 +1,11 @@
 package it.unicam.cs.ids.Casotto.Classi;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class GestoreAcquisto {
 
     private final GestoreProdotti gestoreProdotti;
@@ -37,6 +40,10 @@ public class GestoreAcquisto {
         return this.richieste.remove(richiesta);
     }
 
+    public void cancellaAcquisto(){
+        this.richieste.clear();
+    }
+
     public boolean decrementaProdotto(Richiesta richiesta, int quantita){
         boolean remove = false;
         for(Richiesta richiestaList: richieste){
@@ -67,6 +74,7 @@ public class GestoreAcquisto {
         for(Richiesta richiesta: this.richieste){
             prezzoTotale += richiesta.getPrezzo();
         }
+
         return prezzoTotale;
     }
 

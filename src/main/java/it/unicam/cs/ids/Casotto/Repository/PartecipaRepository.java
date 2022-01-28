@@ -15,5 +15,5 @@ public interface PartecipaRepository extends CrudRepository<Partecipa, Long> {
 
     List<Partecipa> findByAttivitaId(long id);
 
-    Partecipa findByPartecipantiIdAndAttivitaId(long partecipanteId, long attivitaId);
+    Partecipa findByPartecipanteIdAndAttivitaId(long partecipanteId, long attivitaId);
 }

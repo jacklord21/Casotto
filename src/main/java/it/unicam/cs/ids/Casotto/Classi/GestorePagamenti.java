@@ -1,8 +1,11 @@
 package it.unicam.cs.ids.Casotto.Classi;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class GestorePagamenti {
 
     private final GestoreProdotti gestoreProdotti;
@@ -13,6 +16,18 @@ public class GestorePagamenti {
         this.gestoreOrdinazione = new GestoreOrdinazione();
     }
 
+    /**
+     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
+     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
+     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
+     *
+     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
+     * @param account {@link Account} del quale conoscere il saldo
+     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
+     */
+    public double prezzoFinale(Prenotazione prenotazione, Account account){
+        return (account.getSaldo()>prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
+    }
 
     public boolean pagamentoElettronico(Ordinazione ordinazione){
         //TODO: implementazione comunicazione con il POS ed il sistema sta in attesa della risposta positiva del POS
