@@ -5,6 +5,11 @@ import it.unicam.cs.ids.Casotto.Repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
 /**
  * Classe che rappresenta un gestore di {@link Account}, che permette di effettuare tutte le operazioni
  * connesse (registrazione, login, ...)
@@ -57,9 +62,7 @@ public class GestoreAccount {
      */
     public boolean registration(Utente utente, Livello livello, String email, String psw){
         this.checkIsNull(utente, email, psw, livello);
-/*        if(accountRepository.existsByEmailIgnoreCase(email)) {
-            return false;
-        }*/
+
         utenteRepository.save(utente);
         accountRepository.save(new Account(email, psw, 0, livello, utente));
         return true;
@@ -67,6 +70,38 @@ public class GestoreAccount {
 
     public boolean checkIfUserExists(Utente u) {
         return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());
+    }
+
+
+    public boolean changeUserName(Account account, String nome) {
+        return this.aggiornaDatiUtente(account, nome, Utente::setNome);
+    }
+
+    public boolean changeUserSurname(Account account, String cognome) {
+        return this.aggiornaDatiUtente(account, cognome, Utente::setCognome);
+    }
+
+    public boolean changeUserBirthdayDate(Account account, LocalDate data) {
+        return this.aggiornaDatiUtente(account, data, Utente::setDataNascita);
+    }
+
+    private <T> boolean aggiornaDatiUtente(Account account, T valore, BiConsumer<Utente, T> consumerLocale) {
+        this.checkIsNull(account, valore);
+        if(!accountRepository.existsById(account.getId())) return false;
+
+        Utente u = this.getUtenteOf(account);
+        consumerLocale.accept(u, valore);
+        this.utenteRepository.save(u);
+        return true;
+    }
+
+    public boolean changeAccountEmail(Account account, String email) {
+        this.checkIsNull(account, email);
+        if(!accountRepository.existsById(account.getId())) return false;
+
+        account.setEmail(email);
+        this.accountRepository.updateAccountEmailById(account.getId(), email);
+        return true;
     }
 
     /**
@@ -82,12 +117,10 @@ public class GestoreAccount {
      */
     public boolean changePasswordAccount(Account account, String psw) {
         this.checkIsNull(account, psw);
-        if(!accountRepository.existsById(account.getId())){
-            return false;
-            //    throw new IllegalArgumentException("L'account passato non esiste");
-        }
+        if(!accountRepository.existsById(account.getId())) return false;
+
         account.setPassword(psw);
-        accountRepository.save(account);
+        this.accountRepository.updateAccountPasswordById(account.getId(), psw.hashCode());
         return true;
     }
 
@@ -124,15 +157,21 @@ public class GestoreAccount {
      * @return true se il saldo &egrave; stato aggiornato correttamente, false se l'{@link Account} passato come
      *         parametro non esiste
      */
-    public boolean updateSaldoAccount(Account account, double saldo){
+    public boolean updateSaldoAccount(Account account, double saldo) {
         this.checkIsNull(account, saldo);
         if(!accountRepository.existsById(account.getId())){
             return false;
             //    throw new IllegalArgumentException("L'account passato non esiste");
         }
         account.setSaldo(saldo);
-        accountRepository.save(account);
+
+      //  accountRepository.save(account);
+        accountRepository.updateAccountSaldoById(account.getId(), account.getSaldo());
         return true;
+    }
+
+    public Account getAccountOf(Prenotazione prenotazione) {
+        return this.accountRepository.findByPrenotazioniId(prenotazione.getId());
     }
 
     /**
@@ -144,7 +183,7 @@ public class GestoreAccount {
      *
      * @return l'{@link Utente} associato all'account
      */
-    public Utente getUtente(Account account) {
+    public Utente getUtenteOf(Account account) {
         this.checkIsNull(account);
         if(!accountRepository.existsById(account.getId())){
             return null;
