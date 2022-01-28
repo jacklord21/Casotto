@@ -1,10 +1,9 @@
 package it.unicam.cs.ids.Casotto;
 
 import it.unicam.cs.ids.Casotto.Classi.*;
-import it.unicam.cs.ids.Casotto.Repository.AccountRepository;
-import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
-import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
-import it.unicam.cs.ids.Casotto.Repository.UtenteRepository;
+import it.unicam.cs.ids.Casotto.Interazione.InteractionManager;
+import it.unicam.cs.ids.Casotto.Interazione.Menu;
+import it.unicam.cs.ids.Casotto.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @SpringBootApplication
@@ -21,55 +25,50 @@ public class CasottoApplication {
 	@Autowired
 	InteractionManager im;
 
-	private static int menu() {
+	@Autowired
+	OmbrelloneRepository or;
 
-		int choice;
-		Scanner sc = new Scanner(System.in);
+	@Autowired
+	GestoreProdotti gestoreProdotti;
 
-		System.out.println("\nMenu'\n");
-
-		System.out.println("1. Registrazione");
-		System.out.println("2. Login");
-		System.out.println("3. Logout");
-		System.out.println("4. Effettua una prenotazione");
-		System.out.println("5. Visualizza storico prenotazione");
-		System.out.println("6. Visualizza prenotazioni attive");
-		System.out.println("0. Esci");
-
-		System.out.print("\nInsert a number: ");
-		choice = sc.nextInt();
-		return choice;
-	}
-
+	@Autowired
+	AccountRepository accountRepository;
 
 	public static void main(String[] args)  {
 		SpringApplication.run(CasottoApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or) {
+	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or, PrezzoRepository prr) {
 
 		return args -> {
 
-			int choice = menu();
+			String scelta = "";
+			Scanner sc = new Scanner(System.in);
+			Map<String, Map<String, Runnable>> menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
 
-			while(true) {
-				switch (choice) {
-					case 1: im.registration();
-						break;
-					case 2: im.login();
-						break;
-					case 3: im.logout();
-						break;
-					case 4:
-					case 5:
-					case 6:
-					case 0: System.exit(0);
-					default:
-						System.err.println("Error: invalid choice!!!");
+			while (true) {
+				System.out.println("\n\n\nMenu'\n");
+				for (Map.Entry<String, Map<String, Runnable>> e : menu.entrySet())
+					System.out.println(e.getKey() + ". " + Objects.requireNonNull(e.getValue().entrySet().stream().findFirst().orElse(null)).getKey());
+
+				do {
+					if (!scelta.isEmpty())
+						System.out.print("Scelta NON valida. Riprova: ");
+
+					System.out.print("\nInserisci un numero: ");
+					scelta = sc.next();
 				}
-				choice = menu();
+				while (!menu.containsKey(scelta));
+
+				Objects.requireNonNull(menu.get(scelta).entrySet().stream().findFirst().orElse(null)).getValue().run();
+				menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
+				scelta = "";
 			}
 		};
+	}
+
+	private Menu cambiaMenu(Account account) {
+		return (account==null) ? Menu::menuInizio : (account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente : Menu::menuGestore;
 	}
 }
