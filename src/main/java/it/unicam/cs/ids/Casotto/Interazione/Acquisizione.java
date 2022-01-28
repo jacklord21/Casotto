@@ -7,7 +7,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Acquisizione {
 
@@ -33,7 +36,7 @@ public class Acquisizione {
     public static int acquisizioneMese(String tipoMese) {
 
         String mese = "";
-        Set<String> mesi = Set.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+        Set<String> mesi = IntStream.range(1, 13).mapToObj(String::valueOf).collect(Collectors.toSet());
 
         do {
             if(!mese.isEmpty())
@@ -46,7 +49,7 @@ public class Acquisizione {
     }
 
     public static String acquisizioneCredenziali(String credName) {
-        System.out.print("Insert " + credName + ": ");
+        System.out.print("Inserisci " + credName + ": ");
         return sc.next();
     }
 
@@ -100,8 +103,8 @@ public class Acquisizione {
 
     public static Livello acquisizioneLivello() {
 
-        String ris = "";
-        List<String> possibleLevels = Arrays.stream(Livello.values()).map(Enum::name).collect(Collectors.toList());
+       String ris = "";
+       List<String> possibleLevels = Arrays.stream(Livello.values()).map(Livello::name).collect(Collectors.toList());
 
         do {
             if(!ris.isEmpty())
