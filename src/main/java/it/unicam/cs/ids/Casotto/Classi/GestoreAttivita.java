@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class GestoreAttivita {
@@ -30,6 +32,11 @@ public class GestoreAttivita {
 
     public List<Attivita> getAllAttivitaForTodayOf(Account account){
         return this.getAllAttivitaOf(account).stream().filter(a -> a.getData().isEqual(LocalDate.now())).collect(Collectors.toList());
+    }
+
+    public List<Attivita> getAllAttivita(){
+        return StreamSupport.stream(attivitaRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public boolean thereIsAttivitaForToday(){
@@ -116,5 +123,26 @@ public class GestoreAttivita {
         iscrizione.setNumPartecipanti(iscrizione.getNumPartecipanti() + partecipantiDaAggiungere);
         partecipaRepository.save(iscrizione);
         return true;
+    }
+
+    public Attivita createAttivita(String nome, LocalDate data, int numPosti){
+        return new Attivita(nome, data, numPosti);
+    }
+
+    public boolean modificheAttivita(HashMap<Attivita, Boolean> modifiche){
+        for(Attivita attivita: modifiche.keySet()){
+            if(modifiche.get(attivita)){
+                attivitaRepository.save(attivita);
+            }else{
+                this.cancellaAttivita(attivita);
+            }
+        }
+        return true;
+    }
+
+    private void cancellaAttivita(Attivita attivita){
+        if(attivitaRepository.existsById(attivita.getId())){
+            attivitaRepository.deleteById(attivita.getId());
+        }
     }
 }
