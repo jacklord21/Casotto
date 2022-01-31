@@ -56,12 +56,12 @@ public class GestoreProdotti {
         prodottoRepository.save(prodotto);
     }
 
-    public Prodotto creazioneProdotto(String oggetto, long prezzo, int quantita, Tipo tipo){
+    public Prodotto creazioneProdotto(String oggetto, double prezzo, int quantita, Tipo tipo){
         this.checkIsNull(oggetto, prezzo, quantita);
         return new Prodotto(oggetto, prezzo, quantita, tipo);
     }
 
-    public void rimozioneProdotto(Prodotto prodotto){
+    private void cancellaProdotto(Prodotto prodotto){
         this.checkIsNull(prodotto);
         if(!prodottoRepository.existsById(prodotto.getId())){
             return;
@@ -69,14 +69,13 @@ public class GestoreProdotti {
         prodottoRepository.deleteById(prodotto.getId());
     }
 
-    public boolean modificheProdotti(HashMap<Prodotto, Boolean> modifiche){
-        for(Prodotto prodotto: modifiche.keySet()){
-            if(modifiche.get(prodotto)){
-                prodottoRepository.save(prodotto);
-            }else{
-                this.rimozioneProdotto(prodotto);
-            }
+    public boolean modificheProdotti(Prodotto prodotto, boolean cancella) {
+        if(cancella) {
+            this.cancellaProdotto(prodotto);
+            return true;
         }
+
+        this.prodottoRepository.save(prodotto);
         return true;
     }
 
