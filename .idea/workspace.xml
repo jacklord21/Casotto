@@ -4,34 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Aggiunta nuove funzionalità">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/checksums/sha1-checksums.bin" afterDir="false" />
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Modifiche file di configurazione">
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Attivita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Attivita.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreNotifiche.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreNotifiche.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prenotazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prenotazione.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Livello.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Livello.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Notifica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Notifica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/InteractionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/InteractionManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" afterDir="false" />
@@ -103,7 +99,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../ProvaSpringVaadinUI" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="Console" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -396,7 +395,98 @@
       <option name="project" value="LOCAL" />
       <updated>1643385477108</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Implementazione setters e metodo toString">
+      <created>1643616993134</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1643616993134</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Implementazione setter mancante per Tipo">
+      <created>1643617022001</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617022001</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Modifica signature metodo modificheProdotti">
+      <created>1643617073875</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617073875</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Modifica signature metodo modificheAttivita">
+      <created>1643617172762</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617172762</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Modifiche file di configurazione">
+      <created>1643617231075</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617231075</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Modifica FetchType da LAZY in EAGER">
+      <created>1643617261194</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617261194</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Modifiche file di configurazione">
+      <created>1643617271513</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617271513</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Modifiche file di configurazione">
+      <created>1643617277939</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617277939</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Correzione grammatica metodo invioNotifica">
+      <created>1643617338212</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617338212</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Rimozione metodo per il calcolo del prezzo finale della prenotazione">
+      <created>1643617384901</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617384901</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Rimozione strategy per la generazione dell'id">
+      <created>1643617432460</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617432460</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Ricaricamento Ombrellone.java">
+      <created>1643617457898</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617457898</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Modifiche file di configurazione">
+      <created>1643617557887</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1643617557887</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -412,14 +502,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="First Commit" />
-    <MESSAGE value="Implementazione classi entità con le relative enum" />
-    <MESSAGE value="Creazione interfaccia per i vari Menù e della classe Acquisizione per l'acquisizione dei vari dati da tastiera." />
-    <MESSAGE value="Aggiornata in Casotto la modalità di visualizzazione dei menù e selezione delle voci" />
-    <MESSAGE value="Aggiornamento file application.properties per impedire la visualizzazione delle query sql effettuate da spring boot" />
-    <MESSAGE value="Rimozione del filtro che, nel metodo Spiaggia.getOmbrelloniLiberi, rimuove gli ombrelloni con capienza uguale al numero dei partecipanti" />
-    <MESSAGE value="Correzione dichiarazione packages e imports" />
-    <MESSAGE value="Ricaricamento ContatoreOggettiRepository" />
     <MESSAGE value="Eliminazione import inutilizzati" />
     <MESSAGE value="Implementazione query per l'aggiornamento di saldo, email e password di un account" />
     <MESSAGE value="Cambiamento nel metodo di generazione dei numeri dei mesi dell'anno" />
@@ -435,7 +517,21 @@
     <MESSAGE value="Commit workspace.xml" />
     <MESSAGE value="Commit CasottoApplication.java" />
     <MESSAGE value="Aggiunta nuove funzionalità" />
-    <option name="LAST_COMMIT_MESSAGE" value="Aggiunta nuove funzionalità" />
+    <MESSAGE value="Implementazione setters e metodo toString" />
+    <MESSAGE value="Implementazione setter mancante per Tipo" />
+    <MESSAGE value="Modifica signature metodo modificheProdotti" />
+    <MESSAGE value="Modifica signature metodo modificheAttivita" />
+    <MESSAGE value="Modifica FetchType da LAZY in EAGER" />
+    <MESSAGE value="Correzione grammatica metodo invioNotifica" />
+    <MESSAGE value="Rimozione metodo per il calcolo del prezzo finale della prenotazione" />
+    <MESSAGE value="Rimozione strategy per la generazione dell'id" />
+    <MESSAGE value="Ricaricamento Ombrellone.java" />
+    <MESSAGE value="Modifiche file di configurazione" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modifiche file di configurazione" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Casotto$CasottoApplication.ic" NAME="CasottoApplication Coverage Results" MODIFIED="1643229268798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
