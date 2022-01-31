@@ -15,7 +15,7 @@ public class Account {
     private double saldo;
     private Livello livello;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente utente;
 
