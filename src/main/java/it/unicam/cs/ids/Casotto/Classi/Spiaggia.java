@@ -104,10 +104,6 @@ public class Spiaggia {
         for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){
             if(prenotazione.getDurata() == Durata.INTERO || (durata==Durata.INTERO && (prenotazione.getDurata()==Durata.MATTINO || prenotazione.getDurata()==Durata.POMERIGGIO)))
                 return true;
-/*            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)
-                return true;
-            else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)
-                return true;*/
         }
         return false;
     }
