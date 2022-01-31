@@ -25,7 +25,7 @@ public class Notifica {
     }
 
     public Notifica(String testo, Livello gruppo) {
-        this(testo, gruppo, LocalDate.MAX);
+        this(testo, gruppo, null);
     }
 
     public long getId() {
@@ -43,4 +43,11 @@ public class Notifica {
     public Livello getGruppo() {
         return gruppo;
     }
+
+    public String toString() {
+        return "\nNOTIFICA\n" + this.getTesto() +
+                ( (this.getDatavalidita()!=null) ? "\nData fine validita': " + this.getDatavalidita() : "" );
+    }
+
+
 }
