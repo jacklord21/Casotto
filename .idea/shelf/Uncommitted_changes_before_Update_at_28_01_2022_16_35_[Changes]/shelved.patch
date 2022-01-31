@@ -1,0 +1,1594 @@
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.ProdottoRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\nimport java.util.stream.StreamSupport;\r\n\r\n@Service\r\npublic class GestoreProdotti {\r\n\r\n    @Autowired\r\n    ProdottoRepository prodottoRepository;\r\n\r\n    public List<Prodotto> getProdottiOf(List<Richiesta> richieste){\r\n        List<Prodotto> prodotti = new ArrayList<>();\r\n        for(Richiesta richiesta: richieste){\r\n            prodotti.add(prodottoRepository.findByRichiesteId(richiesta.getId()));\r\n        }\r\n        return prodotti;\r\n    }\r\n\r\n    public Prodotto getProdottoOf(Richiesta richiesta){\r\n        return prodottoRepository.findByRichiesteId(richiesta.getId());\r\n    }\r\n\r\n    public void incrementoQuantitaProdotto(Prodotto prodotto, int quantita){\r\n        this.modificaQuantitaProdotto(prodotto, quantita);\r\n    }\r\n\r\n    public void decrementoQuantitaProdotto(Prodotto prodotto, int quantita){\r\n        this.modificaQuantitaProdotto(prodotto, quantita * -1);\r\n    }\r\n\r\n    private void modificaQuantitaProdotto(Prodotto prodotto, int quantita){\r\n        this.checkIsNull(prodotto, quantita);\r\n        if(!prodottoRepository.existsById(prodotto.getId())){\r\n            throw new IllegalArgumentException(\"Il prodotto passato non esiste\");\r\n        }\r\n        if(!this.isPresent(prodotto, quantita)){\r\n            return;\r\n        }\r\n        prodotto.setQuantita(prodotto.getQuantita()+quantita);\r\n        prodottoRepository.save(prodotto);\r\n    }\r\n\r\n    public Prodotto creazioneProdotto(String oggetto, long prezzo, int quantita, Tipo tipo){\r\n        this.checkIsNull(oggetto, prezzo, quantita);\r\n        return new Prodotto(oggetto, prezzo, quantita, tipo);\r\n    }\r\n\r\n    public void rimozioneProdotto(Prodotto prodotto){\r\n        this.checkIsNull(prodotto);\r\n        if(!prodottoRepository.existsById(prodotto.getId())){\r\n            return;\r\n        }\r\n        prodottoRepository.deleteById(prodotto.getId());\r\n    }\r\n\r\n    public boolean modificheProdotti(HashMap<Prodotto, Boolean> modifiche){\r\n        for(Prodotto prodotto: modifiche.keySet()){\r\n            if(modifiche.get(prodotto)){\r\n                prodottoRepository.save(prodotto);\r\n            }else{\r\n                this.rimozioneProdotto(prodotto);\r\n            }\r\n        }\r\n        return true;\r\n    }\r\n\r\n    public List<Prodotto> getBevande(){\r\n        return prodottoRepository.findByTipo(Tipo.BEVANDE);\r\n    }\r\n\r\n    public List<Prodotto> getCibo(){\r\n        return prodottoRepository.findByTipo(Tipo.CIBO);\r\n    }\r\n\r\n    public List<Prodotto> getAllAlimenti(){\r\n        List<Prodotto> lista = this.getBevande();\r\n        lista.addAll(this.getCibo());\r\n        return lista;\r\n    }\r\n\r\n    public List<Prodotto> getAll(){\r\n        return StreamSupport.stream(prodottoRepository.findAll().spliterator(), false)\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    public boolean isPresent(Prodotto prodotto, int quantita){\r\n        this.checkIsNull(prodotto, quantita);\r\n        if(!prodottoRepository.existsById(prodotto.getId()) || quantita < 0){\r\n            return false;\r\n        }\r\n        return prodottoRepository.findById(prodotto.getId()).getQuantita() >= quantita;\r\n    }\r\n\r\n    private void checkIsNull(Object ... objects) {\r\n        for(Object obj: objects){\r\n            if(obj == null){\r\n                throw new NullPointerException(\"I parametri passati sono nulli\");\r\n            }\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java	(date 1643383363629)
+@@ -14,7 +14,7 @@
+ public class GestoreProdotti {
+ 
+     @Autowired
+-    ProdottoRepository prodottoRepository;
++    private ProdottoRepository prodottoRepository;
+ 
+     public List<Prodotto> getProdottiOf(List<Richiesta> richieste){
+         List<Prodotto> prodotti = new ArrayList<>();
+@@ -24,6 +24,14 @@
+         return prodotti;
+     }
+ 
++    public int getQuantitaOf(String oggetto) {
++        return prodottoRepository.findByOggetto(oggetto).getQuantita();
++    }
++
++    public double getPrezzoOf(String oggetto) {
++        return prodottoRepository.findByOggetto(oggetto).getPrezzo();
++    }
++
+     public Prodotto getProdottoOf(Richiesta richiesta){
+         return prodottoRepository.findByRichiesteId(richiesta.getId());
+     }
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.AccountRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.UtenteRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\n/**\r\n * Classe che rappresenta un gestore di {@link Account}, che permette di effettuare tutte le operazioni\r\n * connesse (registrazione, login, ...)\r\n *\r\n */\r\n@Service\r\npublic class GestoreAccount {\r\n\r\n    @Autowired\r\n    AccountRepository accountRepository;\r\n\r\n    @Autowired\r\n    UtenteRepository utenteRepository;\r\n\r\n    /**\r\n     * Metodo che permette, attraverso email e password, di effettuare il login a un {@link Account}\r\n     *\r\n     * @param email email associata all'{@link Account}\r\n     * @param psw password associata all'{@link Account}\r\n     *\r\n     * @throws NullPointerException se uno dei parametri passati &egrave; nullo\r\n     * @throws IllegalArgumentException se l'email passata come parametro non &egrave; associata a nessun account\r\n     *\r\n     * @return l'{@link Account} associato alle credenziali passate, o null se questo non esiste\r\n     */\r\n    public Account login(String email, String psw) {\r\n        this.checkIsNull(email, psw);\r\n        Account result = null;\r\n\r\n        if (accountRepository.existsByEmailIgnoreCase(email))\r\n            result = accountRepository.findByEmailIgnoreCaseAndPassword(email, psw.hashCode());\r\n\r\n        return result;\r\n    //    throw new IllegalArgumentException(\"L'email inserita non e' associata a nessun account\");\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette a un {@link Utente} di registrarsi nel sistema, specificando il {@link Livello}, l'email e\r\n     * la password da associare all'{@link Account}\r\n     *\r\n     * @param utente {@link Utente} che effettua la registrazione\r\n     * @param livello {@link Livello} da associare all'{@link Account}\r\n     * @param email email da associare all'{@link Account}\r\n     * @param psw password da associare all'{@link Account}\r\n     *\r\n     * @throws NullPointerException se uno dei parametri passati &egrave; nullo\r\n     *\r\n     * @return true se la registrazione &egrave; andata a buon fine, false se esiste gi&agrave; un {@link Account}\r\n     *         con associata l'email passata\r\n     */\r\n    public boolean registration(Utente utente, Livello livello, String email, String psw){\r\n        this.checkIsNull(utente, email, psw, livello);\r\n/*        if(accountRepository.existsByEmailIgnoreCase(email)) {\r\n            return false;\r\n        }*/\r\n        utenteRepository.save(utente);\r\n        accountRepository.save(new Account(email, psw, 0, livello, utente));\r\n        return true;\r\n    }\r\n\r\n    public boolean checkIfUserExists(Utente u) {\r\n        return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di cambiare la password associata all'{@link Account} passato come parametro\r\n     *\r\n     * @param account {@link Account} del quale cambiare la password\r\n     * @param psw nuova password da associare all'{@link Account}\r\n     *\r\n     * @throws NullPointerException se uno dei parametri passati &egrave; nullo\r\n     *\r\n     * @return true se la password &egrave; stata cambiata correttamente, false se l'{@link Account} passato come\r\n     *         parametro non esiste\r\n     */\r\n    public boolean changePasswordAccount(Account account, String psw) {\r\n        this.checkIsNull(account, psw);\r\n        if(!accountRepository.existsById(account.getId())){\r\n            return false;\r\n            //    throw new IllegalArgumentException(\"L'account passato non esiste\");\r\n        }\r\n        account.setPassword(psw);\r\n        accountRepository.save(account);\r\n        return true;\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di cambiare il {@link Livello} dell'{@link Account} passato come parametro\r\n     *\r\n     * @param account {@link Account} del quale cambiare il {@link Livello}\r\n     * @param livello nuovo livello da associare all'{@link Account}\r\n     *\r\n     * @throws NullPointerException se uno dei parametri passati &egrave; nullo\r\n     *\r\n     * @return true se il livello &egrave; stato cambiato correttamente, false se l'{@link Account} passato come\r\n     *         parametro non esiste\r\n     */\r\n    public boolean updateLivelloAccount(Account account, Livello livello){\r\n        this.checkIsNull(account, livello);\r\n        if(!accountRepository.existsById(account.getId())){\r\n            return false;\r\n            //    throw new IllegalArgumentException(\"L'account passato non esiste\");\r\n        }\r\n        account.setLivello(livello);\r\n        accountRepository.save(account);\r\n        return true;\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di aggiornare il saldo dell'{@link Account} con il saldo passato come parametro\r\n     *\r\n     * @param account {@link Account} del quale aggiornare il saldo\r\n     * @param saldo nuovo saldo dell'{@link Account}\r\n     *\r\n     * @throws NullPointerException se il parametro account &egrave; nullo\r\n     *\r\n     * @return true se il saldo &egrave; stato aggiornato correttamente, false se l'{@link Account} passato come\r\n     *         parametro non esiste\r\n     */\r\n    public boolean updateSaldoAccount(Account account, double saldo){\r\n        this.checkIsNull(account, saldo);\r\n        if(!accountRepository.existsById(account.getId())){\r\n            return false;\r\n            //    throw new IllegalArgumentException(\"L'account passato non esiste\");\r\n        }\r\n        account.setSaldo(saldo);\r\n        accountRepository.save(account);\r\n        return true;\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di ottenere l'{@link Utente} proprietario dell'{@link Account} passato come parametro\r\n     *\r\n     * @param account {@link Account} del quale ottenere l'{@link Utente}\r\n     *\r\n     * @throws IllegalArgumentException se l'{@link Account} passato non esiste\r\n     *\r\n     * @return l'{@link Utente} associato all'account\r\n     */\r\n    public Utente getUtente(Account account) {\r\n        this.checkIsNull(account);\r\n        if(!accountRepository.existsById(account.getId())){\r\n            return null;\r\n         //   throw new IllegalArgumentException(\"L'account passato non esiste\");\r\n        }\r\n        return utenteRepository.findByAccountId(account.getId());\r\n    }\r\n\r\n    private void checkIsNull(Object ... objects){\r\n        for(Object obj: objects){\r\n            if(obj == null){\r\n                throw new NullPointerException(\"I paramentri passati sono nulli\");\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java	(date 1643383363708)
+@@ -5,6 +5,11 @@
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
++import java.time.LocalDate;
++import java.util.function.BiConsumer;
++import java.util.function.BiFunction;
++import java.util.function.Consumer;
++
+ /**
+  * Classe che rappresenta un gestore di {@link Account}, che permette di effettuare tutte le operazioni
+  * connesse (registrazione, login, ...)
+@@ -57,9 +62,7 @@
+      */
+     public boolean registration(Utente utente, Livello livello, String email, String psw){
+         this.checkIsNull(utente, email, psw, livello);
+-/*        if(accountRepository.existsByEmailIgnoreCase(email)) {
+-            return false;
+-        }*/
++
+         utenteRepository.save(utente);
+         accountRepository.save(new Account(email, psw, 0, livello, utente));
+         return true;
+@@ -69,6 +72,38 @@
+         return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());
+     }
+ 
++
++    public boolean changeUserName(Account account, String nome) {
++        return this.aggiornaDatiUtente(account, nome, Utente::setNome);
++    }
++
++    public boolean changeUserSurname(Account account, String cognome) {
++        return this.aggiornaDatiUtente(account, cognome, Utente::setCognome);
++    }
++
++    public boolean changeUserBirthdayDate(Account account, LocalDate data) {
++        return this.aggiornaDatiUtente(account, data, Utente::setDataNascita);
++    }
++
++    private <T> boolean aggiornaDatiUtente(Account account, T valore, BiConsumer<Utente, T> consumerLocale) {
++        this.checkIsNull(account, valore);
++        if(!accountRepository.existsById(account.getId())) return false;
++
++        Utente u = this.getUtenteOf(account);
++        consumerLocale.accept(u, valore);
++        this.utenteRepository.save(u);
++        return true;
++    }
++
++    public boolean changeAccountEmail(Account account, String email) {
++        this.checkIsNull(account, email);
++        if(!accountRepository.existsById(account.getId())) return false;
++
++        account.setEmail(email);
++        this.accountRepository.updateAccountEmailById(account.getId(), email);
++        return true;
++    }
++
+     /**
+      * Metodo che permette di cambiare la password associata all'{@link Account} passato come parametro
+      *
+@@ -82,12 +117,10 @@
+      */
+     public boolean changePasswordAccount(Account account, String psw) {
+         this.checkIsNull(account, psw);
+-        if(!accountRepository.existsById(account.getId())){
+-            return false;
+-            //    throw new IllegalArgumentException("L'account passato non esiste");
+-        }
++        if(!accountRepository.existsById(account.getId())) return false;
++
+         account.setPassword(psw);
+-        accountRepository.save(account);
++        this.accountRepository.updateAccountPasswordById(account.getId(), psw.hashCode());
+         return true;
+     }
+ 
+@@ -103,6 +136,7 @@
+      *         parametro non esiste
+      */
+     public boolean updateLivelloAccount(Account account, Livello livello){
++        //TODO usare il metodo privato aggiornaDatoUtente
+         this.checkIsNull(account, livello);
+         if(!accountRepository.existsById(account.getId())){
+             return false;
+@@ -124,17 +158,23 @@
+      * @return true se il saldo &egrave; stato aggiornato correttamente, false se l'{@link Account} passato come
+      *         parametro non esiste
+      */
+-    public boolean updateSaldoAccount(Account account, double saldo){
++    public boolean updateSaldoAccount(Account account, double saldo) {
+         this.checkIsNull(account, saldo);
+         if(!accountRepository.existsById(account.getId())){
+             return false;
+             //    throw new IllegalArgumentException("L'account passato non esiste");
+         }
+         account.setSaldo(saldo);
+-        accountRepository.save(account);
++
++      //  accountRepository.save(account);
++        accountRepository.updateAccountSaldoById(account.getId(), account.getSaldo());
+         return true;
+     }
+ 
++    public Account getAccountOf(Prenotazione prenotazione) {
++        return this.accountRepository.findByPrenotazioniId(prenotazione.getId());
++    }
++
+     /**
+      * Metodo che permette di ottenere l'{@link Utente} proprietario dell'{@link Account} passato come parametro
+      *
+@@ -144,7 +184,7 @@
+      *
+      * @return l'{@link Utente} associato all'account
+      */
+-    public Utente getUtente(Account account) {
++    public Utente getUtenteOf(Account account) {
+         this.checkIsNull(account);
+         if(!accountRepository.existsById(account.getId())){
+             return null;
+Index: src/main/java/it/unicam/cs/ids/Casotto/Casotto.java
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java b/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java
+deleted file mode 100644
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ /dev/null	(revision e8283872837460480b9246f0f5236771ea89f210)
+@@ -1,63 +0,0 @@
+-package it.unicam.cs.ids.Casotto;
+-
+-import it.unicam.cs.ids.Casotto.Classi.*;
+-import it.unicam.cs.ids.Casotto.Interazione.Acquisizione;
+-import it.unicam.cs.ids.Casotto.Interazione.InteractionManager;
+-import it.unicam.cs.ids.Casotto.Interazione.Menu;
+-import it.unicam.cs.ids.Casotto.Repository.*;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.boot.CommandLineRunner;
+-import org.springframework.boot.SpringApplication;
+-import org.springframework.boot.autoconfigure.SpringBootApplication;
+-import org.springframework.context.annotation.Bean;
+-import org.springframework.stereotype.Controller;
+-
+-import java.util.*;
+-
+-@Controller
+-@SpringBootApplication
+-public class Casotto {
+-
+-	@Autowired
+-	InteractionManager im;
+-
+-	@Autowired
+-	OmbrelloneRepository or;
+-
+-	public static void main(String[] args)  {
+-		SpringApplication.run(Casotto.class, args);
+-	}
+-
+-	@Bean
+-	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or, PrezzoRepository prr) {
+-
+-		return args -> {
+-			String scelta = "";
+-			Scanner sc = new Scanner(System.in);
+-			Map<String, Map<String, Runnable>> menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
+-
+-			while (true) {
+-				System.out.println("\n\n\nMenu'\n");
+-				for (Map.Entry<String, Map<String, Runnable>> e : menu.entrySet())
+-					System.out.println(e.getKey() + ". " + Objects.requireNonNull(e.getValue().entrySet().stream().findFirst().orElse(null)).getKey());
+-
+-				do {
+-					if (!scelta.isEmpty())
+-						System.out.print("Scelta NON valida. Riprova: ");
+-
+-					System.out.print("\nInserisci un numero: ");
+-					scelta = sc.next();
+-				}
+-				while (!menu.containsKey(scelta));
+-
+-				Objects.requireNonNull(menu.get(scelta).entrySet().stream().findFirst().orElse(null)).getValue().run();
+-				menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
+-				scelta = "";
+-			}
+-		};
+-	}
+-
+-	private Menu cambiaMenu(Account account) {
+-		return (account==null) ? Menu::menuInizio : (account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente : Menu::menuGestore;
+-	}
+-}
+\ No newline at end of file
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java
+deleted file mode 100644
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ /dev/null	(revision e8283872837460480b9246f0f5236771ea89f210)
+@@ -1,107 +0,0 @@
+-package it.unicam.cs.ids.Casotto.Classi;
+-
+-import javax.persistence.Id;
+-import javax.persistence.Entity;
+-import javax.persistence.GeneratedValue;
+-
+-/**
+- * Classe che rappresenta l'entit&agrave; 'Contatore Oggetti'
+- *
+- */
+-@Entity
+-public class ContatoreOggetti {
+-
+-    @Id
+-    @GeneratedValue
+-    private long id;
+-    private String oggetto;
+-    private int quantita;
+-    private double prezzo;
+-
+-    /**
+-     * Costruttore di default che inizializza un contatore oggetti per la creazione della corrispondente
+-     * tabella nel database
+-     *
+-     */
+-    public ContatoreOggetti() {
+-    }
+-
+-    /**
+-     * Costruttore che inizializza un contatore oggetti con i parametri passati: questi NON possono essere nulli
+-     *
+-     * @param oggetto descrizione dell'oggetto del quale si vuole memorizzare la quantit&agrave;
+-     * @param quantita quantit&agrave; di oggetti del tipo descritto
+-     * @param prezzo prezzo di un'unit&agrave; dell'oggetto
+-     */
+-    public ContatoreOggetti(String oggetto, int quantita, double prezzo) {
+-        this.oggetto = oggetto;
+-        this.quantita = quantita;
+-        this.prezzo = prezzo;
+-    }
+-
+-    /**
+-     * Restituisce l'identificativo dell'oggetto
+-     *
+-     * @return l'identificativo dell'oggetto
+-     */
+-    public long getId() {
+-        return id;
+-    }
+-
+-    /**
+-     * Restituisce la descrizione dell'oggetto
+-     *
+-     * @return la descrizione dell'oggetto
+-     */
+-    public String getOggetto() {
+-        return oggetto;
+-    }
+-
+-    /**
+-     * Imposta la descrizione dell'oggetto con la descrizione passata come parametro: se quest'ultima &egrave; nulla,
+-     * la descrizione corrente rimane inalterata
+-     *
+-     * @param oggetto nuova descrizione dell'oggetto
+-     */
+-    public void setOggetto(String oggetto) {
+-        this.oggetto = (oggetto==null) ? this.oggetto : oggetto;
+-    }
+-
+-    /**
+-     * Restituisce la quantit&agrave; dell'oggetto
+-     *
+-     * @return la quantit&agrave; dell'oggetto
+-     */
+-    public int getQuantita() {
+-        return quantita;
+-    }
+-
+-    /**
+-     * Imposta la quantit&agrave; di oggetti rimasti con la quantit&agrave; passata come parametro: se
+-     * quest'ultima &egrave; negativa, la quantit&agrave; corrente rimane inalterata
+-     *
+-     * @param quantita quantit&agrave; di oggetti rimasti
+-     */
+-    public void setQuantita(int quantita) {
+-        this.quantita = (quantita<0) ? this.quantita : quantita;
+-    }
+-
+-    /**
+-     * Restituisce il prezzo di un'unit&agrave; dell'oggetto
+-     *
+-     * @return il prezzo di un'unit&agrave; dell'oggetto
+-     */
+-    public double getPrezzo() {
+-        return prezzo;
+-    }
+-
+-    /**
+-     * Imposta il prezzo di un'unit&agrave; dell'oggetto con il prezzo passato come parametro: se quest'ultimo
+-     * &egrave; negativo, il prezzo corrente rimane inalterato
+-     *
+-     * @param prezzo nuovo prezzo di un'unit&agrave; dell'oggetto
+-     */
+-    public void setPrezzo(double prezzo) {
+-        this.prezzo = (prezzo<0) ? this.prezzo : prezzo;
+-    }
+-}
+Index: src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java b/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java
+deleted file mode 100644
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ /dev/null	(revision e8283872837460480b9246f0f5236771ea89f210)
+@@ -1,24 +0,0 @@
+-package it.unicam.cs.ids.Casotto.Repository;
+-
+-import it.unicam.cs.ids.Casotto.Classi.ContatoreOggetti;
+-import org.springframework.data.repository.CrudRepository;
+-import org.springframework.stereotype.Repository;
+-import org.springframework.transaction.annotation.Transactional;
+-
+-import javax.persistence.Entity;
+-
+-/**
+- * {@link Repository} per l'{@link Entity} {@link ContatoreOggetti}
+- *
+- */
+-@Transactional
+-public interface ContatoreOggettiRepository extends CrudRepository<ContatoreOggetti, Long> {
+-
+-    /**
+-     * Query che restituisce il {@link ContatoreOggetti} con associata la descrizione indicata
+-     *
+-     * @param oggetto descrizione dell'oggetto
+-     * @return il {@link ContatoreOggetti} con associata la descrizione indicata, o null se questo non esiste
+-     */
+-    ContatoreOggetti findByOggetto(String oggetto);
+-}
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"JavadocGenerationManager\">\r\n    <option name=\"OUTPUT_DIRECTORY\" value=\"$PROJECT_DIR$/../../../VPProjects/casotto\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" project-jdk-name=\"15\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/.idea/misc.xml	(date 1643383357408)
+@@ -1,5 +1,10 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="EntryPointsManager">
++    <writeAnnotations>
++      <writeAnnotation name="org.springframework.beans.factory.annotation.Autowired" />
++    </writeAnnotations>
++  </component>
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="JavadocGenerationManager">
+     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../../VPProjects/casotto" />
+Index: src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Repository;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.Account;\r\nimport it.unicam.cs.ids.Casotto.Classi.Utente;\r\nimport org.springframework.data.repository.CrudRepository;\r\nimport org.springframework.stereotype.Repository;\r\nimport org.springframework.transaction.annotation.Transactional;\r\nimport javax.persistence.Entity;\r\nimport java.time.LocalDate;\r\n\r\n/**\r\n * {@link Repository} per l'{@link Entity} {@link Utente}\r\n *\r\n */\r\n@Repository\r\n@Transactional\r\npublic interface UtenteRepository extends CrudRepository<Utente, Long>{\r\n\r\n    /**\r\n     * Query che estrae l'{@link Utente} proprietario dell'{@link Account} identificato dall'id passato come parametro\r\n     *\r\n     * @param accountID id dell'{@link Account}, del quale estrarre l'{@link Utente}\r\n     * @return l'{@link Utente} proprietario dell'{@link Account}, o null se questo non esiste\r\n     */\r\n    Utente findByAccountId(long accountID);\r\n\r\n    boolean existsByNomeAndCognomeAndDataNascita(String nome, String cognome, LocalDate dataNascita);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java b/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java	(date 1643383357408)
+@@ -2,6 +2,8 @@
+ 
+ import it.unicam.cs.ids.Casotto.Classi.Account;
+ import it.unicam.cs.ids.Casotto.Classi.Utente;
++import org.springframework.data.jpa.repository.Modifying;
++import org.springframework.data.jpa.repository.Query;
+ import org.springframework.data.repository.CrudRepository;
+ import org.springframework.stereotype.Repository;
+ import org.springframework.transaction.annotation.Transactional;
+Index: src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Repository;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.Ordinazione;\r\nimport it.unicam.cs.ids.Casotto.Classi.Stato;\r\nimport org.springframework.data.repository.CrudRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\nimport java.util.List;\r\nimport java.util.Stack;\r\n\r\n@Repository\r\npublic interface OrdinazioneRepository extends CrudRepository<Ordinazione, Long> {\r\n\r\n    Ordinazione findById(long id);\r\n\r\n    boolean existsById(long id);\r\n\r\n    List<Ordinazione> findByStato(Stato stato);\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java b/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java	(date 1643383357423)
+@@ -5,6 +5,7 @@
+ import org.springframework.data.repository.CrudRepository;
+ import org.springframework.stereotype.Repository;
+ 
++import java.time.LocalDate;
+ import java.util.List;
+ import java.util.Stack;
+ 
+@@ -15,5 +16,8 @@
+ 
+     boolean existsById(long id);
+ 
+-    List<Ordinazione> findByStato(Stato stato);
++    List<Ordinazione> findByStatoAndData(Stato stato, LocalDate data);
++
++    List<Ordinazione> findByOmbrelloneIdAndData(long id, LocalDate data);
++
+ }
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.ContatoreOggettiRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.time.LocalDate;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\nimport java.util.Optional;\r\n\r\n/**\r\n * Classe che rappresenta un gestore spiaggia, che permette di effettuare le operazioni\r\n * connesse\r\n *\r\n */\r\n@Service\r\npublic class Spiaggia {\r\n\r\n    @Autowired\r\n    OmbrelloneRepository ombrelloneRepository;\r\n\r\n    @Autowired\r\n    PrezzoRepository prezzoRepository;\r\n\r\n    @Autowired\r\n    PrenotazioniRepository prenotazioneRepository;\r\n\r\n    @Autowired\r\n    ContatoreOggettiRepository contatoreOggettiRepository;\r\n\r\n    /**\r\n     * Metodo che calcola il prezzo totale di una prenotazione in base al prezzo dell'{@link Ombrellone} e alla\r\n     * quantit&agrave; di sdraie e lettini presenti nella prenotazione\r\n     *\r\n     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo totale\r\n     *\r\n     * @throws NullPointerException se la {@link Prenotazione} passata &egrave; nulla\r\n     *\r\n     * @return il prezzo totale della prenotazione\r\n     */\r\n    public double getPrezzoTotale(Prenotazione prenotazione){\r\n\r\n        if(Objects.isNull(prenotazione)) throw new NullPointerException(\"La prenotazione passata è nulla\");\r\n\r\n        double prezzoFinale = 0.0;\r\n        for(Ombrellone ombrellone: prenotazione.getOmbrelloni())\r\n            prezzoFinale += this.getPrezzoOmbrellone(ombrellone, prenotazione.getDataPrenotazione(), prenotazione.getDurata()).getPrezzo();\r\n\r\n        prezzoFinale += contatoreOggettiRepository.findByOggetto(\"Lettini\").getPrezzo()*prenotazione.getLettini();\r\n        prezzoFinale += contatoreOggettiRepository.findByOggetto(\"Sdraie\").getPrezzo()* prenotazione.getSdraie();\r\n        return prezzoFinale;\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di ottenere il {@link Prezzo} di un {@link Ombrellone} in una determinata data (passata come\r\n     * parametro). Il {@link Prezzo} viene cercato in base alla data intera e, se non viene trovato, viene cercato\r\n     * solamente in base al mese\r\n     *\r\n     * @param ombrellone {@link Ombrellone} del quel cercare il {@link Prezzo}\r\n     * @param dataPrenotazione data in cui si vuole effettuare la {@link Prenotazione}\r\n     * @param durata {@link Durata} temporale della prenotazione\r\n     * @return  il prezzo dell'{@link Ombrellone} passato\r\n     */\r\n    public Prezzo getPrezzoOmbrellone(Ombrellone ombrellone, LocalDate dataPrenotazione, Durata durata) {\r\n        Optional<Prezzo> prezzo = this.checkDataCorrente(prezzoRepository.findByOmbrelloniId(ombrellone.getId()), dataPrenotazione, durata);\r\n        if(prezzo.isPresent()) return prezzo.get();\r\n\r\n        prezzo = this.checkMeseCorrente(prezzoRepository.findByOmbrelloniId(ombrellone.getId()), dataPrenotazione, durata);\r\n        return prezzo.orElse(null);\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di conoscere gli ombrelloni liberi nella data indicata e per una certa {@link Durata} temporale\r\n     *\r\n     * @param dataPrenotazione data nella quale si vogliono conoscere gli ombrelloni liberi\r\n     * @param durata {@link Durata} temporale della prenotazione\r\n     * @return una {@link List} contenente gli ombrelloni che risultano liberi in base ai parametri passati\r\n     */\r\n    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){\r\n        List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();\r\n        ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));\r\n        return ombrelloni;\r\n    }\r\n\r\n    /**\r\n     * Verifica se un {@link Ombrellone} &egrave; disponibile nella data indicata, in base alla {@link Durata} temporale\r\n     *\r\n     * @param ombrellone {@link Ombrellone} del quale verificare la disponibilit&agrave;\r\n     * @param dataPrenotazione data nella quale verificare la disponibilit&agrave; dell'{@link Ombrellone}\r\n     * @param durata durata temporale per la quale verificare la disponibilit&agrave; dell'{@link Ombrellone}\r\n     *\r\n     * @throws NullPointerException se almeno UNO dei parametri passati &egrave; nullo\r\n     *\r\n     * @return true se l'ombrellone &egrave; disponibile, false altrimenti\r\n     */\r\n    public boolean notIsFree(Ombrellone ombrellone, LocalDate dataPrenotazione, Durata durata){\r\n        if(ombrellone == null || dataPrenotazione == null || durata == null){\r\n            throw new NullPointerException(\"I parametri passati sono nulli\");\r\n        }\r\n        for (Prenotazione prenotazione: prenotazioneRepository.findByOmbrelloniIdAndDataPrenotazione(ombrellone.getId(), dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO || (durata==Durata.INTERO && (prenotazione.getDurata()==Durata.MATTINO || prenotazione.getDurata()==Durata.POMERIGGIO)))\r\n                return true;\r\n/*            else if (prenotazione.getDurata()==Durata.MATTINO && durata==Durata.INTERO)\r\n                return true;\r\n            else if (prenotazione.getDurata()==Durata.POMERIGGIO && durata==Durata.INTERO)\r\n                return true;*/\r\n        }\r\n        return false;\r\n    }\r\n\r\n    /**\r\n     * Metodo che calcola il numero di lettini ancora disponibili. Si estrae da ogni prenotazione (con data uguale a\r\n     * quella passata come parametro e con {@link Durata} pari a 'INTERO' o alla durata passata come parametro) il\r\n     * numero di lettini associati, che vengono sommati in un accumulatore. La quantit&agrave; ottenuta viene sottratta\r\n     * dal totale delle lettini disponibili\r\n     *\r\n     * @param dataPrenotazione data della prenotazione\r\n     * @param durata durata della prenotazione\r\n     * @return il numero di lettini disponibili\r\n     */\r\n    public int lettiniDisponibili(LocalDate dataPrenotazione, Durata durata){\r\n        int oggettiOccupati = 0;\r\n        int quantitaTotale = contatoreOggettiRepository.findByOggetto(\"lettini\").getQuantita();\r\n\r\n        for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){\r\n                oggettiOccupati += prenotazione.getLettini();\r\n            }\r\n        }\r\n        return quantitaTotale-oggettiOccupati;\r\n    }\r\n\r\n    /**\r\n     * Metodo che calcola il numero di sdraie ancora disponibili. Si estrae da ogni prenotazione (con data uguale a\r\n     * quella passata come parametro e con {@link Durata} pari a 'INTERO' o alla durata passata come parametro) il\r\n     * numero di sdraie associate, che vengono sommate in un accumulatore. La quantit&agrave; ottenuta viene sottratta\r\n     * dal totale delle sdraie disponibili\r\n     *\r\n     * @param dataPrenotazione data della prenotazione\r\n     * @param durata durata della prenotazione\r\n     * @return il numero di sdraie disponibili\r\n     */\r\n    public int sdraieDisponibili(LocalDate dataPrenotazione, Durata durata) {\r\n        int oggettiOccupati = 0;\r\n        int quantitaTotale = contatoreOggettiRepository.findByOggetto(\"sdraie\").getQuantita();\r\n\r\n        for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){\r\n            if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){\r\n                oggettiOccupati += prenotazione.getSdraie();\r\n            }\r\n        }\r\n        return quantitaTotale-oggettiOccupati;\r\n    }\r\n\r\n    public List<Ombrellone> getAllOmbrelloni() {\r\n        return this.ombrelloneRepository.findAll();\r\n    }\r\n\r\n    private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){\r\n        return prezzi.stream()\r\n                .filter(p -> p.getDataInizio() != null && p.getDataFine() != null)\r\n                .filter(p -> p.getDataInizio().compareTo(dataPrenotazione) <= 0 &&\r\n                        p.getDataFine().compareTo(dataPrenotazione) >= 0)\r\n                .filter(p -> this.checkDurata(p, durata)).findFirst();\r\n    }\r\n\r\n    private Optional<Prezzo> checkMeseCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){\r\n        return prezzi.stream()\r\n                .filter(p -> p.getMeseInizio() != 0 && p.getMeseFine() != 0)\r\n                .filter(p -> p.getMeseInizio() <= dataPrenotazione.getMonthValue() &&\r\n                        p.getMeseFine() >= dataPrenotazione.getMonthValue())\r\n                .filter(p -> this.checkDurata(p, durata)).findFirst();\r\n    }\r\n\r\n    private boolean checkDurata(Prezzo prezzo, Durata durata){\r\n        return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java	(date 1643383357423)
+@@ -1,6 +1,5 @@
+ package it.unicam.cs.ids.Casotto.Classi;
+ 
+-import it.unicam.cs.ids.Casotto.Repository.ContatoreOggettiRepository;
+ import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
+ import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
+ import it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;
+@@ -30,7 +29,8 @@
+     PrenotazioniRepository prenotazioneRepository;
+ 
+     @Autowired
+-    ContatoreOggettiRepository contatoreOggettiRepository;
++    GestoreProdotti gestoreProdotti;
++
+ 
+     /**
+      * Metodo che calcola il prezzo totale di una prenotazione in base al prezzo dell'{@link Ombrellone} e alla
+@@ -42,7 +42,7 @@
+      *
+      * @return il prezzo totale della prenotazione
+      */
+-    public double getPrezzoTotale(Prenotazione prenotazione){
++    public double getPrezzoTotale(Prenotazione prenotazione) {
+ 
+         if(Objects.isNull(prenotazione)) throw new NullPointerException("La prenotazione passata è nulla");
+ 
+@@ -50,8 +50,8 @@
+         for(Ombrellone ombrellone: prenotazione.getOmbrelloni())
+             prezzoFinale += this.getPrezzoOmbrellone(ombrellone, prenotazione.getDataPrenotazione(), prenotazione.getDurata()).getPrezzo();
+ 
+-        prezzoFinale += contatoreOggettiRepository.findByOggetto("Lettini").getPrezzo()*prenotazione.getLettini();
+-        prezzoFinale += contatoreOggettiRepository.findByOggetto("Sdraie").getPrezzo()* prenotazione.getSdraie();
++        prezzoFinale += this.gestoreProdotti.getPrezzoOf("lettini") * prenotazione.getLettini();
++        prezzoFinale += this.gestoreProdotti.getPrezzoOf("sdraie") * prenotazione.getSdraie();
+         return prezzoFinale;
+     }
+ 
+@@ -124,7 +124,7 @@
+      */
+     public int lettiniDisponibili(LocalDate dataPrenotazione, Durata durata){
+         int oggettiOccupati = 0;
+-        int quantitaTotale = contatoreOggettiRepository.findByOggetto("lettini").getQuantita();
++        int quantitaTotale = this.gestoreProdotti.getQuantitaOf("lettini");
+ 
+         for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){
+             if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){
+@@ -146,7 +146,7 @@
+      */
+     public int sdraieDisponibili(LocalDate dataPrenotazione, Durata durata) {
+         int oggettiOccupati = 0;
+-        int quantitaTotale = contatoreOggettiRepository.findByOggetto("sdraie").getQuantita();
++        int quantitaTotale = this.gestoreProdotti.getQuantitaOf("sdraie");
+ 
+         for(Prenotazione prenotazione: prenotazioneRepository.findByDataPrenotazione(dataPrenotazione)){
+             if(prenotazione.getDurata() == Durata.INTERO || prenotazione.getDurata() == durata){
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Service\r\npublic class GestorePagamenti {\r\n\r\n    private final GestoreProdotti gestoreProdotti;\r\n    private final GestoreOrdinazione gestoreOrdinazione;\r\n\r\n    public GestorePagamenti() {\r\n        this.gestoreProdotti = new GestoreProdotti();\r\n        this.gestoreOrdinazione = new GestoreOrdinazione();\r\n    }\r\n\r\n    /**\r\n     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}\r\n     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;\r\n     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account\r\n     *\r\n     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale\r\n     * @param account {@link Account} del quale conoscere il saldo\r\n     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}\r\n     */\r\n    public double prezzoFinale(Prenotazione prenotazione, Account account){\r\n        return (account.getSaldo()>prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();\r\n    }\r\n\r\n    public boolean pagamentoElettronico(Ordinazione ordinazione){\r\n        //TODO: implementazione comunicazione con il POS ed il sistema sta in attesa della risposta positiva del POS\r\n        gestoreOrdinazione.setStato(ordinazione, Stato.PAGATO);\r\n        return true;\r\n    }\r\n\r\n    public double pagamentoContanti(Ordinazione ordinazione, double denaro){\r\n        if(denaro < ordinazione.getPrezzoTot()){\r\n            throw new IllegalArgumentException(\"Denaro insufficente\");\r\n        }\r\n        gestoreOrdinazione.setStato(ordinazione, Stato.PAGATO);\r\n        return denaro - ordinazione.getPrezzoTot();\r\n    }\r\n\r\n    public String creazioneScontrino(Ordinazione ordinazione){\r\n        if(ordinazione == null){\r\n            throw new NullPointerException(\"L'ordinazione passata è nulla\");\r\n        }\r\n        if(ordinazione.getStato() == Stato.DA_PAGARE || ordinazione.getStato() == Stato.CONSEGNATO){\r\n            return null;\r\n        }\r\n        GestoreOrdinazione gestoreOrdinazione = new GestoreOrdinazione();\r\n        List<String> scontrino = new ArrayList<>();\r\n        for(Richiesta richiesta: gestoreOrdinazione.getRichiesteOf(ordinazione)){\r\n            scontrino.add(gestoreProdotti.getProdottoOf(richiesta).getOggetto() +\r\n                    \"  \" + richiesta.getQuantita() + \"  \" + richiesta.getPrezzo());\r\n\r\n        }\r\n        scontrino.add(\"Totale:  \"+ordinazione.getPrezzoTot());\r\n        return this.generateStringOfScontrino(scontrino);\r\n    }\r\n\r\n    private String generateStringOfScontrino(List<String> righe){\r\n        StringBuilder scontrinoCompleto = new StringBuilder(\"Prodotto    Quantità    Prezzo\\n\");\r\n        for(String riga: righe){\r\n            scontrinoCompleto.append(riga);\r\n            scontrinoCompleto.append(\"\\n\");\r\n        }\r\n        return scontrinoCompleto.toString();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java	(date 1643383357439)
+@@ -1,5 +1,6 @@
+ package it.unicam.cs.ids.Casotto.Classi;
+ 
++import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
+ import java.util.ArrayList;
+@@ -8,25 +9,28 @@
+ @Service
+ public class GestorePagamenti {
+ 
+-    private final GestoreProdotti gestoreProdotti;
+-    private final GestoreOrdinazione gestoreOrdinazione;
++    @Autowired
++    private GestoreProdotti gestoreProdotti;
++
++    @Autowired
++    private GestoreOrdinazione gestoreOrdinazione;
++
++    @Autowired
++    private GestoreAccount gestoreAccount;
++
++    @Autowired
++    private GestorePrenotazioni gestorePrenotazioni;
+ 
+     public GestorePagamenti() {
+-        this.gestoreProdotti = new GestoreProdotti();
+-        this.gestoreOrdinazione = new GestoreOrdinazione();
+     }
+ 
+-    /**
+-     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
+-     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
+-     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
+-     *
+-     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
+-     * @param account {@link Account} del quale conoscere il saldo
+-     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
+-     */
+-    public double prezzoFinale(Prenotazione prenotazione, Account account){
+-        return (account.getSaldo()>prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
++    public boolean pagamentoPrenotazione(Prenotazione prenotazione, Account account) {
++        if(prenotazione.getPrezzo() >= account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, 0);
++        else if(prenotazione.getPrezzo() < account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, account.getSaldo() - prenotazione.getPrezzo());
++
++        //Pagamento "prezzoFinale"
++
++        return this.gestorePrenotazioni.registrazionePrenotazione(prenotazione);
+     }
+ 
+     public boolean pagamentoElettronico(Ordinazione ordinazione){
+@@ -52,6 +56,8 @@
+         }
+         GestoreOrdinazione gestoreOrdinazione = new GestoreOrdinazione();
+         List<String> scontrino = new ArrayList<>();
++        //TODO vedere se ordinazione.getOmbrellone().getId() funziona
++        scontrino.add("Ordinazione: " + ordinazione.getId() + " Ombrellone: " + ordinazione.getOmbrellone().getId());
+         for(Richiesta richiesta: gestoreOrdinazione.getRichiesteOf(ordinazione)){
+             scontrino.add(gestoreProdotti.getProdottoOf(richiesta).getOggetto() +
+                     "  " + richiesta.getQuantita() + "  " + richiesta.getPrezzo());
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.AccountRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.AttivitaRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PartecipaRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.time.LocalDate;\r\nimport java.util.List;\r\nimport java.util.stream.Collectors;\r\n\r\n@Service\r\npublic class GestoreAttivita {\r\n\r\n    @Autowired\r\n    AccountRepository accountRepository;\r\n\r\n    @Autowired\r\n    AttivitaRepository attivitaRepository;\r\n\r\n    @Autowired\r\n    PartecipaRepository partecipaRepository;\r\n\r\n    public List<Attivita> getAllAttivitaOf(Account account){\r\n        return partecipaRepository.findByPartecipanteId(account.getId())\r\n                .stream().map(p -> attivitaRepository.findByPartecipantiId(p.getId()))\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    public List<Attivita> getAllAttivitaForTodayOf(Account account){\r\n        return this.getAllAttivitaOf(account).stream().filter(a -> a.getData().isEqual(LocalDate.now())).collect(Collectors.toList());\r\n    }\r\n\r\n    public boolean thereIsAttivitaForToday(){\r\n        return !this.getAllAttivitaForToday().isEmpty();\r\n    }\r\n\r\n    public List<Attivita> getAllAttivitaForToday(){\r\n        return this.getAllAttivitaOf(LocalDate.now());\r\n    }\r\n\r\n    public List<Attivita> getAllAttivitaOf(LocalDate data){\r\n        return attivitaRepository.findByData(data);\r\n    }\r\n\r\n    public List<Account> getAccountIscrittiTo(Attivita attivita){\r\n        return partecipaRepository.findByAttivitaId(attivita.getId())\r\n                .stream().map(iscr -> accountRepository.findByIscrizioniId(iscr.getId()))\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    public int postiRimanenti(Attivita attivita){\r\n        int postiRimanenti = attivita.getNumeroposti();\r\n        for(Partecipa iscrizione: partecipaRepository.findByAttivitaId(attivita.getId())){\r\n            postiRimanenti -= iscrizione.getNumPartecipanti();\r\n        }\r\n        return postiRimanenti;\r\n    }\r\n\r\n    public boolean canPrenotate (int numPartecipanti, Attivita attivita){\r\n        return this.postiRimanenti(attivita) >= numPartecipanti;\r\n    }\r\n\r\n    public boolean prenotazione(Account account, int numPartecipanti, Attivita attivita){\r\n        if(!this.canPrenotate(numPartecipanti, attivita)){\r\n            return false;\r\n        }\r\n        Partecipa iscrizione = new Partecipa(numPartecipanti, account, attivita);\r\n        partecipaRepository.save(iscrizione);\r\n        account.setLivello(Livello.PARTECIPANTE);\r\n        accountRepository.save(account);\r\n        return true;\r\n    }\r\n\r\n    public boolean cancellaPrenotazione(Account account, Attivita attivita){\r\n        return this.cancellaPrenotazione(partecipaRepository.findByPartecipanteIdAndAttivitaId(account.getId(), attivita.getId()));\r\n    }\r\n\r\n    public boolean cancellaPrenotazione(Partecipa iscrizione){\r\n        Account account = accountRepository.findByIscrizioniId(iscrizione.getId());\r\n        if(!partecipaRepository.existsById(iscrizione.getId())){\r\n            throw new IllegalArgumentException(\"L'iscrizione passata non esiste\");\r\n        }\r\n        if(!this.haveOtherIscrizioniForToday(account)){\r\n            account.setLivello(Livello.CLIENTE);\r\n            accountRepository.save(account);\r\n        }\r\n        partecipaRepository.deleteById(iscrizione.getId());\r\n        return true;\r\n    }\r\n\r\n    private boolean haveOtherIscrizioniForToday(Account account){\r\n        return !this.getAllAttivitaForTodayOf(account).isEmpty();\r\n    }\r\n\r\n    public boolean decrementaNumPartecipanti(Partecipa iscrizione, int partecipantiDaTogliere){\r\n        if(!partecipaRepository.existsById(iscrizione.getId())){\r\n            throw new IllegalArgumentException(\"L'iscrizone passata non esiste\");\r\n        }\r\n        if(iscrizione.getNumPartecipanti() <= partecipantiDaTogliere){\r\n            return this.cancellaPrenotazione(iscrizione);\r\n        }\r\n        iscrizione.setNumPartecipanti(iscrizione.getNumPartecipanti() - partecipantiDaTogliere);\r\n        partecipaRepository.save(iscrizione);\r\n        return true;\r\n    }\r\n\r\n    public boolean incrementaNumPartecipanti(Partecipa iscrizione, int partecipantiDaAggiungere){\r\n        if(!partecipaRepository.existsById(iscrizione.getId())){\r\n            throw new IllegalArgumentException(\"L'iscrizone passata non esiste\");\r\n        }\r\n        if(!this.canPrenotate(partecipantiDaAggiungere, attivitaRepository.findByPartecipantiId(iscrizione.getId()))){\r\n            return false;\r\n        }\r\n        iscrizione.setNumPartecipanti(iscrizione.getNumPartecipanti() + partecipantiDaAggiungere);\r\n        partecipaRepository.save(iscrizione);\r\n        return true;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java	(date 1643383357439)
+@@ -22,6 +22,9 @@
+     @Autowired
+     PartecipaRepository partecipaRepository;
+ 
++    @Autowired
++    GestoreAccount gestoreAccount;
++
+     public List<Attivita> getAllAttivitaOf(Account account){
+         return partecipaRepository.findByPartecipanteId(account.getId())
+                 .stream().map(p -> attivitaRepository.findByPartecipantiId(p.getId()))
+@@ -32,7 +35,7 @@
+         return this.getAllAttivitaOf(account).stream().filter(a -> a.getData().isEqual(LocalDate.now())).collect(Collectors.toList());
+     }
+ 
+-    public boolean thereIsAttivitaForToday(){
++    public boolean thereIsAttivitaForToday() {
+         return !this.getAllAttivitaForToday().isEmpty();
+     }
+ 
+@@ -68,8 +71,8 @@
+         }
+         Partecipa iscrizione = new Partecipa(numPartecipanti, account, attivita);
+         partecipaRepository.save(iscrizione);
+-        account.setLivello(Livello.PARTECIPANTE);
+-        accountRepository.save(account);
++        this.gestoreAccount.updateLivelloAccount(account, Livello.PARTECIPANTE);
++
+         return true;
+     }
+ 
+@@ -77,7 +80,7 @@
+         return this.cancellaPrenotazione(partecipaRepository.findByPartecipanteIdAndAttivitaId(account.getId(), attivita.getId()));
+     }
+ 
+-    public boolean cancellaPrenotazione(Partecipa iscrizione){
++    private boolean cancellaPrenotazione(Partecipa iscrizione) {
+         Account account = accountRepository.findByIscrizioniId(iscrizione.getId());
+         if(!partecipaRepository.existsById(iscrizione.getId())){
+             throw new IllegalArgumentException("L'iscrizione passata non esiste");
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e044db9b-05ef-4b90-a42d-06c9973a3058\" name=\"Changes\" comment=\"Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreNotifiche.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Notifica.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/NotificaRepository.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2022_22_57__Changes_.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2022_22_57__Changes_.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Interface\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_TAGS\">\r\n      <GitPushTagMode>\r\n        <option name=\"argument\" value=\"--tags\" />\r\n        <option name=\"title\" value=\"All\" />\r\n      </GitPushTagMode>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitSEFilterConfiguration\">\r\n    <file-type-list>\r\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\r\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\r\n      <filtered-out-file-type name=\"TAG\" />\r\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\r\n    </file-type-list>\r\n  </component>\r\n  <component name=\"JpbToolWindowState\">\r\n    <option name=\"myId2FirstActivated\">\r\n      <map>\r\n        <entry key=\"com.haulmont.jpb.jpaInspector\" value=\"true\" />\r\n        <entry key=\"com.haulmont.jpb.jpaPalette\" value=\"true\" />\r\n        <entry key=\"com.haulmont.jpb.jpaStructure\" value=\"true\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"myId2Visible\">\r\n      <map>\r\n        <entry key=\"com.haulmont.jpb.jpaInspector\" value=\"false\" />\r\n        <entry key=\"com.haulmont.jpb.jpaPalette\" value=\"false\" />\r\n        <entry key=\"com.haulmont.jpb.jpaStructure\" value=\"false\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"22dx3ELdjfWQW1gByHTFPfGsk60\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"reference.settingsdialog.project.gradle\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Leira\\Documents\\programmi\\java\\Casotto\\src\\main\\java\\it\\unicam\\cs\\ids\\Casotto\\Repository\" />\r\n      <recent name=\"C:\\Users\\Leira\\Documents\\programmi\\java\\Casotto\\src\\main\\java\\it\\unicam\\cs\\ids\\Casotto\\Classi\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"CasottoApplication\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"it.unicam.cs.ids.Casotto.CasottoApplication\" />\r\n      <module name=\"Casotto.main\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"it.unicam.cs.ids.Casotto.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.CasottoApplication\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e044db9b-05ef-4b90-a42d-06c9973a3058\" name=\"Changes\" comment=\"\" />\r\n      <created>1640181066337</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1640181066337</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Implementazione classi entità con le relative enum\">\r\n      <created>1640611963076</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1640611963076</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.\">\r\n      <created>1642696155387</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1642696155387</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.\">\r\n      <created>1643110521865</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1643110521865</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"UnknownFeatures\">\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.jupiter:junit-jupiter-params\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:jakarta.xml.bind:jakarta.xml.bind-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.slf4j:jul-to-slf4j\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.hamcrest:hamcrest\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter-data-jpa\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.data:spring-data-commons\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:net.bytebuddy:byte-buddy-agent\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.platform:junit-platform-engine\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.zaxxer:HikariCP\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-aspects\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.jboss:jandex\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:net.minidev:accessors-smart\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter-test\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.aspectj:aspectjweaver\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.jayway.jsonpath:json-path\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-beans\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-test\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.fasterxml:classmate\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.hibernate.common:hibernate-commons-annotations\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.hibernate:hibernate-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.glassfish.jaxb:jaxb-runtime\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.skyscreamer:jsonassert\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.data:spring-data-jpa\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:ch.qos.logback:logback-classic\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.mockito:mockito-junit-jupiter\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:jakarta.activation:jakarta.activation-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.glassfish.jaxb:txw2\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.opentest4j:opentest4j\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.objenesis:objenesis\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.jupiter:junit-jupiter\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-tx\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.jupiter:junit-jupiter-engine\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-jcl\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter-logging\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter-aop\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:ch.qos.logback:logback-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-test\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.apache.logging.log4j:log4j-to-slf4j\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.platform:junit-platform-commons\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:jakarta.annotation:jakarta.annotation-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:jakarta.persistence:jakarta.persistence-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.jboss.logging:jboss-logging\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-orm\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.slf4j:slf4j-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.ow2.asm:asm\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:antlr:antlr\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.yaml:snakeyaml\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-autoconfigure\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-context\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-test-autoconfigure\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-expression\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.sun.istack:istack-commons-runtime\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-aop\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.junit.jupiter:junit-jupiter-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:net.minidev:json-smart\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:mysql:mysql-connector-java\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.assertj:assertj-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.vaadin.external.google:android-json\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.apiguardian:apiguardian-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework:spring-jdbc\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.springframework.boot:spring-boot-starter-jdbc\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.mockito:mockito-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:jakarta.transaction:jakarta.transaction-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:com.sun.activation:jakarta.activation\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.apache.logging.log4j:log4j-api\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:org.xmlunit:xmlunit-core\" />\r\n    <option featureType=\"dependencySupport\" implementationName=\"java:net.bytebuddy:byte-buddy\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"First Commit\" />\r\n    <MESSAGE value=\"Implementazione classi entità con le relative enum\" />\r\n    <MESSAGE value=\"Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.\" />\r\n    <MESSAGE value=\"Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/.idea/workspace.xml	(date 1643383467829)
+@@ -4,14 +4,39 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.">
+-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreNotifiche.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Notifica.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/NotificaRepository.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2022_22_57__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_01_2022_22_57__Changes_.xml" afterDir="false" />
++    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Fix della signature del metodo findByPartecipanteIdAndAttivitaId per la chiamata">
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAccount.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAttivita.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePagamenti.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreProdotti.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -23,21 +48,7 @@
+       <ProjectState />
+     </projectState>
+   </component>
+-  <component name="FileTemplateManagerImpl">
+-    <option name="RECENT_TEMPLATES">
+-      <list>
+-        <option value="Interface" />
+-        <option value="Class" />
+-      </list>
+-    </option>
+-  </component>
+   <component name="Git.Settings">
+-    <option name="PUSH_TAGS">
+-      <GitPushTagMode>
+-        <option name="argument" value="--tags" />
+-        <option name="title" value="All" />
+-      </GitPushTagMode>
+-    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="GitSEFilterConfiguration">
+@@ -65,7 +76,6 @@
+     </option>
+   </component>
+   <component name="ProjectId" id="22dx3ELdjfWQW1gByHTFPfGsk60" />
+-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+@@ -76,7 +86,7 @@
+     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository" />
+-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
++    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+   </component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+@@ -120,94 +130,57 @@
+       <option name="project" value="LOCAL" />
+       <updated>1640611963076</updated>
+     </task>
+-    <task id="LOCAL-00002" summary="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti.">
+-      <created>1642696155387</created>
++    <task id="LOCAL-00002" summary="Creazione interfaccia per i vari Menù e della classe Acquisizione per l'acquisizione dei vari dati da tastiera.">
++      <created>1643061799757</created>
+       <option name="number" value="00002" />
+       <option name="presentableId" value="LOCAL-00002" />
+       <option name="project" value="LOCAL" />
+-      <updated>1642696155387</updated>
++      <updated>1643061799757</updated>
+     </task>
+-    <task id="LOCAL-00003" summary="Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi.">
+-      <created>1643110521865</created>
++    <task id="LOCAL-00003" summary="Aggiornata in Casotto la modalità di visualizzazione dei menù e selezione delle voci">
++      <created>1643061958152</created>
+       <option name="number" value="00003" />
+       <option name="presentableId" value="LOCAL-00003" />
+       <option name="project" value="LOCAL" />
+-      <updated>1643110521865</updated>
++      <updated>1643061958152</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="Aggiornamento file application.properties per impedire la visualizzazione delle query sql effettuate da spring boot">
++      <created>1643062017094</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1643062017094</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Rimozione del filtro che, nel metodo Spiaggia.getOmbrelloniLiberi, rimuove gli ombrelloni con capienza uguale al numero dei partecipanti">
++      <created>1643062305975</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1643062305975</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Correzione dichiarazione packages e imports">
++      <created>1643063014019</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1643063014019</updated>
++    </task>
++    <task id="LOCAL-00007" summary="Ricaricamento ContatoreOggettiRepository">
++      <created>1643063138978</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1643063138978</updated>
++    </task>
++    <task id="LOCAL-00008" summary="Eliminazione import inutilizzati">
++      <created>1643063309405</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1643063309405</updated>
++    </task>
++    <option name="localTasksCounter" value="9" />
+     <servers />
+-  </component>
+-  <component name="UnknownFeatures">
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-params" />
+-    <option featureType="dependencySupport" implementationName="java:jakarta.xml.bind:jakarta.xml.bind-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.slf4j:jul-to-slf4j" />
+-    <option featureType="dependencySupport" implementationName="java:org.hamcrest:hamcrest" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-data-jpa" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
+-    <option featureType="dependencySupport" implementationName="java:net.bytebuddy:byte-buddy-agent" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.platform:junit-platform-engine" />
+-    <option featureType="dependencySupport" implementationName="java:com.zaxxer:HikariCP" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-aspects" />
+-    <option featureType="dependencySupport" implementationName="java:org.jboss:jandex" />
+-    <option featureType="dependencySupport" implementationName="java:net.minidev:accessors-smart" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-test" />
+-    <option featureType="dependencySupport" implementationName="java:org.aspectj:aspectjweaver" />
+-    <option featureType="dependencySupport" implementationName="java:com.jayway.jsonpath:json-path" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-beans" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-test" />
+-    <option featureType="dependencySupport" implementationName="java:com.fasterxml:classmate" />
+-    <option featureType="dependencySupport" implementationName="java:org.hibernate.common:hibernate-commons-annotations" />
+-    <option featureType="dependencySupport" implementationName="java:org.hibernate:hibernate-core" />
+-    <option featureType="dependencySupport" implementationName="java:org.glassfish.jaxb:jaxb-runtime" />
+-    <option featureType="dependencySupport" implementationName="java:org.skyscreamer:jsonassert" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-jpa" />
+-    <option featureType="dependencySupport" implementationName="java:ch.qos.logback:logback-classic" />
+-    <option featureType="dependencySupport" implementationName="java:org.mockito:mockito-junit-jupiter" />
+-    <option featureType="dependencySupport" implementationName="java:jakarta.activation:jakarta.activation-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.glassfish.jaxb:txw2" />
+-    <option featureType="dependencySupport" implementationName="java:org.opentest4j:opentest4j" />
+-    <option featureType="dependencySupport" implementationName="java:org.objenesis:objenesis" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-tx" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-engine" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-jcl" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-logging" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-aop" />
+-    <option featureType="dependencySupport" implementationName="java:ch.qos.logback:logback-core" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-test" />
+-    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-to-slf4j" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.platform:junit-platform-commons" />
+-    <option featureType="dependencySupport" implementationName="java:jakarta.annotation:jakarta.annotation-api" />
+-    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter" />
+-    <option featureType="dependencySupport" implementationName="java:org.jboss.logging:jboss-logging" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-orm" />
+-    <option featureType="dependencySupport" implementationName="java:org.slf4j:slf4j-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.ow2.asm:asm" />
+-    <option featureType="dependencySupport" implementationName="java:antlr:antlr" />
+-    <option featureType="dependencySupport" implementationName="java:org.yaml:snakeyaml" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-autoconfigure" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-context" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-test-autoconfigure" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-expression" />
+-    <option featureType="dependencySupport" implementationName="java:com.sun.istack:istack-commons-runtime" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-aop" />
+-    <option featureType="dependencySupport" implementationName="java:org.junit.jupiter:junit-jupiter-api" />
+-    <option featureType="dependencySupport" implementationName="java:net.minidev:json-smart" />
+-    <option featureType="dependencySupport" implementationName="java:mysql:mysql-connector-java" />
+-    <option featureType="dependencySupport" implementationName="java:org.assertj:assertj-core" />
+-    <option featureType="dependencySupport" implementationName="java:com.vaadin.external.google:android-json" />
+-    <option featureType="dependencySupport" implementationName="java:org.apiguardian:apiguardian-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-jdbc" />
+-    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot-starter-jdbc" />
+-    <option featureType="dependencySupport" implementationName="java:org.mockito:mockito-core" />
+-    <option featureType="dependencySupport" implementationName="java:jakarta.transaction:jakarta.transaction-api" />
+-    <option featureType="dependencySupport" implementationName="java:com.sun.activation:jakarta.activation" />
+-    <option featureType="dependencySupport" implementationName="java:org.apache.logging.log4j:log4j-api" />
+-    <option featureType="dependencySupport" implementationName="java:org.xmlunit:xmlunit-core" />
+-    <option featureType="dependencySupport" implementationName="java:net.bytebuddy:byte-buddy" />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+     <option name="TAB_STATES">
+@@ -224,8 +197,18 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="First Commit" />
+     <MESSAGE value="Implementazione classi entità con le relative enum" />
+-    <MESSAGE value="Implementazione Classi, interfacce ed enum aggiuntive per la gestione degli acquisti di prodotti e relativo pagamento; varie correzioni nei metodi precedentemente scritti." />
+-    <MESSAGE value="Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi." />
+-    <option name="LAST_COMMIT_MESSAGE" value="Implementazione Classi interfacce ed entità dell'iterazione 3, con correzione errori nel codice precedentemente scritto e aggiunta metodi." />
++    <MESSAGE value="Creazione interfaccia per i vari Menù e della classe Acquisizione per l'acquisizione dei vari dati da tastiera." />
++    <MESSAGE value="Aggiornata in Casotto la modalità di visualizzazione dei menù e selezione delle voci" />
++    <MESSAGE value="Aggiornamento file application.properties per impedire la visualizzazione delle query sql effettuate da spring boot" />
++    <MESSAGE value="Rimozione del filtro che, nel metodo Spiaggia.getOmbrelloniLiberi, rimuove gli ombrelloni con capienza uguale al numero dei partecipanti" />
++    <MESSAGE value="Correzione dichiarazione packages e imports" />
++    <MESSAGE value="Ricaricamento ContatoreOggettiRepository" />
++    <MESSAGE value="Eliminazione import inutilizzati" />
++    <option name="LAST_COMMIT_MESSAGE" value="Eliminazione import inutilizzati" />
++  </component>
++  <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/Casotto$CasottoApplication.ic" NAME="CasottoApplication Coverage Results" MODIFIED="1643229268798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
++      <FILTER>it.unicam.cs.ids.Casotto.*</FILTER>
++    </SUITE>
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.*;\r\nimport it.unicam.cs.ids.Casotto.Repository.AccountRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.UtenteRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.boot.CommandLineRunner;\r\nimport org.springframework.boot.SpringApplication;\r\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.stereotype.Controller;\r\n\r\nimport java.util.Scanner;\r\n\r\n@Controller\r\n@SpringBootApplication\r\npublic class CasottoApplication {\r\n\r\n\t@Autowired\r\n\tInteractionManager im;\r\n\r\n\tprivate static int menu() {\r\n\r\n\t\tint choice;\r\n\t\tScanner sc = new Scanner(System.in);\r\n\r\n\t\tSystem.out.println(\"\\nMenu'\\n\");\r\n\r\n\t\tSystem.out.println(\"1. Registrazione\");\r\n\t\tSystem.out.println(\"2. Login\");\r\n\t\tSystem.out.println(\"3. Logout\");\r\n\t\tSystem.out.println(\"4. Effettua una prenotazione\");\r\n\t\tSystem.out.println(\"5. Visualizza storico prenotazione\");\r\n\t\tSystem.out.println(\"6. Visualizza prenotazioni attive\");\r\n\t\tSystem.out.println(\"0. Esci\");\r\n\r\n\t\tSystem.out.print(\"\\nInsert a number: \");\r\n\t\tchoice = sc.nextInt();\r\n\t\treturn choice;\r\n\t}\r\n\r\n\r\n\tpublic static void main(String[] args)  {\r\n\t\tSpringApplication.run(CasottoApplication.class, args);\r\n\t}\r\n\r\n\t@Bean\r\n\tpublic CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or) {\r\n\r\n\t\treturn args -> {\r\n\r\n\t\t\tint choice = menu();\r\n\r\n\t\t\twhile(true) {\r\n\t\t\t\tswitch (choice) {\r\n\t\t\t\t\tcase 1: im.registration();\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tcase 2: im.login();\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tcase 3: im.logout();\r\n\t\t\t\t\t\tbreak;\r\n\t\t\t\t\tcase 4:\r\n\t\t\t\t\tcase 5:\r\n\t\t\t\t\tcase 6:\r\n\t\t\t\t\tcase 0: System.exit(0);\r\n\t\t\t\t\tdefault:\r\n\t\t\t\t\t\tSystem.err.println(\"Error: invalid choice!!!\");\r\n\t\t\t\t}\r\n\t\t\t\tchoice = menu();\r\n\t\t\t}\r\n\t\t};\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java b/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java	(date 1643383363567)
+@@ -1,10 +1,9 @@
+ package it.unicam.cs.ids.Casotto;
+ 
+ import it.unicam.cs.ids.Casotto.Classi.*;
+-import it.unicam.cs.ids.Casotto.Repository.AccountRepository;
+-import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
+-import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
+-import it.unicam.cs.ids.Casotto.Repository.UtenteRepository;
++import it.unicam.cs.ids.Casotto.Interazione.InteractionManager;
++import it.unicam.cs.ids.Casotto.Interazione.Menu;
++import it.unicam.cs.ids.Casotto.Repository.*;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.CommandLineRunner;
+ import org.springframework.boot.SpringApplication;
+@@ -12,7 +11,12 @@
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.stereotype.Controller;
+ 
+-import java.util.Scanner;
++import java.time.LocalDate;
++import java.time.LocalDateTime;
++import java.time.temporal.ChronoUnit;
++import java.util.*;
++import java.util.stream.Collectors;
++import java.util.stream.IntStream;
+ 
+ @Controller
+ @SpringBootApplication
+@@ -21,55 +25,50 @@
+ 	@Autowired
+ 	InteractionManager im;
+ 
+-	private static int menu() {
+-
+-		int choice;
+-		Scanner sc = new Scanner(System.in);
++	@Autowired
++	OmbrelloneRepository or;
+ 
+-		System.out.println("\nMenu'\n");
++	@Autowired
++	GestoreProdotti gestoreProdotti;
+ 
+-		System.out.println("1. Registrazione");
+-		System.out.println("2. Login");
+-		System.out.println("3. Logout");
+-		System.out.println("4. Effettua una prenotazione");
+-		System.out.println("5. Visualizza storico prenotazione");
+-		System.out.println("6. Visualizza prenotazioni attive");
+-		System.out.println("0. Esci");
+-
+-		System.out.print("\nInsert a number: ");
+-		choice = sc.nextInt();
+-		return choice;
+-	}
+-
++	@Autowired
++	AccountRepository accountRepository;
+ 
+ 	public static void main(String[] args)  {
+ 		SpringApplication.run(CasottoApplication.class, args);
+ 	}
+ 
+ 	@Bean
+-	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or) {
++	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or, PrezzoRepository prr) {
+ 
+ 		return args -> {
+ 
+-			int choice = menu();
++			String scelta = "";
++			Scanner sc = new Scanner(System.in);
++			Map<String, Map<String, Runnable>> menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
+ 
+-			while(true) {
+-				switch (choice) {
+-					case 1: im.registration();
+-						break;
+-					case 2: im.login();
+-						break;
+-					case 3: im.logout();
+-						break;
+-					case 4:
+-					case 5:
+-					case 6:
+-					case 0: System.exit(0);
+-					default:
+-						System.err.println("Error: invalid choice!!!");
++			while (true) {
++				System.out.println("\n\n\nMenu'\n");
++				for (Map.Entry<String, Map<String, Runnable>> e : menu.entrySet())
++					System.out.println(e.getKey() + ". " + Objects.requireNonNull(e.getValue().entrySet().stream().findFirst().orElse(null)).getKey());
++
++				do {
++					if (!scelta.isEmpty())
++						System.out.print("Scelta NON valida. Riprova: ");
++
++					System.out.print("\nInserisci un numero: ");
++					scelta = sc.next();
+ 				}
+-				choice = menu();
++				while (!menu.containsKey(scelta));
++
++				Objects.requireNonNull(menu.get(scelta).entrySet().stream().findFirst().orElse(null)).getValue().run();
++				menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
++				scelta = "";
+ 			}
+ 		};
+ 	}
++
++	private Menu cambiaMenu(Account account) {
++		return (account==null) ? Menu::menuInizio : (account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente : Menu::menuGestore;
++	}
+ }
+\ No newline at end of file
+Index: src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Interazione;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.Durata;\r\nimport it.unicam.cs.ids.Casotto.Classi.Livello;\r\n\r\nimport java.time.LocalDate;\r\nimport java.time.format.DateTimeParseException;\r\nimport java.util.*;\r\nimport java.util.function.BiPredicate;\r\nimport java.util.stream.Collectors;\r\n\r\npublic class Acquisizione {\r\n\r\n\r\n    private static final Scanner sc = new Scanner(System.in);\r\n\r\n    public static double acquisizionePrezzo(String descrizionePrezzo) {\r\n\r\n        String prezzo;\r\n\r\n        do {\r\n            System.out.print(\"Inserisci il prezzo \" + descrizionePrezzo + \": \");\r\n            try {\r\n                prezzo = sc.next();\r\n                break;\r\n            }\r\n            catch(DateTimeParseException e) { System.out.println(\"Errore nel formato della data: deve essere del tipo YYYY-mm-dd. Riprova.\"); }\r\n        } while(true);\r\n\r\n        return Double.parseDouble(prezzo);\r\n    }\r\n\r\n    public static int acquisizioneMese(String tipoMese) {\r\n\r\n        String mese = \"\";\r\n        Set<String> mesi = Set.of(\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"11\", \"12\");\r\n\r\n        do {\r\n            if(!mese.isEmpty())\r\n                System.out.println(\"Errore: il mese digitato non è valido. Riprova.\");\r\n\r\n            System.out.print(\"Inserisci il mese di \" + tipoMese + \": \");\r\n        }while(!mesi.contains(mese=sc.next()));\r\n\r\n        return Integer.parseInt(mese);\r\n    }\r\n\r\n    public static String acquisizioneCredenziali(String credName) {\r\n        System.out.print(\"Insert \" + credName + \": \");\r\n        return sc.next();\r\n    }\r\n\r\n\r\n    public static LocalDate acquisizioneData(String tipoData) {\r\n        LocalDate date;\r\n\r\n        do {\r\n            System.out.print(\"Inserisci la data \" + tipoData + \": \");\r\n            try {\r\n                date = LocalDate.parse(sc.next());\r\n                break;\r\n            }\r\n            catch(DateTimeParseException e) { System.out.println(\"Errore nel formato della data: deve essere del tipo YYYY-mm-dd. Riprova.\"); }\r\n        } while(true);\r\n\r\n        return date;\r\n    }\r\n\r\n    public static int acquisizioneLettiniSdraie(int oggettiDisponibili, String descrizione, BiPredicate<Integer, Integer> predicato) {\r\n        System.out.print(\"Inserisci il numero desiderato di \" + descrizione + \" (max. \" + oggettiDisponibili + \"): \");\r\n        int oggettiScelti = sc.nextInt();\r\n        while(predicato.test(oggettiScelti, oggettiDisponibili)) {\r\n            System.out.println(\"Errore: il numero di \" + descrizione + \" inserito non è valido. Riprova.\");\r\n            System.out.print(\"Inserisci il numero desiderato di \" + descrizione + \" (max. \" + oggettiDisponibili + \"): \");\r\n            oggettiScelti = sc.nextInt();\r\n        }\r\n\r\n        return oggettiScelti;\r\n    }\r\n\r\n\r\n    public static Durata acquisizioneDurata(String descrizioneDurata) {\r\n        String ris = \"\";\r\n        List<String> possibleLevels = Arrays.stream(Durata.values()).map(Enum::name).collect(Collectors.toList());\r\n\r\n        do {\r\n            if(!ris.isEmpty())\r\n                System.out.println(\"Errore: la durata selezionata non e' prevista. Prova ancora.\");\r\n\r\n            System.out.println(\"\\nDurate previste: \");\r\n            possibleLevels.forEach(System.out::println);\r\n            System.out.print(\"\\nSeleziona la durata temporale \" + descrizioneDurata + \": \");\r\n            ris = sc.next();\r\n        }\r\n        while(!possibleLevels.contains(ris));\r\n\r\n        return Durata.valueOf(ris);\r\n    }\r\n\r\n\r\n    public static Livello acquisizioneLivello() {\r\n\r\n        String ris = \"\";\r\n        List<String> possibleLevels = Arrays.stream(Livello.values()).map(Enum::name).collect(Collectors.toList());\r\n\r\n        do {\r\n            if(!ris.isEmpty())\r\n                System.out.println(\"Errore: il livello selezionato non è valido. Riprova.\");\r\n\r\n            System.out.println(\"\\nLivelli: \");\r\n            possibleLevels.forEach(System.out::println);\r\n            System.out.print(\"\\nDigita il livello: \");\r\n            ris = sc.next();\r\n        }\r\n        while(!possibleLevels.contains(ris));\r\n\r\n        return Livello.valueOf(ris);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java b/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java	(date 1643383363583)
+@@ -7,7 +7,10 @@
+ import java.time.format.DateTimeParseException;
+ import java.util.*;
+ import java.util.function.BiPredicate;
++import java.util.function.Consumer;
++import java.util.function.Function;
+ import java.util.stream.Collectors;
++import java.util.stream.IntStream;
+ 
+ public class Acquisizione {
+ 
+@@ -33,7 +36,7 @@
+     public static int acquisizioneMese(String tipoMese) {
+ 
+         String mese = "";
+-        Set<String> mesi = Set.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
++        Set<String> mesi = IntStream.range(1, 13).mapToObj(String::valueOf).collect(Collectors.toSet());
+ 
+         do {
+             if(!mese.isEmpty())
+@@ -46,7 +49,7 @@
+     }
+ 
+     public static String acquisizioneCredenziali(String credName) {
+-        System.out.print("Insert " + credName + ": ");
++        System.out.print("Inserisci " + credName + ": ");
+         return sc.next();
+     }
+ 
+@@ -100,8 +103,8 @@
+ 
+     public static Livello acquisizioneLivello() {
+ 
+-        String ris = "";
+-        List<String> possibleLevels = Arrays.stream(Livello.values()).map(Enum::name).collect(Collectors.toList());
++       String ris = "";
++       List<String> possibleLevels = Arrays.stream(Livello.values()).map(Livello::name).collect(Collectors.toList());
+ 
+         do {
+             if(!ris.isEmpty())
+@@ -116,4 +119,4 @@
+ 
+         return Livello.valueOf(ris);
+     }
+-}
++}
+\ No newline at end of file
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport javax.persistence.*;\r\n\r\n@Entity\r\npublic class Richiesta {\r\n\r\n    @Id\r\n    @GeneratedValue\r\n    private long id;\r\n\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"ordinazione_id\", nullable = false)\r\n    private Ordinazione ordinazione;\r\n\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"prodotto_id\", nullable = false)\r\n    private Prodotto prodotto;\r\n\r\n    private int quantita;\r\n    private double prezzo;\r\n    private String modifiche;\r\n\r\n    public Richiesta() {\r\n    }\r\n\r\n    public Richiesta(Prodotto prodotto, int quantita){\r\n        this(prodotto, quantita, null);\r\n    }\r\n\r\n\r\n    public Richiesta(Prodotto prodotto, int quantita, String modifiche) {\r\n        this.prodotto = prodotto;\r\n        this.quantita = quantita;\r\n        this.modifiche = modifiche;\r\n    }\r\n\r\n    public long getId() {\r\n        return id;\r\n    }\r\n\r\n    public Ordinazione getOrdinazione() {\r\n        return ordinazione;\r\n    }\r\n\r\n    public Prodotto getProdotto() {\r\n        return prodotto;\r\n    }\r\n\r\n    public int getQuantita() {\r\n        return quantita;\r\n    }\r\n\r\n    public double getPrezzo() {\r\n        return prezzo;\r\n    }\r\n\r\n    public String getModifiche() {\r\n        return modifiche;\r\n    }\r\n\r\n    public void setQuantita(int quantita) {\r\n        this.quantita = quantita;\r\n    }\r\n\r\n    public void setOrdinazione(Ordinazione ordinazione) {\r\n        this.ordinazione = ordinazione;\r\n    }\r\n\r\n    public void setPrezzo(double prezzo) {\r\n        this.prezzo = prezzo;\r\n    }\r\n\r\n    public void setModifiche(String modifiche) {\r\n        this.modifiche = modifiche;\r\n    }\r\n\r\n\r\n    @Override\r\n    public String toString() {\r\n\r\n        return \"\\nRICHIESTA\" +\r\n                \"\\t\\nId: \" + this.getId() +\r\n                \"\\t\\nProdotto: [ Descrizione: \" + this.getProdotto().getOggetto() + \", Prezzo unitario: \" + this.getProdotto().getPrezzo() + \"]\" +\r\n                \"\\t\\nQuantita': \" + this.getQuantita() +\r\n                \"\\t\\nModifiche: \" + ((this.getModifiche().isEmpty()) ? \"nessuna\" : this.getModifiche());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Richiesta.java	(date 1643383363598)
+@@ -81,7 +81,7 @@
+ 
+         return "\nRICHIESTA" +
+                 "\t\nId: " + this.getId() +
+-                "\t\nProdotto: [ Descrizione: " + this.getProdotto().getOggetto() + ", Prezzo unitario: " + this.getProdotto().getPrezzo() + "]" +
++                "\t\n" + this.getProdotto().toString() +
+                 "\t\nQuantita': " + this.getQuantita() +
+                 "\t\nModifiche: " + ((this.getModifiche().isEmpty()) ? "nessuna" : this.getModifiche());
+     }
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport javax.persistence.*;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\n@Entity\r\npublic class Account {\r\n\r\n    @Id\r\n    @GeneratedValue\r\n    private long id;\r\n    private String email;\r\n    private int password;\r\n    private double saldo;\r\n    private Livello livello;\r\n\r\n    @OneToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"utente_id\", nullable = false)\r\n    private Utente utente;\r\n\r\n    @OneToMany(mappedBy = \"account\", cascade = CascadeType.ALL, fetch = FetchType.LAZY)\r\n    private final Set<Prenotazione> prenotazioni = new HashSet<>();\r\n\r\n    @OneToMany(mappedBy = \"partecipante\", cascade = CascadeType.ALL, fetch = FetchType.LAZY)\r\n    private final Set<Partecipa> iscrizioni = new HashSet<>();\r\n\r\n    public Account(){\r\n    }\r\n\r\n    public Account(String email, String password, double saldo, Livello livello, Utente utente) {\r\n        this.email = email;\r\n        this.password = password.hashCode();\r\n        this.saldo = saldo;\r\n        this.livello = livello;\r\n        this.utente = utente;\r\n    }\r\n\r\n    public long getId() {\r\n        return id;\r\n    }\r\n\r\n    public String getEmail() {\r\n        return email;\r\n    }\r\n\r\n    public void setEmail(String email) {\r\n        this.email = email;\r\n    }\r\n\r\n    public int getPassword() {\r\n        return password;\r\n    }\r\n\r\n    public void setPassword(String password) {\r\n        this.password = password.hashCode();\r\n    }\r\n\r\n    public double getSaldo() {\r\n        return saldo;\r\n    }\r\n\r\n    public void setSaldo(double saldo) {\r\n        this.saldo = saldo;\r\n    }\r\n\r\n    public Livello getLivello() {\r\n        return livello;\r\n    }\r\n\r\n    public void setLivello(Livello livello) {\r\n        this.livello = livello;\r\n    }\r\n\r\n    public Set<Prenotazione> getPrenotazioni() {\r\n        return prenotazioni;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java	(date 1643383363614)
+@@ -8,7 +8,6 @@
+ public class Account {
+ 
+     @Id
+-    @GeneratedValue
+     private long id;
+     private String email;
+     private int password;
+Index: src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Interazione;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\n@Service\r\n@FunctionalInterface\r\npublic interface Menu\r\n{\r\n\r\n    Map<String, Map<String, Runnable>> getMenu(InteractionManager im);\r\n\r\n    static Map<String, Map<String, Runnable>> menuInizio(InteractionManager im) {\r\n        Map<String, Map<String, Runnable>> menu = new HashMap<>();\r\n\r\n        menu.put(\"1\", new HashMap<>()); menu.get(\"1\").put(\"Registrazione\", im::registrazione);\r\n        menu.put(\"2\", new HashMap<>()); menu.get(\"2\").put(\"Login\", im::login);\r\n        menu.put(\"0\", new HashMap<>()); menu.get(\"0\").put(\"Esci\", () -> System.exit(0));\r\n\r\n        return menu;\r\n    }\r\n\r\n    static Map<String, Map<String, Runnable>> menuCliente(InteractionManager im) {\r\n        Map<String, Map<String, Runnable>> menu = new HashMap<>();\r\n\r\n        menu.put(\"1\", new HashMap<>()); menu.get(\"1\").put(\"Effettua una prenotazione\", im::prenotaSpiaggia);\r\n        menu.put(\"2\", new HashMap<>()); menu.get(\"2\").put(\"Cancella una prenotazione\", im::cancellaPrenotazione);\r\n        menu.put(\"3\", new HashMap<>()); menu.get(\"3\").put(\"Visualizza storico prenotazione\", im::visualizzaStoricoPrenotazioni);\r\n        menu.put(\"4\", new HashMap<>()); menu.get(\"4\").put(\"Visualizza prenotazioni attive\", im::visualizzaPrenotazioniCorrenti);\r\n        menu.put(\"5\", new HashMap<>()); menu.get(\"5\").put(\"Acquista prodotti\", im::acquistaProdotto);\r\n        menu.put(\"6\", new HashMap<>()); menu.get(\"6\").put(\"Logout\", im::logout);\r\n        menu.put(\"0\", new HashMap<>()); menu.get(\"0\").put(\"Esci\", () -> System.exit(0));\r\n\r\n        return menu;\r\n    }\r\n\r\n    static Map<String, Map<String, Runnable>> menuGestore(InteractionManager im) {\r\n        Map<String, Map<String, Runnable>> menu = new HashMap<>();\r\n\r\n        menu.put(\"1\", new HashMap<>()); menu.get(\"1\").put(\"Inserisci un nuovo prezzo\", im::inserisciPrezzoPerOmbrellone);\r\n        menu.put(\"2\", new HashMap<>()); menu.get(\"2\").put(\"Imposta prezzo ombrellone\", im::impostaPrezzoOmbrellone);\r\n        menu.put(\"3\", new HashMap<>()); menu.get(\"3\").put(\"Logout\", im::logout);\r\n        menu.put(\"0\", new HashMap<>()); menu.get(\"0\").put(\"Esci\", () -> System.exit(0));\r\n\r\n        return menu;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java b/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java	(date 1643383363614)
+@@ -9,6 +9,7 @@
+ @FunctionalInterface
+ public interface Menu
+ {
++    //TODO inserire metodo modifiche dati
+ 
+     Map<String, Map<String, Runnable>> getMenu(InteractionManager im);
+ 
+@@ -30,7 +31,34 @@
+         menu.put("3", new HashMap<>()); menu.get("3").put("Visualizza storico prenotazione", im::visualizzaStoricoPrenotazioni);
+         menu.put("4", new HashMap<>()); menu.get("4").put("Visualizza prenotazioni attive", im::visualizzaPrenotazioniCorrenti);
+         menu.put("5", new HashMap<>()); menu.get("5").put("Acquista prodotti", im::acquistaProdotto);
+-        menu.put("6", new HashMap<>()); menu.get("6").put("Logout", im::logout);
++        menu.put("6", new HashMap<>()); menu.get("6").put("Prenota attivita'", im::prenotazioneAttivita);
++        menu.put("7", new HashMap<>()); menu.get("7").put("Cancella prenotazione attivita'", im::cancellazionePrenotazioneAttivita);
++        menu.put("8", new HashMap<>()); menu.get("8").put("Modifica Dati", im::modificaDati);
++        menu.put("9", new HashMap<>()); menu.get("9").put("Logout", im::logout);
++        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
++
++        return menu;
++    }
++
++    static Map<String, Map<String, Runnable>> menuAddettoSpiaggia(InteractionManager im) {
++        Map<String, Map<String, Runnable>> menu = new HashMap<>();
++
++        menu.put("1", new HashMap<>()); menu.get("1").put("Pagamento ordinazione", im::pagamentoOrdinazione);
++        menu.put("2", new HashMap<>()); menu.get("2").put("Consegna comanda con scontrino", im::consegnaComandaConScontrino);
++        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
++        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
++        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
++
++        return menu;
++    }
++
++    static Map<String, Map<String, Runnable>> menuBarista(InteractionManager im) {
++        Map<String, Map<String, Runnable>> menu = new HashMap<>();
++
++        menu.put("1", new HashMap<>()); menu.get("1").put("Inizia una preparazione", im::inizioPreparazione);
++        menu.put("2", new HashMap<>()); menu.get("2").put("Termina una preparazione", im::finePreparazione);
++        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
++        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
+         menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
+ 
+         return menu;
+@@ -41,7 +69,8 @@
+ 
+         menu.put("1", new HashMap<>()); menu.get("1").put("Inserisci un nuovo prezzo", im::inserisciPrezzoPerOmbrellone);
+         menu.put("2", new HashMap<>()); menu.get("2").put("Imposta prezzo ombrellone", im::impostaPrezzoOmbrellone);
+-        menu.put("3", new HashMap<>()); menu.get("3").put("Logout", im::logout);
++        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
++        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
+         menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
+ 
+         return menu;
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport javax.persistence.*;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\n@Entity\r\npublic class Ordinazione {\r\n\r\n    @Id\r\n    @GeneratedValue\r\n    private long id;\r\n    private double prezzoTot;\r\n    private Stato stato;\r\n\r\n    @OneToMany(mappedBy = \"ordinazione\", cascade = CascadeType.ALL, fetch = FetchType.LAZY)\r\n    private final Set<Richiesta> prodotti = new HashSet<>();\r\n\r\n    @ManyToOne(fetch = FetchType.LAZY, optional = false)\r\n    @JoinColumn(name = \"ombrellone_id\", nullable = false)\r\n    private Ombrellone ombrellone;\r\n\r\n    public Ordinazione() {\r\n    }\r\n\r\n    public Ordinazione(Ombrellone ombrellone) {\r\n        this.ombrellone = ombrellone;\r\n        this.stato = Stato.DA_PAGARE;\r\n    }\r\n\r\n    public long getId() {\r\n        return id;\r\n    }\r\n\r\n    public Set<Richiesta> getProdotti() {\r\n        return prodotti;\r\n    }\r\n\r\n    public double getPrezzoTot() {\r\n        return prezzoTot;\r\n    }\r\n\r\n    public Stato getStato() {\r\n        return stato;\r\n    }\r\n\r\n    public Ombrellone getOmbrellone() {\r\n        return ombrellone;\r\n    }\r\n\r\n    public void setPrezzoTot(double prezzoTot) {\r\n        this.prezzoTot = prezzoTot;\r\n    }\r\n\r\n    public void setStato(Stato stato) {\r\n        this.stato = stato;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ordinazione.java	(date 1643383363645)
+@@ -1,6 +1,7 @@
+ package it.unicam.cs.ids.Casotto.Classi;
+ 
+ import javax.persistence.*;
++import java.time.LocalDate;
+ import java.util.HashSet;
+ import java.util.Set;
+ 
+@@ -12,6 +13,7 @@
+     private long id;
+     private double prezzoTot;
+     private Stato stato;
++    private LocalDate data;
+ 
+     @OneToMany(mappedBy = "ordinazione", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+     private final Set<Richiesta> prodotti = new HashSet<>();
+@@ -26,6 +28,7 @@
+     public Ordinazione(Ombrellone ombrellone) {
+         this.ombrellone = ombrellone;
+         this.stato = Stato.DA_PAGARE;
++        this.data = LocalDate.now();
+     }
+ 
+     public long getId() {
+@@ -44,6 +47,8 @@
+         return stato;
+     }
+ 
++    public LocalDate getData() {return this.data;}
++
+     public Ombrellone getOmbrellone() {
+         return ombrellone;
+     }
+@@ -55,4 +60,15 @@
+     public void setStato(Stato stato) {
+         this.stato = stato;
+     }
++
++    @Override
++    public String toString() {
++
++        return "\nORDINAZIONE" +
++                "\t\nId: " + this.getId() +
++                "\t\n" + this.getProdotti().stream().toString() +
++                "\t\nStato: " + this.getStato() +
++                "\t\n" + this.getOmbrellone().toString();
++    }
++
+ }
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport com.sun.istack.NotNull;\r\n\r\nimport javax.persistence.*;\r\nimport java.time.LocalDate;\r\n\r\n/**\r\n * Classe che rappresenta l'entit&agrave; 'Utente'\r\n *\r\n */\r\n@Entity(name = \"utente\")\r\npublic class Utente\r\n{\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.AUTO)\r\n    @Column(name = \"ID_Utente\")\r\n    private long id;\r\n\r\n    @NotNull\r\n    @Column(name = \"Nome\")\r\n    private String nome;\r\n\r\n    @NotNull\r\n    @Column(name = \"Cognome\")\r\n    private String cognome;\r\n\r\n    @NotNull\r\n    @Column(name = \"Data_Nascita\")\r\n    private LocalDate dataNascita;\r\n\r\n    @OneToOne(fetch = FetchType.LAZY,\r\n            cascade =  CascadeType.ALL,\r\n            mappedBy = \"utente\")\r\n    private Account account;\r\n\r\n    /**\r\n     * Costruttore di default che inizializza un utente per la creazione della corrispondente tabella nel database\r\n     *\r\n     */\r\n    Utente() {\r\n    }\r\n\r\n    /**\r\n     * Costruttore che inizializza un utente con i parametri passati: questi NON possono essere nulli\r\n     *\r\n     * @param nome nome dell'utente\r\n     * @param cognome cognome dell'utente\r\n     * @param dataNascita data di nascita dell'utente\r\n     */\r\n    public Utente(String nome, String cognome, LocalDate dataNascita) {\r\n        this.nome = nome;\r\n        this.cognome = cognome;\r\n        this.dataNascita = dataNascita;\r\n    }\r\n\r\n    /**\r\n     * Restituisce l'identificativo dell'utente\r\n     *\r\n     * @return l'identificativo dell'utente\r\n     */\r\n    public long getId() {\r\n        return this.id;\r\n    }\r\n\r\n    /**\r\n     * Restituisce il nome dell'utente\r\n     *\r\n     * @return il nome dell'utente\r\n     */\r\n    public String getNome() {\r\n        return this.nome;\r\n    }\r\n\r\n    /**\r\n     * Restituisce il cognome dell'utente\r\n     *\r\n     * @return il cognome dell'utente\r\n     */\r\n    public String getCognome() {\r\n        return this.cognome;\r\n    }\r\n\r\n    /**\r\n     * Restituisce la data di nascita dell'utente\r\n     *\r\n     * @return la data di nascita dell'utente\r\n     */\r\n    public LocalDate getDataNascita() {\r\n        return this.dataNascita;\r\n    }\r\n\r\n    /**\r\n     * Restituisce l'{@link Account} associato all'utente\r\n     *\r\n     * @return l'{@link Account}s associato all'utente\r\n     */\r\n    public Account getAccount() {\r\n        return this.account;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java	(date 1643383363661)
+@@ -30,7 +30,7 @@
+     private LocalDate dataNascita;
+ 
+     @OneToOne(fetch = FetchType.LAZY,
+-            cascade =  CascadeType.ALL,
++            cascade =  CascadeType.PERSIST,
+             mappedBy = "utente")
+     private Account account;
+ 
+@@ -72,6 +72,8 @@
+         return this.nome;
+     }
+ 
++    public void setNome(String nome) {this.nome = nome;}
++
+     /**
+      * Restituisce il cognome dell'utente
+      *
+@@ -81,6 +83,8 @@
+         return this.cognome;
+     }
+ 
++    public void setCognome(String cognome) {this.cognome = cognome;}
++
+     /**
+      * Restituisce la data di nascita dell'utente
+      *
+@@ -90,6 +94,8 @@
+         return this.dataNascita;
+     }
+ 
++    public void setDataNascita(LocalDate dataNascita) {this.dataNascita = dataNascita;}
++
+     /**
+      * Restituisce l'{@link Account} associato all'utente
+      *
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Service\r\npublic class GestoreAcquisto {\r\n\r\n    private final GestoreProdotti gestoreProdotti;\r\n    private final List<Richiesta> richieste;\r\n    private final GestoreOrdinazione gestoreOrdinazione;\r\n\r\n    public GestoreAcquisto() {\r\n        this.gestoreProdotti = new GestoreProdotti();\r\n        this.richieste = new ArrayList<>();\r\n        this.gestoreOrdinazione = new GestoreOrdinazione();\r\n    }\r\n\r\n    public boolean addRichiesta(Prodotto prodotto, int quantita, String modifiche){\r\n        if(!gestoreProdotti.isPresent(prodotto, quantita)){\r\n            return false;\r\n        }\r\n        Richiesta richiesta = new Richiesta(prodotto, quantita, modifiche);\r\n        richiesta.setPrezzo(prodotto.getPrezzo()*quantita);\r\n        richieste.add(richiesta);\r\n        return true;\r\n    }\r\n\r\n    public Prodotto getProdottoOf(Richiesta richiesta){\r\n        return this.gestoreProdotti.getProdottoOf(richiesta);\r\n    }\r\n\r\n    public List<Richiesta> getAllRichieste(){\r\n        return this.richieste;\r\n    }\r\n\r\n    public boolean cancellaRichiesta(Richiesta richiesta){\r\n        return this.richieste.remove(richiesta);\r\n    }\r\n\r\n    public void cancellaAcquisto(){\r\n        this.richieste.clear();\r\n    }\r\n\r\n    public boolean decrementaProdotto(Richiesta richiesta, int quantita){\r\n        boolean remove = false;\r\n        for(Richiesta richiestaList: richieste){\r\n            if(richiestaList.equals(richiesta)){\r\n                if(richiestaList.getQuantita() <= quantita){\r\n                    remove = true;\r\n                    break;\r\n                }\r\n                if(richiestaList.getQuantita() > quantita){\r\n                    richiestaList.setQuantita(richiestaList.getQuantita() - quantita);\r\n                    richiestaList.setPrezzo(this.ricalcoloPrezzoRichiesta(richiestaList));\r\n                }\r\n                this.gestoreProdotti.incrementoQuantitaProdotto(richiestaList.getProdotto(), quantita);\r\n                return true;\r\n            }\r\n            break;\r\n        }\r\n        if(remove) this.richieste.remove(richiesta);\r\n        return false;\r\n    }\r\n\r\n    public Ordinazione confirmOrdinazione(Ombrellone ombrellone){\r\n        return this.gestoreOrdinazione.creaOrdinazione(richieste, ombrellone);\r\n    }\r\n\r\n    public double getPrezzoTotale(){\r\n        double prezzoTotale = 0;\r\n        for(Richiesta richiesta: this.richieste){\r\n            prezzoTotale += richiesta.getPrezzo();\r\n        }\r\n\r\n        return prezzoTotale;\r\n    }\r\n\r\n    private double ricalcoloPrezzoRichiesta(Richiesta richiesta){\r\n        return gestoreProdotti.getProdottoOf(richiesta).getPrezzo() * richiesta.getQuantita();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreAcquisto.java	(date 1643383363676)
+@@ -1,5 +1,6 @@
+ package it.unicam.cs.ids.Casotto.Classi;
+ 
++import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
+ import java.util.ArrayList;
+@@ -8,20 +9,26 @@
+ @Service
+ public class GestoreAcquisto {
+ 
+-    private final GestoreProdotti gestoreProdotti;
+-    private final List<Richiesta> richieste;
+-    private final GestoreOrdinazione gestoreOrdinazione;
++    @Autowired
++    private GestoreProdotti gestoreProdotti;
++
++
++    private List<Richiesta> richieste;
++
++    @Autowired
++    private GestoreOrdinazione gestoreOrdinazione;
+ 
+     public GestoreAcquisto() {
+-        this.gestoreProdotti = new GestoreProdotti();
+         this.richieste = new ArrayList<>();
+-        this.gestoreOrdinazione = new GestoreOrdinazione();
++/*        this.gestoreProdotti = new GestoreProdotti();
++        this.gestoreOrdinazione = new GestoreOrdinazione();*/
+     }
+ 
+     public boolean addRichiesta(Prodotto prodotto, int quantita, String modifiche){
+         if(!gestoreProdotti.isPresent(prodotto, quantita)){
+             return false;
+         }
++
+         Richiesta richiesta = new Richiesta(prodotto, quantita, modifiche);
+         richiesta.setPrezzo(prodotto.getPrezzo()*quantita);
+         richieste.add(richiesta);
+@@ -36,7 +43,7 @@
+         return this.richieste;
+     }
+ 
+-    public boolean cancellaRichiesta(Richiesta richiesta){
++    public boolean cancellaRichiesta(Richiesta richiesta) {
+         return this.richieste.remove(richiesta);
+     }
+ 
+Index: src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Repository;\r\n\r\nimport it.unicam.cs.ids.Casotto.Classi.Account;\r\nimport it.unicam.cs.ids.Casotto.Classi.Utente;\r\nimport org.springframework.data.repository.CrudRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\n@Repository\r\npublic interface AccountRepository extends CrudRepository<Account, Long> {\r\n\r\n    Account findById(long id);\r\n\r\n    Account findByUtente(Utente utente);\r\n\r\n    Account findByEmail(String email);\r\n\r\n    Account findByEmailIgnoreCaseAndPassword(String email, int password);\r\n\r\n    boolean existsByEmailIgnoreCase(String email);\r\n\r\n    Account findByIscrizioniId(long id);\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java b/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java	(date 1643383363676)
+@@ -2,8 +2,11 @@
+ 
+ import it.unicam.cs.ids.Casotto.Classi.Account;
+ import it.unicam.cs.ids.Casotto.Classi.Utente;
++import org.springframework.data.jpa.repository.Modifying;
++import org.springframework.data.jpa.repository.Query;
+ import org.springframework.data.repository.CrudRepository;
+ import org.springframework.stereotype.Repository;
++import org.springframework.transaction.annotation.Transactional;
+ 
+ @Repository
+ public interface AccountRepository extends CrudRepository<Account, Long> {
+@@ -20,4 +23,22 @@
+ 
+     Account findByIscrizioniId(long id);
+ 
++    Account findByPrenotazioniId(long id);
++
++    @Modifying
++    @Transactional
++    @Query("UPDATE Account a SET a.saldo = ?2 WHERE a.id = ?1")
++    void updateAccountSaldoById(long id, double saldo);
++
++    @Modifying
++    @Transactional
++    @Query("UPDATE Account a SET a.email = ?2 WHERE a.id = ?1")
++    void updateAccountEmailById(long id, String email);
++
++    @Modifying
++    @Transactional
++    @Query("UPDATE Account a SET a.password = ?2 WHERE a.id = ?1")
++    void updateAccountPasswordById(long id, int psw);
++
++
+ }
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.time.LocalDate;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\n\r\n/**\r\n * Classe che rappresenta un gestore delle prenotazioni, che permette di effettuare le operazioni\r\n * connesse (conoscere il costo, sapere lo storico delle prenotazioni di un'utente, ...)\r\n *\r\n */\r\n@Service\r\npublic class GestorePrenotazioni {\r\n\r\n    @Autowired\r\n    PrenotazioniRepository pr;\r\n\r\n    @Autowired\r\n    Spiaggia gs;\r\n\r\n    /**\r\n     * Metodo che permette di registrare una {@link Prenotazione}\r\n     *\r\n     * @param prenotazione prenotazione da registrare\r\n     *\r\n     * @throws NullPointerException se la {@link Prenotazione} passata &egrave; nulla\r\n     * @throws IllegalArgumentException se gli ombrelloni associati alla prenotazione sono gi&agrave; occupati o se\r\n     *                                  non sono pi&ugrave; disponibili le sdraie o i lettini\r\n     *\r\n     * @return true se la prenotazione &egrave; stata registrata correttamente\r\n     */\r\n    public boolean registrazionePrenotazione(Prenotazione prenotazione) {\r\n        if(Objects.isNull(prenotazione)) throw new NullPointerException(\"La prenotazione passata è nulla.\");\r\n\r\n        for(Ombrellone ombrellone : prenotazione.getOmbrelloni()){\r\n            if(gs.notIsFree(ombrellone, prenotazione.getDataPrenotazione(), prenotazione.getDurata())){\r\n                throw new IllegalArgumentException(\"Ombrelloni selezionati gia' prenotati\");\r\n            }\r\n        }\r\n\r\n        if(prenotazione.getLettini()>gs.lettiniDisponibili(prenotazione.getDataPrenotazione(), prenotazione.getDurata())\r\n                || prenotazione.getSdraie()>gs.sdraieDisponibili(prenotazione.getDataPrenotazione(), prenotazione.getDurata()))\r\n            throw new IllegalArgumentException(\"Sdraie o lettini non disponibili\");\r\n\r\n        prenotazione.setPrezzo(gs.getPrezzoTotale(prenotazione));\r\n        pr.save(prenotazione);\r\n        return true;\r\n    }\r\n\r\n\r\n    /**\r\n     * Metodo che permette di ottenere la {@link Prenotazione} effettuata dall'{@link Account} con data uguale a\r\n     * quella passata come parametro\r\n     *\r\n     * @param account {@link Account} del quale estrarre la {@link Prenotazione}\r\n     * @param dataPrenotazione data della {@link Prenotazione} da estrarre\r\n     * @return la {@link Prenotazione} con data uguale a quella passata come parametro\r\n     */\r\n    public Prenotazione getPrenotazioneOf(Account account, LocalDate dataPrenotazione) {\r\n        return this.pr.findByAccountIdAndDataPrenotazione(account.getId(), dataPrenotazione);\r\n    }\r\n\r\n    /**\r\n     * Metodo che restituisce una {@link List} contenente le prenotazioni valide, cio&egrave; quelle\r\n     * con data successiva rispetto a quella corrente\r\n     *\r\n     * @param account {@link Account} del quale estrarre le prenotazioni valide\r\n     * @return una {@link List} contenente le prenotazioni valide associate all'{@link Account}\r\n     */\r\n    public List<Prenotazione> getCurrentPrenotazioni(Account account) {\r\n        return this.pr.findByAccountIdAndDataPrenotazioneAfter(account.getId(), LocalDate.now());\r\n    }\r\n\r\n    /**\r\n     * Metodo che restituisce una {@link List} contenente le prenotazioni passate, cio&egrave; quelle\r\n     * con data precedente rispetto a quella corrente\r\n     *\r\n     * @param account {@link Account} del quale estrarre le prenotazioni passate\r\n     * @return una {@link List} contenente le prenotazioni passate associate all'{@link Account}\r\n     */\r\n    public List<Prenotazione> getPrenotazioniHistory(Account account){\r\n        return this.pr.findByAccountIdAndDataPrenotazioneBefore(account.getId(), LocalDate.now());\r\n    }\r\n\r\n    /**\r\n     * Metodo che permette di cancellare una {@link Prenotazione}\r\n     *\r\n     * @param prenotazione {@link Prenotazione} da cancellare\r\n     * @return true se la {@link Prenotazione} &egrave; stata eliminata, false se la prenotazione &egrave; uguale a null\r\n     *         o non esiste\r\n     */\r\n    public boolean cancellazionePrenotazione(Prenotazione prenotazione) {\r\n        if(Objects.isNull(prenotazione) || !this.pr.existsById(prenotazione.getId())) return false;\r\n        pr.deleteById(prenotazione.getId());\r\n        return true;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestorePrenotazioni.java	(date 1643383363692)
+@@ -5,6 +5,8 @@
+ import org.springframework.stereotype.Service;
+ 
+ import java.time.LocalDate;
++import java.time.LocalDateTime;
++import java.time.temporal.ChronoUnit;
+ import java.util.List;
+ import java.util.Objects;
+ 
+@@ -19,9 +21,25 @@
+     @Autowired
+     PrenotazioniRepository pr;
+ 
++    @Autowired
++    GestoreAccount gestoreAccount;
++
+     @Autowired
+     Spiaggia gs;
+ 
++    /**
++     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
++     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
++     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
++     *
++     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
++     * @param account {@link Account} del quale conoscere il saldo
++     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
++     */
++    public double prezzoFinale(Prenotazione prenotazione, Account account) {
++        return (account.getSaldo()>=prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
++    }
++
+     /**
+      * Metodo che permette di registrare una {@link Prenotazione}
+      *
+@@ -95,7 +113,13 @@
+      */
+     public boolean cancellazionePrenotazione(Prenotazione prenotazione) {
+         if(Objects.isNull(prenotazione) || !this.pr.existsById(prenotazione.getId())) return false;
+-        pr.deleteById(prenotazione.getId());
++        LocalDateTime now = LocalDateTime.now();
++
++        if(now.until(prenotazione.getDataPrenotazione().atStartOfDay(), ChronoUnit.HOURS)<72) return false;
++
++        Account a = this.gestoreAccount.getAccountOf(prenotazione);
++        this.gestoreAccount.updateSaldoAccount(a, prenotazione.getPrezzo()+a.getSaldo());
++        this.pr.deleteById(prenotazione.getId());
+         return true;
+     }
+ 
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport it.unicam.cs.ids.Casotto.Repository.OrdinazioneRepository;\r\nimport it.unicam.cs.ids.Casotto.Repository.RichiestaRepository;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Service\r\npublic class GestoreOrdinazione {\r\n\r\n    private final GestoreProdotti gestoreProdotti;\r\n\r\n    @Autowired\r\n    OrdinazioneRepository ordinazioneRepository;\r\n\r\n    @Autowired\r\n    RichiestaRepository richiestaRepository;\r\n\r\n    GestoreOrdinazione(){\r\n        this.gestoreProdotti = new GestoreProdotti();\r\n    }\r\n\r\n    public List<Richiesta> getRichiesteOf(Ordinazione ordinazione){\r\n        this.checkIsNull(ordinazione);\r\n        if(!ordinazioneRepository.existsById(ordinazione.getId())){\r\n            throw new IllegalArgumentException(\"L'ordinazione passata non esiste\");\r\n        }\r\n        return richiestaRepository.findByOrdinazioneId(ordinazione.getId());\r\n    }\r\n\r\n    public List<Ordinazione> getRichiesteWith(Stato stato){\r\n        this.checkIsNull(stato);\r\n        return ordinazioneRepository.findByStato(stato);\r\n    }\r\n\r\n    public Ordinazione creaOrdinazione(List<Richiesta> richieste, Ombrellone ombrellone){\r\n        this.checkIsNull(richieste, ombrellone);\r\n        Ordinazione ordinazione = new Ordinazione(ombrellone);\r\n        if(this.checkProdotti(richieste)) return null;\r\n        if(!this.needImpostaPrezzo(richieste)){\r\n            ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));\r\n        }\r\n        ordinazioneRepository.save(ordinazione);\r\n        for(Richiesta richiesta: richieste){\r\n            richiesta.setOrdinazione(ordinazione);\r\n            gestoreProdotti.decrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());\r\n        }\r\n        richiestaRepository.saveAll(richieste);\r\n        return ordinazione;\r\n    }\r\n\r\n    public boolean annullaOrdinazione(Ordinazione ordinazione){\r\n        this.checkIsNull(ordinazione);\r\n        if(!ordinazioneRepository.existsById(ordinazione.getId())){\r\n            return false;\r\n        }\r\n        for(Richiesta richiesta: richiestaRepository.findByOrdinazioneId(ordinazione.getId())){\r\n            gestoreProdotti.incrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());\r\n        }\r\n        ordinazioneRepository.deleteById(ordinazione.getId());\r\n        return true;\r\n    }\r\n\r\n    public boolean impostaPrezzoRichiesta(Richiesta richiesta, double prezzo){\r\n        this.checkIsNull(richiesta, prezzo);\r\n        if(!richiestaRepository.existsById(richiesta.getId())){\r\n            throw new IllegalArgumentException(\"I parametri passati non esistono\");\r\n        }\r\n        richiesta.setPrezzo(prezzo);\r\n        richiestaRepository.save(richiesta);\r\n        return true;\r\n    }\r\n\r\n    public double ricalcolaPrezzoFinale(Ordinazione ordinazione){\r\n        this.checkIsNull(ordinazione);\r\n        if(ordinazione.getPrezzoTot() != 0){\r\n            return ordinazione.getPrezzoTot();\r\n        }\r\n        return this.getPrezzoTotaleRichieste(richiestaRepository.findByOrdinazioneId(ordinazione.getId()));\r\n    }\r\n\r\n    public List<Richiesta> listaRichiesteConModifiche(Ordinazione ordinazione){\r\n        List<Richiesta> richieste = new ArrayList<>();\r\n        for(Richiesta richiesta: richiestaRepository.findByOrdinazioneId(ordinazione.getId())){\r\n            if(!richiesta.getModifiche().isEmpty()){\r\n                richieste.add(richiesta);\r\n            }\r\n        }\r\n        return richieste;\r\n    }\r\n\r\n    public void setStato(Ordinazione ordinazione, Stato stato){\r\n        this.checkIsNull(ordinazione, stato);\r\n        if(!ordinazioneRepository.existsById(ordinazione.getId())){\r\n            throw new IllegalArgumentException(\"L'ordinazione passata non esiste\");\r\n        }\r\n        ordinazione.setStato(stato);\r\n        ordinazioneRepository.save(ordinazione);\r\n    }\r\n\r\n    public boolean needImpostaPrezzo(List<Richiesta> richieste){\r\n        this.checkIsNull(richieste);\r\n        for(Richiesta richiesta: richieste){\r\n            if(!richiesta.getModifiche().isEmpty()){\r\n                return true;\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    private boolean checkProdotti(List<Richiesta> richieste){\r\n        for(Richiesta richiesta: richieste){\r\n            if(!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())){\r\n                return false;\r\n            }\r\n        }\r\n        return true;\r\n    }\r\n\r\n    private double getPrezzoTotaleRichieste(List<Richiesta> richieste){\r\n        double prezzoFinale = 0;\r\n        for(Richiesta richiesta: richieste){\r\n            prezzoFinale+=richiesta.getPrezzo();\r\n        }\r\n        return prezzoFinale;\r\n    }\r\n\r\n    private void checkIsNull(Object ... objects){\r\n        for(Object obj: objects){\r\n            if(obj == null){\r\n                throw new NullPointerException(\"I paramentri passati sono nulli\");\r\n            }\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/GestoreOrdinazione.java	(date 1643383363708)
+@@ -5,23 +5,22 @@
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
++import java.time.LocalDate;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+ @Service
+ public class GestoreOrdinazione {
+ 
+-    private final GestoreProdotti gestoreProdotti;
++    @Autowired
++    private GestoreProdotti gestoreProdotti;
+ 
+     @Autowired
+-    OrdinazioneRepository ordinazioneRepository;
++    private OrdinazioneRepository ordinazioneRepository;
+ 
+     @Autowired
+-    RichiestaRepository richiestaRepository;
++    private RichiestaRepository richiestaRepository;
+ 
+-    GestoreOrdinazione(){
+-        this.gestoreProdotti = new GestoreProdotti();
+-    }
+ 
+     public List<Richiesta> getRichiesteOf(Ordinazione ordinazione){
+         this.checkIsNull(ordinazione);
+@@ -31,23 +30,27 @@
+         return richiestaRepository.findByOrdinazioneId(ordinazione.getId());
+     }
+ 
+-    public List<Ordinazione> getRichiesteWith(Stato stato){
++    public List<Ordinazione> getOrdinazioneWith(Stato stato) {
+         this.checkIsNull(stato);
+-        return ordinazioneRepository.findByStato(stato);
++        return ordinazioneRepository.findByStatoAndData(stato, LocalDate.now());
+     }
+ 
+     public Ordinazione creaOrdinazione(List<Richiesta> richieste, Ombrellone ombrellone){
+         this.checkIsNull(richieste, ombrellone);
+         Ordinazione ordinazione = new Ordinazione(ombrellone);
+-        if(this.checkProdotti(richieste)) return null;
+-        if(!this.needImpostaPrezzo(richieste)){
+-            ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));
+-        }
++
++        if(!this.checkProdotti(richieste)) return null;
++        if(!this.areThereRequiredChanges(richieste)) ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richieste));
++
++        //TODO vedere se si può eliminare la ripetizione
++        ordinazioneRepository.save(ordinazione);
++        this.setStato(ordinazione, Stato.DA_PAGARE);
+         ordinazioneRepository.save(ordinazione);
+-        for(Richiesta richiesta: richieste){
++        for(Richiesta richiesta: richieste) {
+             richiesta.setOrdinazione(ordinazione);
+             gestoreProdotti.decrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
+         }
++
+         richiestaRepository.saveAll(richieste);
+         return ordinazione;
+     }
+@@ -74,12 +77,15 @@
+         return true;
+     }
+ 
+-    public double ricalcolaPrezzoFinale(Ordinazione ordinazione){
++    public double ricalcolaPrezzoFinale(Ordinazione ordinazione) {
+         this.checkIsNull(ordinazione);
+         if(ordinazione.getPrezzoTot() != 0){
+             return ordinazione.getPrezzoTot();
+         }
+-        return this.getPrezzoTotaleRichieste(richiestaRepository.findByOrdinazioneId(ordinazione.getId()));
++
++        ordinazione.setPrezzoTot(this.getPrezzoTotaleRichieste(richiestaRepository.findByOrdinazioneId(ordinazione.getId())));
++        ordinazioneRepository.save(ordinazione);
++        return ordinazione.getPrezzoTot();
+     }
+ 
+     public List<Richiesta> listaRichiesteConModifiche(Ordinazione ordinazione){
+@@ -101,26 +107,22 @@
+         ordinazioneRepository.save(ordinazione);
+     }
+ 
+-    public boolean needImpostaPrezzo(List<Richiesta> richieste){
++    private boolean areThereRequiredChanges(List<Richiesta> richieste) {
+         this.checkIsNull(richieste);
+-        for(Richiesta richiesta: richieste){
+-            if(!richiesta.getModifiche().isEmpty()){
+-                return true;
+-            }
+-        }
++        for(Richiesta richiesta: richieste)
++            if(!richiesta.getModifiche().isEmpty()) return true;
++
+         return false;
+     }
+ 
+-    private boolean checkProdotti(List<Richiesta> richieste){
+-        for(Richiesta richiesta: richieste){
+-            if(!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())){
+-                return false;
+-            }
+-        }
++    private boolean checkProdotti(List<Richiesta> richieste) {
++        for (Richiesta richiesta : richieste)
++            if (!gestoreProdotti.isPresent(richiesta.getProdotto(), richiesta.getQuantita())) return false;
++
+         return true;
+     }
+ 
+-    private double getPrezzoTotaleRichieste(List<Richiesta> richieste){
++    private double getPrezzoTotaleRichieste(List<Richiesta> richieste) {
+         double prezzoFinale = 0;
+         for(Richiesta richiesta: richieste){
+             prezzoFinale+=richiesta.getPrezzo();
+@@ -128,7 +130,7 @@
+         return prezzoFinale;
+     }
+ 
+-    private void checkIsNull(Object ... objects){
++    private void checkIsNull(Object ... objects) {
+         for(Object obj: objects){
+             if(obj == null){
+                 throw new NullPointerException("I paramentri passati sono nulli");
+Index: src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package it.unicam.cs.ids.Casotto.Classi;\r\n\r\nimport javax.persistence.*;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\n@Entity\r\npublic class Prodotto {\r\n\r\n    @Id\r\n    @GeneratedValue\r\n    private long id;\r\n    private String oggetto;\r\n    private int quantita;\r\n    private double prezzo;\r\n    private Tipo tipo;\r\n\r\n    @OneToMany(mappedBy = \"prodotto\", cascade = CascadeType.ALL, fetch = FetchType.LAZY)\r\n    private final Set<Richiesta> richieste = new HashSet<>();\r\n\r\n    public Prodotto() {\r\n    }\r\n\r\n    public Prodotto(String oggetto, double prezzo, int quantita, Tipo tipo) {\r\n        this.oggetto = oggetto;\r\n        this.quantita = quantita;\r\n        this.prezzo = prezzo;\r\n        this.tipo = tipo;\r\n    }\r\n\r\n    public long getId() {\r\n        return id;\r\n    }\r\n\r\n    public String getOggetto() {\r\n        return oggetto;\r\n    }\r\n\r\n    public void setOggetto(String oggetto) {\r\n        this.oggetto = oggetto;\r\n    }\r\n\r\n    public int getQuantita() {\r\n        return quantita;\r\n    }\r\n\r\n    public void setQuantita(int quantita) {\r\n        this.quantita = quantita;\r\n    }\r\n\r\n    public double getPrezzo() {\r\n        return prezzo;\r\n    }\r\n\r\n    public void setPrezzo(double prezzo) {\r\n        this.prezzo = prezzo;\r\n    }\r\n\r\n    public Tipo getTipo() {\r\n        return tipo;\r\n    }\r\n\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"\\nPRODOTTO[Descrizione: \" + this.oggetto +\" -- Quantità disponibile: \" + this.getQuantita() +\r\n                \" -- Prezzo unitario: \" + this.getPrezzo() + \" euro]\";\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java
+--- a/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java	(revision e8283872837460480b9246f0f5236771ea89f210)
++++ b/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prodotto.java	(date 1643383363723)
+@@ -63,7 +63,7 @@
+ 
+     @Override
+     public String toString() {
+-        return "\nPRODOTTO[Descrizione: " + this.oggetto +" -- Quantità disponibile: " + this.getQuantita() +
++        return "PRODOTTO[Id: " + this.id + " -- Descrizione: " + this.oggetto +" -- Quantita' disponibile: " + this.getQuantita() +
+                 " -- Prezzo unitario: " + this.getPrezzo() + " euro]";
+     }
+ 
