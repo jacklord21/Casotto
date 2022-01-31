@@ -31,8 +31,9 @@ public interface Menu
         menu.put("5", new HashMap<>()); menu.get("5").put("Acquista prodotti", im::acquistaProdotto);
         menu.put("6", new HashMap<>()); menu.get("6").put("Prenota attivita'", im::prenotazioneAttivita);
         menu.put("7", new HashMap<>()); menu.get("7").put("Cancella prenotazione attivita'", im::cancellazionePrenotazioneAttivita);
-        menu.put("8", new HashMap<>()); menu.get("8").put("Modifica Dati", im::modificaDati);
-        menu.put("9", new HashMap<>()); menu.get("9").put("Logout", im::logout);
+        menu.put("8", new HashMap<>()); menu.get("8").put("Notifica Reclamo", im::notificaReclami);
+        menu.put("9", new HashMap<>()); menu.get("9").put("Modifica Dati", im::modificaDati);
+        menu.put("10", new HashMap<>()); menu.get("10").put("Logout", im::logout);
         menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
 
         return menu;
@@ -56,7 +57,8 @@ public interface Menu
         menu.put("1", new HashMap<>()); menu.get("1").put("Inizia una preparazione", im::inizioPreparazione);
         menu.put("2", new HashMap<>()); menu.get("2").put("Termina una preparazione", im::finePreparazione);
         menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
+        menu.put("4", new HashMap<>()); menu.get("4").put("Notifica Problema", im::notificaProblemi);
+        menu.put("5", new HashMap<>()); menu.get("5").put("Logout", im::logout);
         menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
 
         return menu;
@@ -65,10 +67,11 @@ public interface Menu
     static Map<String, Map<String, Runnable>> menuGestore(InteractionManager im) {
         Map<String, Map<String, Runnable>> menu = new HashMap<>();
 
-        menu.put("1", new HashMap<>()); menu.get("1").put("Inserisci un nuovo prezzo", im::inserisciPrezzoPerOmbrellone);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Imposta prezzo ombrellone", im::impostaPrezzoOmbrellone);
-        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
+        menu.put("1", new HashMap<>()); menu.get("1").put("Gestisci struttura", im::gestioneStruttura);
+        menu.put("2", new HashMap<>()); menu.get("2").put("Modifica Dati", im::modificaDati);
+        menu.put("3", new HashMap<>()); menu.get("3").put("Invia Notifiche", im::invioNotifiche);
+        menu.put("4", new HashMap<>()); menu.get("4").put("Modifica livello account", im::modificaLivello);
+        menu.put("5", new HashMap<>()); menu.get("5").put("Logout", im::logout);
         menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
 
         return menu;
