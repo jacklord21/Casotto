@@ -1,77 +1,54 @@
 package it.unicam.cs.ids.Casotto.Interazione;
 
-import it.unicam.cs.ids.Casotto.Classi.Durata;
-import it.unicam.cs.ids.Casotto.Classi.Livello;
+import it.unicam.cs.ids.Casotto.Classi.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Acquisizione {
 
-
     private static final Scanner sc = new Scanner(System.in);
 
-    public static double acquisizionePrezzo(String descrizionePrezzo) {
+    public static double acqDouble(String descNumeroConVirgola) {
+        return acqValore("Inserisci " + descNumeroConVirgola + ": ",
+                "Errore: il numero digitato e' errato. Riprova.", Double::parseDouble);
+    }
 
-        String prezzo;
+    public static int acqIntero(String descIntero) {
+        return acqValore("Inserisci " + descIntero + ": ",
+                "Errore: numero intero NON valido. Riprova.", Integer::parseInt);
+    }
+
+    public static LocalDate acqData(String descData) {
+        return acqValore("Inserisci la data " + descData + " (YYYY-mm-dd): ",
+                "Errore nel formato della data: deve essere del tipo YYYY-mm-dd. Riprova.", LocalDate::parse);
+    }
+
+    public static String acqStringa(String descStringa) {
+        return acqValore("Inserisci " + descStringa + ": ", "", s->s);
+    }
+
+    private static <T> T acqValore(String fraseAcquisizione, String fraseErrore, Function<String, T> funzioneConversioneValore) {
+        T ris;
 
         do {
-            System.out.print("Inserisci il prezzo " + descrizionePrezzo + ": ");
+            System.out.print(fraseAcquisizione);
             try {
-                prezzo = sc.next();
+                ris = funzioneConversioneValore.apply(sc.nextLine());
                 break;
             }
-            catch(DateTimeParseException e) { System.out.println("Errore nel formato della data: deve essere del tipo YYYY-mm-dd. Riprova."); }
+            catch(Exception e) { System.out.println(fraseErrore); }
         } while(true);
 
-        return Double.parseDouble(prezzo);
+        return ris;
     }
 
-    public static int acquisizioneMese(String tipoMese) {
+    public static int acqLettiniSdraie(int oggettiDisponibili, String descrizione, BiPredicate<Integer, Integer> predicato) {
+        int oggettiScelti = acqIntero("il numero desiderato di " + descrizione + " (max. " + oggettiDisponibili + "): ");
 
-        String mese = "";
-        Set<String> mesi = IntStream.range(1, 13).mapToObj(String::valueOf).collect(Collectors.toSet());
-
-        do {
-            if(!mese.isEmpty())
-                System.out.println("Errore: il mese digitato non è valido. Riprova.");
-
-            System.out.print("Inserisci il mese di " + tipoMese + ": ");
-        }while(!mesi.contains(mese=sc.next()));
-
-        return Integer.parseInt(mese);
-    }
-
-    public static String acquisizioneCredenziali(String credName) {
-        System.out.print("Inserisci " + credName + ": ");
-        return sc.next();
-    }
-
-
-    public static LocalDate acquisizioneData(String tipoData) {
-        LocalDate date;
-
-        do {
-            System.out.print("Inserisci la data " + tipoData + ": ");
-            try {
-                date = LocalDate.parse(sc.next());
-                break;
-            }
-            catch(DateTimeParseException e) { System.out.println("Errore nel formato della data: deve essere del tipo YYYY-mm-dd. Riprova."); }
-        } while(true);
-
-        return date;
-    }
-
-    public static int acquisizioneLettiniSdraie(int oggettiDisponibili, String descrizione, BiPredicate<Integer, Integer> predicato) {
-        System.out.print("Inserisci il numero desiderato di " + descrizione + " (max. " + oggettiDisponibili + "): ");
-        int oggettiScelti = sc.nextInt();
         while(predicato.test(oggettiScelti, oggettiDisponibili)) {
             System.out.println("Errore: il numero di " + descrizione + " inserito non è valido. Riprova.");
             System.out.print("Inserisci il numero desiderato di " + descrizione + " (max. " + oggettiDisponibili + "): ");
@@ -81,42 +58,59 @@ public class Acquisizione {
         return oggettiScelti;
     }
 
+    public static Durata acqDurata(String descDurata) {
+        return acqEnum("la durata " + descDurata, "Errore: la durata selezionata non è valido. Riprova.",
+                Arrays.stream(Durata.values()).map(Durata::name).collect(Collectors.toList()), Durata::valueOf);
+    }
 
-    public static Durata acquisizioneDurata(String descrizioneDurata) {
+    public static Livello acqLivello(String descLivello) {
+        return acqEnum("il livello " + descLivello, "Errore: il livello selezionato non è valido. Riprova.",
+                Arrays.stream(Livello.values()).map(Livello::name).collect(Collectors.toList()), Livello::valueOf);
+    }
+
+    public static Tipo acqTipo(String descTipo) {
+       return acqEnum("il tipo " + descTipo, "Errore: il tipo selezionato non è valido. Riprova.",
+               Arrays.stream(Tipo.values()).map(Tipo::name).collect(Collectors.toList()), Tipo::valueOf);
+    }
+
+    private static <T> T acqEnum(String fraseAcquisizione, String fraseErrore, List<String> possibiliValori, Function<String, T> funzioneValoreDiRitorno) {
         String ris = "";
-        List<String> possibleLevels = Arrays.stream(Durata.values()).map(Enum::name).collect(Collectors.toList());
 
         do {
             if(!ris.isEmpty())
-                System.out.println("Errore: la durata selezionata non e' prevista. Prova ancora.");
+                System.out.println(fraseErrore);
 
-            System.out.println("\nDurate previste: ");
-            possibleLevels.forEach(System.out::println);
-            System.out.print("\nSeleziona la durata temporale " + descrizioneDurata + ": ");
-            ris = sc.next();
+            System.out.println("\nValori: ");
+            possibiliValori.forEach(System.out::println);
+
+            System.out.print("\nDigita " + fraseAcquisizione + ": ");
+            ris = sc.nextLine().toUpperCase(Locale.ROOT);
         }
-        while(!possibleLevels.contains(ris));
+        while(!possibiliValori.contains(ris));
 
-        return Durata.valueOf(ris);
+        return funzioneValoreDiRitorno.apply(ris);
     }
 
 
-    public static Livello acquisizioneLivello() {
+    public static Map<Attivita, Boolean> acqParamAttivita(GestoreAttivita ga) {
+        sc.nextLine();
 
-       String ris = "";
-       List<String> possibleLevels = Arrays.stream(Livello.values()).map(Livello::name).collect(Collectors.toList());
+        String nome = acqStringa("il nome dell'attivita'");
+        LocalDate data = Acquisizione.acqData("dell'attivita'");
+        int partecipanti = acqIntero("il numero massimo di partecipanti");
 
-        do {
-            if(!ris.isEmpty())
-                System.out.println("Errore: il livello selezionato non è valido. Riprova.");
+        return Map.of(ga.createAttivita(nome, data, partecipanti), false);
+    }
 
-            System.out.println("\nLivelli: ");
-            possibleLevels.forEach(System.out::println);
-            System.out.print("\nDigita il livello: ");
-            ris = sc.next();
-        }
-        while(!possibleLevels.contains(ris));
 
-        return Livello.valueOf(ris);
+    public static Map<Prodotto, Boolean> acqParamProdotto(GestoreProdotti gp) {
+        sc.nextLine();
+
+        String nome = acqStringa("il nome del prodotto");
+        double prezzo = acqDouble("il prezzo del prodotto");
+        int quantita = acqIntero("la quantita' del prodotto");
+        Tipo tipo = acqTipo("del prodotto");
+
+        return Map.of(gp.creazioneProdotto(nome, prezzo, quantita, tipo), false);
     }
 }
