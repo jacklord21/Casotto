@@ -45,6 +45,7 @@ public class GestoreOrdinazione {
         ordinazioneRepository.save(ordinazione);
         this.setStato(ordinazione, Stato.DA_PAGARE);
         ordinazioneRepository.save(ordinazione);
+
         for(Richiesta richiesta: richieste) {
             richiesta.setOrdinazione(ordinazione);
             gestoreProdotti.decrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
@@ -71,14 +72,15 @@ public class GestoreOrdinazione {
         if(!richiestaRepository.existsById(richiesta.getId())){
             throw new IllegalArgumentException("I parametri passati non esistono");
         }
-        richiesta.setPrezzo(prezzo);
+
+        richiesta.setPrezzo(prezzo*richiesta.getQuantita());
         richiestaRepository.save(richiesta);
         return true;
     }
 
     public double ricalcolaPrezzoFinale(Ordinazione ordinazione) {
         this.checkIsNull(ordinazione);
-        if(ordinazione.getPrezzoTot() != 0){
+        if(ordinazione.getPrezzoTot() != 0) {
             return ordinazione.getPrezzoTot();
         }
 
@@ -123,7 +125,7 @@ public class GestoreOrdinazione {
 
     private double getPrezzoTotaleRichieste(List<Richiesta> richieste) {
         double prezzoFinale = 0;
-        for(Richiesta richiesta: richieste){
+        for(Richiesta richiesta: richieste) {
             prezzoFinale+=richiesta.getPrezzo();
         }
         return prezzoFinale;
