@@ -8,5 +8,7 @@ public enum Livello
 {
     CLIENTE,
     GESTORE,
+    ADDETTO_SPIAGGIA,
+    BARISTA,
     PARTECIPANTE
 }
