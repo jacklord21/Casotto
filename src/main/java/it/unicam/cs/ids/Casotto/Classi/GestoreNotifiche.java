@@ -33,14 +33,14 @@ public class GestoreNotifiche {
         return true;
     }
 
-    public boolean invioNotificha(String testo, List<Livello> gruppiInvio, LocalDate dataFineValidita){
+    public boolean invioNotifica(String testo, List<Livello> gruppiInvio, LocalDate dataFineValidita){
         for(Livello gruppo: gruppiInvio){
             notificaRepository.save(new Notifica(testo, gruppo, dataFineValidita));
         }
         return true;
     }
 
-    public boolean invioProblema(String testo){
+    public boolean invioProblema(String testo) {
         notificaRepository.save(new Notifica(testo, Livello.GESTORE));
         return true;
     }
