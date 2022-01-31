@@ -14,15 +14,12 @@ public class GestoreNotifiche {
     @Autowired
     NotificaRepository notificaRepository;
 
-    public List<Notifica> getNotifiche(Livello gruppo){
-        if(gruppo == Livello.GESTORE)
-            for (Notifica notifica : notificaRepository.findAll())
-                if (notifica.getDatavalidita().isBefore(LocalDate.now()))
-                    this.removeNotifica(notifica);
+    public List<Notifica> getNotifiche(Livello gruppo) {
+        for (Notifica notifica : notificaRepository.findByGruppo(gruppo))
+            if (notifica.getDatavalidita()!=null && notifica.getDatavalidita().isBefore(LocalDate.now()))
+                this.removeNotifica(notifica);
 
-        return notificaRepository.findByGruppo(gruppo)
-                .stream().filter(n -> n.getDatavalidita().compareTo(LocalDate.now()) >= 0)
-                .collect(Collectors.toList());
+        return notificaRepository.findByGruppo(gruppo);
     }
 
     public boolean removeNotifica(Notifica notifica){
