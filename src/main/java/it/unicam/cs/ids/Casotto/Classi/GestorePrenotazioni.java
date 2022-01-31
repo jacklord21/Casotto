@@ -2,6 +2,7 @@ package it.unicam.cs.ids.Casotto.Classi;
 
 import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.Objects;
  * connesse (conoscere il costo, sapere lo storico delle prenotazioni di un'utente, ...)
  *
  */
-@Service
+@Controller
 public class GestorePrenotazioni {
 
     @Autowired
@@ -26,19 +27,6 @@ public class GestorePrenotazioni {
 
     @Autowired
     Spiaggia gs;
-
-    /**
-     * Metodo che calcola il prezzo finale di una {@link Prenotazione} in base al saldo dell'{@link Account}
-     * passato come parametro. Se il saldo &egrave; maggiore del prezzo della prenotazione il prezzo finale &egrave;
-     * ZERO, altrimenti al prezzo della prenotazione viene sottratto il saldo dell'account
-     *
-     * @param prenotazione {@link Prenotazione} della quale calcolare il prezzo finale
-     * @param account {@link Account} del quale conoscere il saldo
-     * @return il prezzo finale della {@link Prenotazione} in base al saldo dell'{@link Account}
-     */
-    public double prezzoFinale(Prenotazione prenotazione, Account account) {
-        return (account.getSaldo()>=prenotazione.getPrezzo()) ? 0 : prenotazione.getPrezzo()-account.getSaldo();
-    }
 
     /**
      * Metodo che permette di registrare una {@link Prenotazione}
