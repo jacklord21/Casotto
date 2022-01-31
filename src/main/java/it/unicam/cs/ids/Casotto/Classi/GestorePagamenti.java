@@ -13,6 +13,9 @@ public class GestorePagamenti {
     private GestoreProdotti gestoreProdotti;
 
     @Autowired
+    private Spiaggia spiaggia;
+
+    @Autowired
     private GestoreOrdinazione gestoreOrdinazione;
 
     @Autowired
@@ -24,13 +27,15 @@ public class GestorePagamenti {
     public GestorePagamenti() {
     }
 
-    public boolean pagamentoPrenotazione(Prenotazione prenotazione, Account account) {
-        if(prenotazione.getPrezzo() >= account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, 0);
-        else if(prenotazione.getPrezzo() < account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, account.getSaldo() - prenotazione.getPrezzo());
+    public boolean pagamentoPrenotazione(Prenotazione pren, Account account) {
+        pren.setPrezzo(this.spiaggia.getPrezzoTotale(pren));
+
+        if(pren.getPrezzo() >= account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, 0);
+        else if(pren.getPrezzo() < account.getSaldo()) this.gestoreAccount.updateSaldoAccount(account, account.getSaldo() - pren.getPrezzo());
 
         //Pagamento "prezzoFinale"
 
-        return this.gestorePrenotazioni.registrazionePrenotazione(prenotazione);
+        return this.gestorePrenotazioni.registrazionePrenotazione(pren);
     }
 
     public boolean pagamentoElettronico(Ordinazione ordinazione){
@@ -39,31 +44,27 @@ public class GestorePagamenti {
         return true;
     }
 
-    public double pagamentoContanti(Ordinazione ordinazione, double denaro){
-        if(denaro < ordinazione.getPrezzoTot()){
-            throw new IllegalArgumentException("Denaro insufficente");
-        }
+    public double pagamentoContanti(Ordinazione ordinazione, double denaro) {
+        if(denaro < ordinazione.getPrezzoTot()) return -1.0;
+
         gestoreOrdinazione.setStato(ordinazione, Stato.PAGATO);
         return denaro - ordinazione.getPrezzoTot();
     }
 
-    public String creazioneScontrino(Ordinazione ordinazione){
-        if(ordinazione == null){
-            throw new NullPointerException("L'ordinazione passata è nulla");
-        }
-        if(ordinazione.getStato() == Stato.DA_PAGARE || ordinazione.getStato() == Stato.CONSEGNATO){
-            return null;
-        }
-        GestoreOrdinazione gestoreOrdinazione = new GestoreOrdinazione();
-        List<String> scontrino = new ArrayList<>();
+    public String creazioneScontrino(Ordinazione ordinazione) {
 
-        scontrino.add("Ordinazione: " + ordinazione.getId() + " Ombrellone: " + ordinazione.getOmbrellone().getId());
-        for(Richiesta richiesta: gestoreOrdinazione.getRichiesteOf(ordinazione)){
-            scontrino.add(gestoreProdotti.getProdottoOf(richiesta).getOggetto() +
-                    "  " + richiesta.getQuantita() + "  " + richiesta.getPrezzo());
+        if(ordinazione == null) throw new NullPointerException("L'ordinazione passata è nulla");
+        if(ordinazione.getStato() == Stato.DA_PAGARE || ordinazione.getStato() == Stato.CONSEGNATO) return null;
 
-        }
-        scontrino.add("Totale:  "+ordinazione.getPrezzoTot());
+       List<String> scontrino = new ArrayList<>();
+
+        scontrino.add("\n\nSCONTRINO: \n");
+
+        scontrino.add("Ordinazione numero: " + ordinazione.getId() + "\nIdentificativo ombrellone: " + ordinazione.getOmbrellone().getId());
+        for(Richiesta richiesta: this.gestoreOrdinazione.getRichiesteOf(ordinazione))
+            scontrino.add(richiesta.toString());
+
+        scontrino.add("Totale:  " + ordinazione.getPrezzoTot());
         return this.generateStringOfScontrino(scontrino);
     }
 
