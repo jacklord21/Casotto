@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Classe che rappresenta un gestore di {@link Account}, che permette di effettuare tutte le operazioni
@@ -23,6 +26,11 @@ public class GestoreAccount {
 
     @Autowired
     UtenteRepository utenteRepository;
+
+
+    public List<Account> getAllAccount() {
+        return StreamSupport.stream(this.accountRepository.findAll().spliterator(), false).collect(Collectors.toList());
+    }
 
     /**
      * Metodo che permette, attraverso email e password, di effettuare il login a un {@link Account}
