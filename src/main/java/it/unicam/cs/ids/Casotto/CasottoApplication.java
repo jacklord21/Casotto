@@ -11,12 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @SpringBootApplication
@@ -24,15 +19,6 @@ public class CasottoApplication {
 
 	@Autowired
 	InteractionManager im;
-
-	@Autowired
-	OmbrelloneRepository or;
-
-	@Autowired
-	GestoreProdotti gestoreProdotti;
-
-	@Autowired
-	AccountRepository accountRepository;
 
 	public static void main(String[] args)  {
 		SpringApplication.run(CasottoApplication.class, args);
@@ -42,7 +28,6 @@ public class CasottoApplication {
 	public CommandLineRunner mappingDemo(AccountRepository ar, PrenotazioniRepository pr, UtenteRepository ur, OmbrelloneRepository or, PrezzoRepository prr) {
 
 		return args -> {
-
 			String scelta = "";
 			Scanner sc = new Scanner(System.in);
 			Map<String, Map<String, Runnable>> menu = cambiaMenu(this.im.getAccount()).getMenu(this.im);
@@ -69,6 +54,9 @@ public class CasottoApplication {
 	}
 
 	private Menu cambiaMenu(Account account) {
-		return (account==null) ? Menu::menuInizio : (account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente : Menu::menuGestore;
+		return (account==null) ? Menu::menuInizio :
+				(account.getLivello()==Livello.CLIENTE) ? Menu::menuCliente :
+				(account.getLivello()==Livello.ADDETTO_SPIAGGIA) ? Menu::menuAddettoSpiaggia :
+				(account.getLivello()==Livello.BARISTA) ? Menu::menuBarista : Menu::menuGestore;
 	}
 }
