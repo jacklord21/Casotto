@@ -76,13 +76,13 @@ public class Richiesta {
     }
 
 
-    @Override
     public String toString() {
 
         return "\nRICHIESTA" +
                 "\t\nId: " + this.getId() +
-                "\t\n" + this.getProdotto().toString() +
+                "\t\nProdotto: " + this.getProdotto().getOggetto() +
                 "\t\nQuantita': " + this.getQuantita() +
-                "\t\nModifiche: " + ((this.getModifiche().isEmpty()) ? "nessuna" : this.getModifiche());
+                "\t\nModifiche: " + ((this.getModifiche().isEmpty()) ? "nessuna" : this.getModifiche()) +
+                "\t\nPrezzo: " + this.getPrezzo();
     }
 }
