@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Classe che rappresenta un gestore delle prenotazioni, che permette di effettuare le operazioni
@@ -52,11 +53,20 @@ public class GestorePrenotazioni {
                 || prenotazione.getSdraie()>gs.sdraieDisponibili(prenotazione.getDataPrenotazione(), prenotazione.getDurata()))
             throw new IllegalArgumentException("Sdraie o lettini non disponibili");
 
-        prenotazione.setPrezzo(gs.getPrezzoTotale(prenotazione));
         pr.save(prenotazione);
         return true;
     }
 
+
+    public boolean haPrenotazioni(Account account, LocalDate date, Durata durata) {
+        List<Prenotazione> prenotazioni = this.pr.findByDataPrenotazione(date).stream()
+                                                  .filter(p->p.getAccount().getId()==account.getId()).collect(Collectors.toList());
+
+        for(Prenotazione pren : prenotazioni)
+            if(pren.getDurata()==Durata.INTERO || pren.getDurata().equals(durata) || durata==Durata.INTERO) return true;
+
+        return false;
+    }
 
     /**
      * Metodo che permette di ottenere la {@link Prenotazione} effettuata dall'{@link Account} con data uguale a
