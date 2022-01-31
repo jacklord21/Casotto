@@ -11,6 +11,7 @@ public class Attivita {
     @Id
     @GeneratedValue
     private long id;
+
     private String nome;
     private LocalDate data;
     private int numeroposti;
@@ -35,11 +36,36 @@ public class Attivita {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public LocalDate getData() {
         return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 
     public int getNumeroposti() {
         return numeroposti;
     }
+
+    public void setNumeroposti(int numeroposti) {
+        this.numeroposti = numeroposti;
+    }
+
+    @Override
+    public String toString() {
+
+        return "\nATTIVITA' " +
+                "\n\tId: " + this.getId() +
+                "\n\tNome: " + this.getNome() +
+                "\n\tData: " + this.getData() +
+                "\n\tNumero posti: " + this.getNumeroposti() + "\n";
+
+    }
+
+
 }
