@@ -75,4 +75,12 @@ public class Account {
     public Set<Prenotazione> getPrenotazioni() {
         return prenotazioni;
     }
+
+
+    public String toString() {
+        return "ACCOUNT (Id " + this.getId() + ")" +
+                "\nNome: " + this.utente.getNome() +
+                "\nCognome: " + this.utente.getCognome() + "\n";
+    }
+
 }
