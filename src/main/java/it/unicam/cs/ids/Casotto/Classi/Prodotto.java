@@ -60,6 +60,9 @@ public class Prodotto {
         return tipo;
     }
 
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 
     @Override
     public String toString() {
