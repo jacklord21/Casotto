@@ -35,7 +35,7 @@ public class Ombrellone {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                CascadeType.MERGE
+                    CascadeType.MERGE
             }, mappedBy = "ombrelloni"
     )
     public Set<Prenotazione> prenotazioni = new HashSet<>();
