@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,6 +28,37 @@ public class GestoreAttivita {
 
     @Autowired
     GestoreAccount gestoreAccount;
+
+
+    public boolean cambiaNomeAttivita(Attivita attivita, String nome) {
+        Objects.requireNonNull(attivita); Objects.requireNonNull(nome);
+        if(!this.attivitaRepository.existsById(attivita.getId()))
+            return false;
+
+        attivita.setNome(nome);
+        this.attivitaRepository.save(attivita);
+        return true;
+    }
+
+    public boolean cambiaDataAttivita(Attivita attivita, LocalDate data) {
+        Objects.requireNonNull(attivita); Objects.requireNonNull(data);
+        if(!this.attivitaRepository.existsById(attivita.getId()))
+            return false;
+
+        attivita.setData(data);
+        this.attivitaRepository.save(attivita);
+        return true;
+    }
+
+    public boolean cambiaNumeroPartecipantiAttivita(Attivita attivita, int partecipanti) {
+        Objects.requireNonNull(attivita);
+        if(!this.attivitaRepository.existsById(attivita.getId()))
+            return false;
+
+        attivita.setNumeroposti(partecipanti);
+        this.attivitaRepository.save(attivita);
+        return true;
+    }
 
     public List<Attivita> getAllAttivitaOf(Account account){
         return partecipaRepository.findByPartecipanteId(account.getId())
@@ -132,14 +165,13 @@ public class GestoreAttivita {
         return new Attivita(nome, data, numPosti);
     }
 
-    public boolean modificheAttivita(HashMap<Attivita, Boolean> modifiche){
-        for(Attivita attivita: modifiche.keySet()){
-            if(modifiche.get(attivita)){
-                attivitaRepository.save(attivita);
-            }else{
-                this.cancellaAttivita(attivita);
-            }
+    public boolean modificheAttivita(Attivita attivita, boolean cancella) {
+        if(cancella) {
+            this.cancellaAttivita(attivita);
+            return true;
         }
+
+        this.attivitaRepository.save(attivita);
         return true;
     }
 
