@@ -35,7 +35,7 @@ public class Ordinazione {
         return id;
     }
 
-    public Set<Richiesta> getProdotti() {
+    public Set<Richiesta> getRichieste() {
         return prodotti;
     }
 
@@ -64,11 +64,17 @@ public class Ordinazione {
     @Override
     public String toString() {
 
-        return "\nORDINAZIONE" +
+        String richieste = "";
+
+        for (Richiesta r : this.getRichieste())
+            richieste = richieste.concat(r.toString() + "\n");
+
+        return "\n\n\nORDINAZIONE" +
                 "\t\nId: " + this.getId() +
-                "\t\n" + this.getProdotti().stream().toString() +
+                "\t\n" + richieste +
                 "\t\nStato: " + this.getStato() +
-                "\t\n" + this.getOmbrellone().toString();
+                "\t\nOmbrellone: " + this.getOmbrellone().toString() +
+                "\t\nPrezzo totale: " + this.getPrezzoTot();
     }
 
 }
