@@ -1,81 +1,118 @@
 package it.unicam.cs.ids.Casotto.Interazione;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Service
-@FunctionalInterface
-public interface Menu
+/**
+ * Classe che rappresenta i vari Men&ugrave;
+ *
+ */
+@Controller
+public class Menu
 {
-    Map<String, Map<String, Runnable>> getMenu(InteractionManager im);
+    @Autowired private InteractionManager im;
+    @Autowired private InteractionManagerAddettoSpiaggia imAddettoSpiaggia;
+    @Autowired private InteractionManagerBarista imBarista;
+    @Autowired private InteractionManagerGestore imGestore;
 
-    static Map<String, Map<String, Runnable>> menuInizio(InteractionManager im) {
-        Map<String, Map<String, Runnable>> menu = new HashMap<>();
 
-        menu.put("1", new HashMap<>()); menu.get("1").put("Registrazione", im::registrazione);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Login", im::login);
-        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
+    /**
+     * Metodo che permette di ottenere il Men&ugarve; iniziale del programma
+     *
+     * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
+     * a esso come valore
+     */
+    public Map<String, Runnable> menuInizio() {
+        Map<String, Runnable> menu = new LinkedHashMap<>();
 
-        return menu;
-    }
-
-    static Map<String, Map<String, Runnable>> menuCliente(InteractionManager im) {
-        Map<String, Map<String, Runnable>> menu = new HashMap<>();
-
-        menu.put("1", new HashMap<>()); menu.get("1").put("Effettua una prenotazione", im::prenotaSpiaggia);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Cancella una prenotazione", im::cancellaPrenotazione);
-        menu.put("3", new HashMap<>()); menu.get("3").put("Visualizza storico prenotazione", im::visualizzaStoricoPrenotazioni);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Visualizza prenotazioni attive", im::visualizzaPrenotazioniCorrenti);
-        menu.put("5", new HashMap<>()); menu.get("5").put("Acquista prodotti", im::acquistaProdotto);
-        menu.put("6", new HashMap<>()); menu.get("6").put("Prenota attivita'", im::prenotazioneAttivita);
-        menu.put("7", new HashMap<>()); menu.get("7").put("Cancella prenotazione attivita'", im::cancellazionePrenotazioneAttivita);
-        menu.put("8", new HashMap<>()); menu.get("8").put("Notifica Reclamo", im::notificaReclami);
-        menu.put("9", new HashMap<>()); menu.get("9").put("Modifica Dati", im::modificaDati);
-        menu.put("10", new HashMap<>()); menu.get("10").put("Logout", im::logout);
-        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
+        menu.put("Esci", () -> System.exit(0));
+        menu.put("Registrazione", ()->this.im.registrazione());
+        menu.put("Login",()->this.im.login());
 
         return menu;
     }
 
-    static Map<String, Map<String, Runnable>> menuAddettoSpiaggia(InteractionManager im) {
-        Map<String, Map<String, Runnable>> menu = new HashMap<>();
+    /**
+     * Metodo che permette di ottenere il Men&ugarve; del cliente
+     *
+     * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
+     * a esso come valore
+     */
+    public Map<String, Runnable> menuCliente() {
+        Map<String, Runnable> menu = new LinkedHashMap<>();
 
-        menu.put("1", new HashMap<>()); menu.get("1").put("Pagamento ordinazione", im::pagamentoOrdinazione);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Consegna comanda con scontrino", im::consegnaComandaConScontrino);
-        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Logout", im::logout);
-        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
-
-        return menu;
-    }
-
-    static Map<String, Map<String, Runnable>> menuBarista(InteractionManager im) {
-        Map<String, Map<String, Runnable>> menu = new HashMap<>();
-
-        menu.put("1", new HashMap<>()); menu.get("1").put("Inizia una preparazione", im::inizioPreparazione);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Termina una preparazione", im::finePreparazione);
-        menu.put("3", new HashMap<>()); menu.get("3").put("Modifica Dati", im::modificaDati);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Notifica Problema", im::notificaProblemi);
-        menu.put("5", new HashMap<>()); menu.get("5").put("Logout", im::logout);
-        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
-
-        return menu;
-    }
-
-    static Map<String, Map<String, Runnable>> menuGestore(InteractionManager im) {
-        Map<String, Map<String, Runnable>> menu = new HashMap<>();
-
-        menu.put("1", new HashMap<>()); menu.get("1").put("Gestisci struttura", im::gestioneStruttura);
-        menu.put("2", new HashMap<>()); menu.get("2").put("Modifica Dati", im::modificaDati);
-        menu.put("3", new HashMap<>()); menu.get("3").put("Invia Notifiche", im::invioNotifiche);
-        menu.put("4", new HashMap<>()); menu.get("4").put("Modifica livello account", im::modificaLivello);
-        menu.put("5", new HashMap<>()); menu.get("5").put("Logout", im::logout);
-        menu.put("0", new HashMap<>()); menu.get("0").put("Esci", () -> System.exit(0));
+        menu.put("Esci", () -> System.exit(0));
+        menu.put("Effettua una prenotazione", ()->this.im.prenotaSpiaggia());
+        menu.put("Cancella una prenotazione", ()->this.im.cancellaPrenotazione());
+        menu.put("Visualizza storico prenotazioni", ()->this.im.visualizzaStoricoPrenotazioni());
+        menu.put("Visualizza prenotazioni attive", ()->this.im.visualizzaPrenotazioniCorrenti());
+        menu.put("Acquista prodotti", ()->this.im.acquistaProdotto());
+        menu.put("Prenota attivita'", ()->this.im.prenotazioneAttivita());
+        menu.put("Cancella prenotazione attivita'", ()->this.im.cancellazionePrenotazioneAttivita());
+        menu.put("Notifica Reclamo", ()->this.im.notificaReclami());
+        menu.put("Modifica Dati", ()->this.im.modificaDati());
+        menu.put("Logout", ()->this.im.logout());
 
         return menu;
     }
 
+    /**
+     * Metodo che permette di ottenere il Men&ugarve; dell'addetto spiaggia
+     *
+     * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
+     * a esso come valore
+     */
+    public Map<String, Runnable> menuAddettoSpiaggia() {
+        Map<String, Runnable> menu = new LinkedHashMap<>();
 
+        menu.put("Esci", () -> System.exit(0));
+        menu.put("Pagamento ordinazione", ()->this.imAddettoSpiaggia.pagamentoOrdinazione());
+        menu.put("Consegna comanda con scontrino", ()->this.imAddettoSpiaggia.consegnaOrdinazioneConScontrino());
+        menu.put("Modifica Dati", ()->this.im.modificaDati());
+        menu.put("Logout", ()->this.im.logout());
+
+        return menu;
+    }
+
+    /**
+     * Metodo che permette di ottenere il Men&ugarve; del barista
+     *
+     * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
+     * a esso come valore
+     */
+    public Map<String, Runnable> menuBarista() {
+        Map<String, Runnable> menu = new LinkedHashMap<>();
+
+        menu.put("Esci", () -> System.exit(0));
+        menu.put("Inizia una preparazione", ()->this.imBarista.inizioPreparazione());
+        menu.put("Termina una preparazione", ()->this.imBarista.finePreparazione());
+        menu.put("Modifica Dati", ()->this.im.modificaDati());
+        menu.put("Notifica Problema", ()->this.im.notificaProblemi());
+        menu.put("Logout", ()->this.im.logout());
+
+        return menu;
+    }
+
+    /**
+     * Metodo che permette di ottenere il Men&ugarve; del gestore
+     *
+     * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
+     * a esso come valore
+     */
+    public Map<String, Runnable> menuGestore() {
+        Map<String, Runnable> menu = new LinkedHashMap<>();
+
+        menu.put("Esci", () -> System.exit(0));
+        menu.put("Gestisci struttura", ()->this.imGestore.gestioneStruttura());
+        menu.put("Modifica Dati", ()->this.im.modificaDati());
+        menu.put("Invia Notifiche", ()->this.imGestore.invioNotifiche());
+        menu.put("Modifica livello account", ()->this.imGestore.modificaLivello());
+        menu.put("Inserisci un nuovo prezzo", ()->this.imGestore.inserisciPrezzo());
+        menu.put("Logout", ()->this.im.logout());
+
+        return menu;
+    }
 }
