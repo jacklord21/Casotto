@@ -22,7 +22,7 @@ public class Prezzo {
     private LocalDate DataFine;
     private Durata durata;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "prezzi")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "prezzi")
     private Set<Ombrellone> ombrelloni = new HashSet<>();
 
     /**
@@ -42,10 +42,10 @@ public class Prezzo {
      * @param dataFine data di fine validit&agrave; del prezzo per periodi speciali
      * @param durata {@link Durata} temporale del prezzo
      */
-    public Prezzo(double prezzo, int meseInizio, int meseFine, LocalDate dataInizio, LocalDate dataFine, Durata durata) {
+    public Prezzo(double prezzo, Integer meseInizio, Integer meseFine, LocalDate dataInizio, LocalDate dataFine, Durata durata) {
         this.prezzo = prezzo;
-        this.meseInizio = meseInizio;
-        this.meseFine = meseFine;
+        this.meseInizio = (meseInizio==null) ? 0 : meseInizio;
+        this.meseFine = (meseFine==null) ? 0 : meseFine;
         DataInizio = dataInizio;
         DataFine = dataFine;
         this.durata = durata;

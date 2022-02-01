@@ -27,7 +27,7 @@ public class Ombrellone {
     @Column(name = "Fila")
     private String fila;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinTable(name = "costa",
             joinColumns = { @JoinColumn(name = "ombrellone_id") },
             inverseJoinColumns = { @JoinColumn(name = "prezzo_id") })
