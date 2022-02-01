@@ -7,8 +7,8 @@ package it.unicam.cs.ids.Casotto.Classi;
 public enum Livello
 {
     CLIENTE,
-    GESTORE,
+    PARTECIPANTE,
     ADDETTO_SPIAGGIA,
     BARISTA,
-    PARTECIPANTE
+    GESTORE
 }
