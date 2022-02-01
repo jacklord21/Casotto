@@ -3,6 +3,7 @@ package it.unicam.cs.ids.Casotto.Classi;
 import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;
+import org.hibernate.event.spi.AbstractPreDatabaseOperationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Classe che rappresenta un gestore spiaggia, che permette di effettuare le operazioni
@@ -31,6 +35,23 @@ public class Spiaggia {
     @Autowired
     GestoreProdotti gestoreProdotti;
 
+    public Prezzo addPrezzo(double prezzo, Integer meseInizio, Integer meseFine, LocalDate dataInizio, LocalDate dataFine, Durata durata) {
+        Prezzo p = new Prezzo(prezzo, meseInizio, meseFine, dataInizio, dataFine, durata);
+        return this.prezzoRepository.save(p);
+    }
+
+    public void associaPrezzo(Prezzo prezzo, Ombrellone ombrellone) {
+        ombrellone.addPrezzi(Set.of(prezzo));
+        this.ombrelloneRepository.save(ombrellone);
+    }
+
+    public void eliminaPrezzo(Prezzo prezzo) {
+        this.prezzoRepository.deleteById(prezzo.getId());
+    }
+
+    public List<Prezzo> getAllPrezzi() {
+        return StreamSupport.stream(this.prezzoRepository.findAll().spliterator(), false).collect(Collectors.toList());
+    }
 
     /**
      * Metodo che calcola il prezzo totale di una prenotazione in base al prezzo dell'{@link Ombrellone} e alla
