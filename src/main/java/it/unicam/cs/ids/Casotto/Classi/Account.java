@@ -80,7 +80,7 @@ public class Account {
     public String toString() {
         return "ACCOUNT (Id " + this.getId() + ")" +
                 "\nNome: " + this.utente.getNome() +
-                "\nCognome: " + this.utente.getCognome() + "\n";
+                "\nCognome: " + this.utente.getCognome() +
+                "\nLivello: " + this.getLivello() + "\n";
     }
-
 }
