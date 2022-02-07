@@ -57,7 +57,7 @@ public class Prezzo {
      * @return l'identificativo del prezzo
      */
     public long getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -66,7 +66,7 @@ public class Prezzo {
      * @return il prezzo
      */
     public double getPrezzo() {
-        return prezzo;
+        return this.prezzo;
     }
 
     /**
@@ -75,7 +75,7 @@ public class Prezzo {
      * @return il mese d'inizio validit&agrave; del prezzo
      */
     public int getMeseInizio() {
-        return meseInizio;
+        return this.meseInizio;
     }
 
     /**
@@ -84,7 +84,7 @@ public class Prezzo {
      * @return il mese di fine validit&agrave; del prezzo
      */
     public int getMeseFine() {
-        return meseFine;
+        return this.meseFine;
     }
 
     /**
@@ -93,7 +93,7 @@ public class Prezzo {
      * @return la data d'inizio validit&agrave; del prezzo per periodi speciali
      */
     public LocalDate getDataInizio() {
-        return DataInizio;
+        return this.DataInizio;
     }
 
     /**
@@ -102,7 +102,7 @@ public class Prezzo {
      * @return la data di fine validit&agrave; del prezzo per periodi speciali
      */
     public LocalDate getDataFine() {
-        return DataFine;
+        return this.DataFine;
     }
 
     /**
@@ -111,10 +111,8 @@ public class Prezzo {
      * @return la {@link Durata} temporale associata al prezzo
      */
     public Durata getDurata() {
-        return durata;
+        return this.durata;
     }
-
-
 
 
     public String toString() {

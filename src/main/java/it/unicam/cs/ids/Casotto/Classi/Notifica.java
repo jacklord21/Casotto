@@ -29,19 +29,19 @@ public class Notifica {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public LocalDate getDatavalidita() {
-        return datavalidita;
+        return this.datavalidita;
     }
 
     public String getTesto() {
-        return testo;
+        return this.testo;
     }
 
     public Livello getGruppo() {
-        return gruppo;
+        return this.gruppo;
     }
 
     public String toString() {

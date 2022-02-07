@@ -36,15 +36,15 @@ public class Richiesta {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public Ordinazione getOrdinazione() {
-        return ordinazione;
+        return this.ordinazione;
     }
 
     public Prodotto getProdotto() {
-        return prodotto;
+        return this.prodotto;
     }
 
     public int getQuantita() {
@@ -52,11 +52,11 @@ public class Richiesta {
     }
 
     public double getPrezzo() {
-        return prezzo;
+        return this.prezzo;
     }
 
     public String getModifiche() {
-        return modifiche;
+        return this.modifiche;
     }
 
     public void setQuantita(int quantita) {

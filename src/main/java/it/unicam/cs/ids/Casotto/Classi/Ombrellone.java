@@ -96,10 +96,8 @@ public class Ombrellone {
         this.prezzi.addAll(prezzi);
     }
 
-
     @Override
     public String toString() {
         return "OMBRELLONE[Id: " + this.getId() + " -- Fila: " + this.getFila() + " -- Capienza: " + this.getNumero() + "]";
     }
-
 }

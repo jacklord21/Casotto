@@ -29,11 +29,11 @@ public class Attivita {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
@@ -41,7 +41,7 @@ public class Attivita {
     }
 
     public LocalDate getData() {
-        return data;
+        return this.data;
     }
 
     public void setData(LocalDate data) {
@@ -49,7 +49,7 @@ public class Attivita {
     }
 
     public int getNumeroposti() {
-        return numeroposti;
+        return this.numeroposti;
     }
 
     public void setNumeroposti(int numeroposti) {
@@ -64,8 +64,5 @@ public class Attivita {
                 "\n\tNome: " + this.getNome() +
                 "\n\tData: " + this.getData() +
                 "\n\tNumero posti: " + this.getNumeroposti() + "\n";
-
     }
-
-
 }

@@ -28,11 +28,11 @@ public class Partecipa {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public int getNumPartecipanti() {
-        return numPartecipanti;
+        return this.numPartecipanti;
     }
 
     public void setNumPartecipanti(int numPartecipanti) {

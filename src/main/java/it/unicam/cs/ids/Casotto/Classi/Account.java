@@ -37,11 +37,11 @@ public class Account {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -49,7 +49,7 @@ public class Account {
     }
 
     public int getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -57,7 +57,7 @@ public class Account {
     }
 
     public double getSaldo() {
-        return saldo;
+        return this.saldo;
     }
 
     public void setSaldo(double saldo) {
@@ -65,7 +65,7 @@ public class Account {
     }
 
     public Livello getLivello() {
-        return livello;
+        return this.livello;
     }
 
     public void setLivello(Livello livello) {
@@ -73,7 +73,7 @@ public class Account {
     }
 
     public Set<Prenotazione> getPrenotazioni() {
-        return prenotazioni;
+        return this.prenotazioni;
     }
 
 

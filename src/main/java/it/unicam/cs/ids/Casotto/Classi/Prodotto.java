@@ -29,11 +29,11 @@ public class Prodotto {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public String getOggetto() {
-        return oggetto;
+        return this.oggetto;
     }
 
     public void setOggetto(String oggetto) {
@@ -41,7 +41,7 @@ public class Prodotto {
     }
 
     public int getQuantita() {
-        return quantita;
+        return this.quantita;
     }
 
     public void setQuantita(int quantita) {
@@ -49,7 +49,7 @@ public class Prodotto {
     }
 
     public double getPrezzo() {
-        return prezzo;
+        return this.prezzo;
     }
 
     public void setPrezzo(double prezzo) {
@@ -57,7 +57,7 @@ public class Prodotto {
     }
 
     public Tipo getTipo() {
-        return tipo;
+        return this.tipo;
     }
 
     public void setTipo(Tipo tipo) {
@@ -69,5 +69,4 @@ public class Prodotto {
         return "PRODOTTO[Id: " + this.id + " -- Descrizione: " + this.oggetto +" -- Quantita' disponibile: " + this.getQuantita() +
                 " -- Prezzo unitario: " + this.getPrezzo() + " euro]";
     }
-
 }

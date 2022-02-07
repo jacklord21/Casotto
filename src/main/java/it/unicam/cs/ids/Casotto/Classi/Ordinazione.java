@@ -32,25 +32,25 @@ public class Ordinazione {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public Set<Richiesta> getRichieste() {
-        return prodotti;
+        return this.prodotti;
     }
 
     public double getPrezzoTot() {
-        return prezzoTot;
+        return this.prezzoTot;
     }
 
     public Stato getStato() {
-        return stato;
+        return this.stato;
     }
 
     public LocalDate getData() {return this.data;}
 
     public Ombrellone getOmbrellone() {
-        return ombrellone;
+        return this.ombrellone;
     }
 
     public void setPrezzoTot(double prezzoTot) {
@@ -76,5 +76,4 @@ public class Ordinazione {
                 "\t\nOmbrellone: " + this.getOmbrellone().toString() +
                 "\t\nPrezzo totale: " + this.getPrezzoTot();
     }
-
 }

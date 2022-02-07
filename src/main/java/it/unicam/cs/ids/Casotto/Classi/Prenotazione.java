@@ -114,7 +114,7 @@ public class Prenotazione {
      * @return il prezzo della prenotazione
      */
     public double getPrezzo() {
-        return prezzo;
+        return this.prezzo;
     }
 
     /**
@@ -175,10 +175,7 @@ public class Prenotazione {
                 "\n\tSdraie: " + this.getSdraie() + "\n";
     }
 
-
-
     private String getStringaOmbrelloni() {
-
         String ris = "";
 
         for(Ombrellone o : this.getOmbrelloni())
@@ -186,5 +183,4 @@ public class Prenotazione {
 
         return ris.substring(0, ris.length()-2);
     }
-
 }
