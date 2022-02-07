@@ -354,7 +354,7 @@ public class InteractionManager
      *
      */
     public void prenotazioneAttivita() {
-        if(this.gestorePrenotazioni.getPrenotazioneOf(this.account, LocalDate.now())==null || this.gestoreAttivita.thereIsAttivitaForToday()) {
+        if(this.gestorePrenotazioni.getPrenotazioneOf(this.account, LocalDate.now())==null || !this.gestoreAttivita.thereIsAttivitaForToday()) {
             System.out.println("AVVISO] Impossibile prenotare un'attivita'.");
             return;
         }
@@ -368,8 +368,7 @@ public class InteractionManager
             attivitaScelta = Acquisizione.scelta(this.gestoreAttivita.getAllAttivitaForToday(), a->String.valueOf(a.getId()), a-> System.out.println(a.toString()),
                     "Scegli un attivita' a cui desideri partecipare", "Errore: scelta NON valida. Riprova");
 
-            System.out.println("Inserisci il numero di partecipanti(MAX. " + this.gestoreAttivita.postiRimanenti(attivitaScelta) + "): ");
-        }while( !(booked=this.gestoreAttivita.prenotazione(this.account, Acquisizione.acqIntero("il numero di partecipanti", false), attivitaScelta)) );
+        }while( !(booked=this.gestoreAttivita.prenotazione(this.account, Acquisizione.acqIntero("il numero di partecipanti(MAX. " + this.gestoreAttivita.postiRimanenti(attivitaScelta) + ")", false), attivitaScelta)) );
 
         System.out.println("L'iscrizione all'attivita' '" + attivitaScelta.getNome() + " e' stata correttamente registrata.");
     }
