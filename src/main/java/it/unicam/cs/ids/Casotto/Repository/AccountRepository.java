@@ -1,21 +1,18 @@
 package it.unicam.cs.ids.Casotto.Repository;
 
 import it.unicam.cs.ids.Casotto.Classi.Account;
-import it.unicam.cs.ids.Casotto.Classi.Utente;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Repository per l'entit&agrave; {@link Account}
+ *
+ */
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Long> {
-
-    Account findById(long id);
-
-    Account findByUtente(Utente utente);
-
-    Account findByEmail(String email);
 
     Account findByEmailIgnoreCaseAndPassword(String email, int password);
 
@@ -39,6 +36,4 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     @Transactional
     @Query("UPDATE Account a SET a.password = ?2 WHERE a.id = ?1")
     void updateAccountPasswordById(long id, int psw);
-
-
 }

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Repository per l'entit&agrave; {@link Attivita}
+ *
+ */
 @Repository
 public interface AttivitaRepository extends CrudRepository<Attivita, Long> {
-
-    Attivita findById(long id);
 
     List<Attivita> findByData(LocalDate data);
 
