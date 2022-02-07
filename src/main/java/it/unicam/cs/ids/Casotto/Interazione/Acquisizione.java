@@ -165,7 +165,6 @@ public class Acquisizione {
      *         indica se quell'{@link Attivita} debba essere cancellata o meno
      */
     public static Map<Attivita, Boolean> acqParamAttivita(GestoreAttivita ga) {
-        sc.nextLine();
 
         String nome = acqStringa("il nome dell'attivita'", false);
         LocalDate data = Acquisizione.acqData("dell'attivita'", false);
