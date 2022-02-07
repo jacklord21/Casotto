@@ -103,7 +103,7 @@ public class InteractionManagerGestore
             Map<T, Boolean> m = mappaGestione.get(sceltaGestione).get();
 
             if(m!=null) {
-                boolean confermaModifiche = Acquisizione.scelta(List.of(true, false), v -> String.valueOf(v.toString().charAt(0)), v -> System.out.println(v.toString()),
+                boolean confermaModifiche = Acquisizione.scelta(List.of(true, false), v -> String.valueOf(v.toString().charAt(0)), v -> {},
                         "\nConfermi di voler " + sceltaGestione + " (t per si'/f per no)?", "Scelta non possibile. Riprova.");
 
                 if (confermaModifiche) {
@@ -113,7 +113,7 @@ public class InteractionManagerGestore
             }
             else System.out.println("\nNon c'e' nulla da " + sceltaGestione);
 
-            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> System.out.println(v.toString()),
+            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> {},
                     "\nDesideri continuare con la gestione (t per si'/f per no)?", "Scelta non possibile. Riprova.");
         }
     }
@@ -165,7 +165,7 @@ public class InteractionManagerGestore
 
             datiAttivita.get(sceltaDatoDaModificare).get();
 
-            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> System.out.println(v.toString()),
+            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> {},
                     "\nDesideri continuare con la modifica dei dati dell'attivita'(t per si'/f per no)? : ", "Scelta non possibile. Riprova.");
         }
 
@@ -207,7 +207,7 @@ public class InteractionManagerGestore
 
             datiProdotto.get(sceltaDatoDaModificare).get();
 
-            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> System.out.println(v.toString()),
+            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> {},
                     "\nDesideri continuare con la modifica dei dati del prodotto(t per si'/f per no)? : ", "Scelta non possibile. Riprova.");
         }
 
@@ -237,11 +237,11 @@ public class InteractionManagerGestore
         while(flagContinuare) {
             gruppi.add(Acquisizione.acqLivello("della notifica"));
 
-            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> System.out.println(v.toString()),
+            flagContinuare = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> {},
                     "\nDesideri continuare con la selezione dei gruppi ai quali inviare la notifica(t per si'/f per no)?", "Scelta non possibile. Riprova.");
         }
 
-        boolean confermaInvio = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> System.out.println(v.toString()),
+        boolean confermaInvio = Acquisizione.scelta(List.of(true, false), v->String.valueOf(v.toString().charAt(0)), v-> {},
                 "\nConfermi l'invio (t per si'/f per no)? : ", "Scelta non possibile. Riprova.");
 
         if(confermaInvio)  this.gestoreNotifiche.invioNotifica(testoNotifica, gruppi, dataFine);
