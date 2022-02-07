@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Modifiche file di configurazione">
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Fix metodo per prenotazione attivita'">
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -12,20 +12,30 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25_01_2022_14_12_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/file-system.probe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/previous-compilation-data.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/resourceHashesCache.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_22_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/file-system.probe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/previous-compilation-data.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/resourceHashesCache.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_28_01_2022_16_35_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Casotto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/ContatoreOggetti.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Livello.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Livello.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prezzo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Prezzo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Acquisizione.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/InteractionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/InteractionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ContatoreOggettiRepository.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -221,62 +231,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1640181066337</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Ricaricamento ContatoreOggettiRepository">
-      <created>1643063138978</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1643063138978</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Eliminazione import inutilizzati">
-      <created>1643063309405</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1643063309405</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Implementazione query per l'aggiornamento di saldo, email e password di un account">
-      <created>1643384473154</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384473154</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Cambiamento nel metodo di generazione dei numeri dei mesi dell'anno">
-      <created>1643384521952</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384521952</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Implementazione setters per i dati dell'utente">
-      <created>1643384577060</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384577060</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Implementazione metodi per la modifica dei dati dell'utente">
-      <created>1643384659930</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384659930</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Utilizzo di autowired">
-      <created>1643384706887</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384706887</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Utilizzo di autowired e fix metodo pagamentoPrenotazione">
-      <created>1643384788207</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1643384788207</updated>
     </task>
     <task id="LOCAL-00015" summary="Utilizzo di autowired e fix metodi">
       <created>1643384868138</created>
@@ -565,7 +519,63 @@
       <option name="project" value="LOCAL" />
       <updated>1643702608917</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="Modifiche file di configurazione">
+      <created>1643745167283</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745167283</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Modifica metodo toString">
+      <created>1643745202222</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745202222</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Divisione funzionalità InteractionManager per attore">
+      <created>1643745258581</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745258581</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Scrittura commenti">
+      <created>1643745357356</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745357356</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Modifica ordine livelli">
+      <created>1643745382984</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745382984</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Modifiche caratteristiche associazione">
+      <created>1643745403252</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745403252</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Implementazione metodi per manipolazione prezzi">
+      <created>1643745469940</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1643745469940</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Fix metodo per prenotazione attivita'">
+      <created>1644222683613</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1644222683613</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -581,12 +591,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implementazione setters e metodo toString" />
-    <MESSAGE value="Implementazione setter mancante per Tipo" />
-    <MESSAGE value="Modifica signature metodo modificheProdotti" />
-    <MESSAGE value="Modifica signature metodo modificheAttivita" />
-    <MESSAGE value="Modifica FetchType da LAZY in EAGER" />
-    <MESSAGE value="Correzione grammatica metodo invioNotifica" />
     <MESSAGE value="Rimozione metodo per il calcolo del prezzo finale della prenotazione" />
     <MESSAGE value="Rimozione strategy per la generazione dell'id" />
     <MESSAGE value="Ricaricamento Ombrellone.java" />
@@ -599,14 +603,20 @@
     <MESSAGE value="Implementazione metodo per scoprire se un account ha prenotazioni in base alla data e durata indicata" />
     <MESSAGE value="Aggiunta al metodo pagamentoPrenotazione del settaggio del prezzo totale della prenotazione" />
     <MESSAGE value="Digitato invio" />
-    <MESSAGE value="Modifica metodo toString" />
     <MESSAGE value="Cancellazione commenti" />
     <MESSAGE value="Aggiornamento Menu.java" />
     <MESSAGE value="Ridefinizione e rinominazione metodi" />
     <MESSAGE value="Eliminazione codice non usato e aggiornamento metodo cambiaMenu" />
     <MESSAGE value="Completamento InteractionManager" />
     <MESSAGE value="Modifiche file di configurazione" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modifiche file di configurazione" />
+    <MESSAGE value="Modifica metodo toString" />
+    <MESSAGE value="Divisione funzionalità InteractionManager per attore" />
+    <MESSAGE value="Scrittura commenti" />
+    <MESSAGE value="Modifica ordine livelli" />
+    <MESSAGE value="Modifiche caratteristiche associazione" />
+    <MESSAGE value="Implementazione metodi per manipolazione prezzi" />
+    <MESSAGE value="Fix metodo per prenotazione attivita'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix metodo per prenotazione attivita'" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
