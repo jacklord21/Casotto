@@ -32,11 +32,28 @@ public class Spiaggia {
     @Autowired
     GestoreProdotti gestoreProdotti;
 
+    /**
+     * Crea un nuovo {@link Prezzo} con i parametri passati}
+     *
+     * @param prezzo prezzo della prenotazione
+     * @param meseInizio mese d'inizio validit&agrave; del prezzo
+     * @param meseFine mese di fine validit&agrave; del prezzo
+     * @param dataInizio data d'inizio validit&agrave; del prezzo per periodi speciali
+     * @param dataFine data di fine validit&agrave; del prezzo per periodi speciali
+     * @param durata {@link Durata} temporale del prezzo
+     * @return un nuovo {@link Prezzo}
+     */
     public Prezzo addPrezzo(double prezzo, Integer meseInizio, Integer meseFine, LocalDate dataInizio, LocalDate dataFine, Durata durata) {
         Prezzo p = new Prezzo(prezzo, meseInizio, meseFine, dataInizio, dataFine, durata);
         return this.prezzoRepository.save(p);
     }
 
+    /**
+     * Associa il {@link Prezzo} passato come parametro all'{@link Ombrellone} indicato
+     *
+     * @param prezzo {@link Prezzo} da associare all'ombrellone
+     * @param ombrellone {@link Ombrellone} al quale associare il prezzo
+     */
     public void associaPrezzo(Prezzo prezzo, Ombrellone ombrellone) {
         ombrellone.addPrezzi(Set.of(prezzo));
         this.ombrelloneRepository.save(ombrellone);
@@ -162,11 +179,28 @@ public class Spiaggia {
         return quantitaTotale-oggettiOccupati;
     }
 
+    /**
+     * Restituisce tutti gli {@link Ombrellone} presenti nel database
+     *
+     * @return una {@link List} contenente tutti gli {@link Ombrellone} presenti nel database, o vuota se non &egrave;
+     *         presente alcun {@link Ombrellone} nel database
+     */
     public List<Ombrellone> getAllOmbrelloni() {
         return this.ombrelloneRepository.findAll();
     }
 
-    private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){
+    /**
+     * Filtra la {@link List} di {@link Prezzo}, passata come parametro, per estrarre il primo {@link Prezzo} che abbia:
+     * la data d'inizio e quella di fine validit&agrave; diverse da null e che comprendano la data passata come parametro
+     * la {@link Durata} uguale a quella passata come parametro
+     *
+     * @param prezzi {@link List} di {@link Prezzo} dalla quale estrarre quello corrispondente ai parametri indicati
+     * @param dataPrenotazione {@link LocalDate} del {@link Prezzo}
+     * @param durata {@link Durata} del {@link Prezzo}
+     * @return un {@link Optional} contenente il {@link Prezzo} corrispondente ai parametri indicati, o vuoto se non esiste
+     *         nessun {@link Prezzo} corrispondente ai parametri indicati
+     */
+    private Optional<Prezzo> checkDataCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata) {
         return prezzi.stream()
                 .filter(p -> p.getDataInizio() != null && p.getDataFine() != null)
                 .filter(p -> p.getDataInizio().compareTo(dataPrenotazione) <= 0 &&
@@ -174,7 +208,19 @@ public class Spiaggia {
                 .filter(p -> this.checkDurata(p, durata)).findFirst();
     }
 
-    private Optional<Prezzo> checkMeseCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata){
+    /**
+     * Filtra la {@link List} di {@link Prezzo}, passata come parametro, per estrarre il primo {@link Prezzo} che abbia:
+     * il mese d'inizio e quello di fine validit&agrave; diversi da ZERO e che comprendano il mese della
+     * {@link LocalDate} passata come parametro
+     * la {@link Durata} uguale a quella passata come parametro
+     *
+     * @param prezzi {@link List} di {@link Prezzo} dalla quale estrarre quello corrispondente ai parametri indicati
+     * @param dataPrenotazione {@link LocalDate} del {@link Prezzo}
+     * @param durata {@link Durata} del {@link Prezzo}
+     * @return un {@link Optional} contenente il {@link Prezzo} corrispondente ai parametri indicati, o vuoto se non esiste
+     *         nessun {@link Prezzo} corrispondente ai parametri indicati
+     */
+    private Optional<Prezzo> checkMeseCorrente(List<Prezzo> prezzi, LocalDate dataPrenotazione, Durata durata) {
         return prezzi.stream()
                 .filter(p -> p.getMeseInizio() != 0 && p.getMeseFine() != 0)
                 .filter(p -> p.getMeseInizio() <= dataPrenotazione.getMonthValue() &&
@@ -182,7 +228,16 @@ public class Spiaggia {
                 .filter(p -> this.checkDurata(p, durata)).findFirst();
     }
 
-    private boolean checkDurata(Prezzo prezzo, Durata durata){
+    /**
+     * Controlla se la {@link Durata} del {@link Prezzo} passato come parametro &egrave; uguale alla {@link Durata}
+     * passata come parametro
+     *
+     * @param prezzo {@link Prezzo} del quale controllare la {@link Durata}
+     * @param durata {@link Durata} da comparare con quella del {@link Prezzo}
+     * @return true se la {@link Durata} del {@link Prezzo} &egrave; uguale alla {@link Durata} passata come parametro,
+     *         false altrimenti
+     */
+    private boolean checkDurata(Prezzo prezzo, Durata durata) {
         return (prezzo.getDurata().equals(Durata.INTERO) || prezzo.getDurata().equals(durata));
     }
 }
