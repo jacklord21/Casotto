@@ -6,12 +6,11 @@ import it.unicam.cs.ids.Casotto.Classi.Prenotazione;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * {@link Repository} per l'{@link Entity} {@link Prenotazione}
+ * Repository per l'entit&agrave; {@link Prenotazione}
  *
  */
 @Repository
