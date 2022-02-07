@@ -125,7 +125,7 @@ public class InteractionManager
             return;
         }
 
-        List<Ombrellone> listaOmbrelloniLiberi = spiaggia.getOmbrelloniLiberi(data, durata, numPersone);
+        List<Ombrellone> listaOmbrelloniLiberi = spiaggia.getOmbrelloniLiberi(data, durata);
 
         if(listaOmbrelloniLiberi.isEmpty() || listaOmbrelloniLiberi.stream().mapToInt(Ombrellone::getNumero).sum()<numPersone) {
             System.out.println("AVVISO] Gli ombrelloni NON possono contenere le persone indicate o non ci sono ombrelloni liberi in base ai dati indicati.");
