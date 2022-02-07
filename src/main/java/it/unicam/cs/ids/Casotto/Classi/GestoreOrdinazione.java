@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestoreOrdinazione {
 
     @Autowired
@@ -53,18 +54,6 @@ public class GestoreOrdinazione {
 
         richiestaRepository.saveAll(richieste);
         return ordinazione;
-    }
-
-    public boolean annullaOrdinazione(Ordinazione ordinazione){
-        this.checkIsNull(ordinazione);
-        if(!ordinazioneRepository.existsById(ordinazione.getId())){
-            return false;
-        }
-        for(Richiesta richiesta: richiestaRepository.findByOrdinazioneId(ordinazione.getId())){
-            gestoreProdotti.incrementoQuantitaProdotto(richiesta.getProdotto(), richiesta.getQuantita());
-        }
-        ordinazioneRepository.deleteById(ordinazione.getId());
-        return true;
     }
 
     public boolean impostaPrezzoRichiesta(Richiesta richiesta, double prezzo){

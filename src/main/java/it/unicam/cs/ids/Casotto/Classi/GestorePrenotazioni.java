@@ -3,7 +3,6 @@ package it.unicam.cs.ids.Casotto.Classi;
 import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

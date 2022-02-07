@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -19,6 +17,7 @@ import java.util.stream.StreamSupport;
  *
  */
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestoreAccount {
 
     @Autowired
@@ -51,7 +50,6 @@ public class GestoreAccount {
             result = accountRepository.findByEmailIgnoreCaseAndPassword(email, psw.hashCode());
 
         return result;
-    //    throw new IllegalArgumentException("L'email inserita non e' associata a nessun account");
     }
 
     /**
@@ -79,7 +77,6 @@ public class GestoreAccount {
     public boolean checkIfUserExists(Utente u) {
         return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());
     }
-
 
     public boolean changeUserName(Account account, String nome) {
         return this.aggiornaDatiUtente(account, nome, Utente::setNome);
@@ -145,10 +142,8 @@ public class GestoreAccount {
      */
     public boolean updateLivelloAccount(Account account, Livello livello){
         this.checkIsNull(account, livello);
-        if(!accountRepository.existsById(account.getId())){
-            return false;
-            //    throw new IllegalArgumentException("L'account passato non esiste");
-        }
+        if(!accountRepository.existsById(account.getId())) return false;
+
         account.setLivello(livello);
         accountRepository.save(account);
         return true;
@@ -167,13 +162,9 @@ public class GestoreAccount {
      */
     public boolean updateSaldoAccount(Account account, double saldo) {
         this.checkIsNull(account, saldo);
-        if(!accountRepository.existsById(account.getId())){
-            return false;
-            //    throw new IllegalArgumentException("L'account passato non esiste");
-        }
-        account.setSaldo(saldo);
+        if(!accountRepository.existsById(account.getId())) return false;
 
-      //  accountRepository.save(account);
+        account.setSaldo(saldo);
         accountRepository.updateAccountSaldoById(account.getId(), account.getSaldo());
         return true;
     }

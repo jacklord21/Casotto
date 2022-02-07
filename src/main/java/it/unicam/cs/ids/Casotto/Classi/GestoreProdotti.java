@@ -4,25 +4,16 @@ import it.unicam.cs.ids.Casotto.Repository.ProdottoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@SuppressWarnings( {"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"} )
 public class GestoreProdotti {
 
     @Autowired
     private ProdottoRepository prodottoRepository;
-
-    public List<Prodotto> getProdottiOf(List<Richiesta> richieste){
-        List<Prodotto> prodotti = new ArrayList<>();
-        for(Richiesta richiesta: richieste){
-            prodotti.add(prodottoRepository.findByRichiesteId(richiesta.getId()));
-        }
-        return prodotti;
-    }
 
     public int getQuantitaOf(String oggetto) {
         return prodottoRepository.findByOggetto(oggetto).getQuantita();
@@ -34,10 +25,6 @@ public class GestoreProdotti {
 
     public Prodotto getProdottoOf(Richiesta richiesta){
         return prodottoRepository.findByRichiesteId(richiesta.getId());
-    }
-
-    public void incrementoQuantitaProdotto(Prodotto prodotto, int quantita){
-        this.modificaQuantitaProdotto(prodotto, quantita);
     }
 
     public void decrementoQuantitaProdotto(Prodotto prodotto, int quantita){

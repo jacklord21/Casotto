@@ -7,9 +7,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Stack;
 
+/**
+ * Repository per l'entit&agrave; {@link Ordinazione}
+ *
+ */
 @Repository
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+
 public interface OrdinazioneRepository extends CrudRepository<Ordinazione, Long> {
 
     boolean existsById(long id);

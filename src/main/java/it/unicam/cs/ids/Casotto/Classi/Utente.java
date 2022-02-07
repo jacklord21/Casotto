@@ -10,6 +10,7 @@ import java.time.LocalDate;
  *
  */
 @Entity(name = "utente")
+@SuppressWarnings("unused")
 public class Utente
 {
     @Id

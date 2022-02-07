@@ -6,10 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository per l'entit&agrave; {@link Richiesta}
+ *
+ */
 @Repository
 public interface RichiestaRepository extends CrudRepository<Richiesta, Long> {
-
-    Richiesta findById(long id);
 
     List<Richiesta> findByOrdinazioneId(long ordinazioneId);
 }

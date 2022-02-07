@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestoreNotifiche {
 
     @Autowired
@@ -23,22 +23,19 @@ public class GestoreNotifiche {
     }
 
     public boolean removeNotifica(Notifica notifica){
-        if(!notificaRepository.existsById(notifica.getId())){
+        if(!notificaRepository.existsById(notifica.getId()))
             return false;
-        }
+
         notificaRepository.deleteById(notifica.getId());
         return true;
     }
 
-    public boolean invioNotifica(String testo, List<Livello> gruppiInvio, LocalDate dataFineValidita){
-        for(Livello gruppo: gruppiInvio){
+    public void invioNotifica(String testo, List<Livello> gruppiInvio, LocalDate dataFineValidita){
+        for(Livello gruppo: gruppiInvio)
             notificaRepository.save(new Notifica(testo, gruppo, dataFineValidita));
-        }
-        return true;
     }
 
-    public boolean invioProblema(String testo) {
+    public void invioProblema(String testo) {
         notificaRepository.save(new Notifica(testo, Livello.GESTORE));
-        return true;
     }
 }

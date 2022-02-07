@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@SuppressWarnings("unused")
 public class Account {
 
     @Id
@@ -25,7 +26,7 @@ public class Account {
     @OneToMany(mappedBy = "partecipante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final Set<Partecipa> iscrizioni = new HashSet<>();
 
-    public Account(){
+    public Account() {
     }
 
     public Account(String email, String password, double saldo, Livello livello, Utente utente) {
@@ -48,10 +49,6 @@ public class Account {
         this.email = email;
     }
 
-    public int getPassword() {
-        return this.password;
-    }
-
     public void setPassword(String password) {
         this.password = password.hashCode();
     }
@@ -71,11 +68,6 @@ public class Account {
     public void setLivello(Livello livello) {
         this.livello = livello;
     }
-
-    public Set<Prenotazione> getPrenotazioni() {
-        return this.prenotazioni;
-    }
-
 
     public String toString() {
         return "ACCOUNT (Id " + this.getId() + ")" +

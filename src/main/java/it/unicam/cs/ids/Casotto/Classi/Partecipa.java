@@ -3,6 +3,7 @@ package it.unicam.cs.ids.Casotto.Classi;
 import javax.persistence.*;
 
 @Entity
+@SuppressWarnings("unused")
 public class Partecipa {
 
     @Id
@@ -33,9 +34,5 @@ public class Partecipa {
 
     public int getNumPartecipanti() {
         return this.numPartecipanti;
-    }
-
-    public void setNumPartecipanti(int numPartecipanti) {
-        this.numPartecipanti = numPartecipanti;
     }
 }

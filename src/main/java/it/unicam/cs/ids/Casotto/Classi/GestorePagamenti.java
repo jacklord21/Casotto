@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestorePagamenti {
-
-    @Autowired
-    private GestoreProdotti gestoreProdotti;
 
     @Autowired
     private Spiaggia spiaggia;
@@ -39,7 +37,7 @@ public class GestorePagamenti {
     }
 
     public boolean pagamentoElettronico(Ordinazione ordinazione){
-        //TODO: implementazione comunicazione con il POS ed il sistema sta in attesa della risposta positiva del POS
+        // implementazione comunicazione con il POS ed il sistema sta in attesa della risposta positiva del POS
         gestoreOrdinazione.setStato(ordinazione, Stato.PAGATO);
         return true;
     }

@@ -6,10 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository per l'entit&agrave; {@link Partecipa}
+ *
+ */
 @Repository
 public interface PartecipaRepository extends CrudRepository<Partecipa, Long> {
-
-    Partecipa findById(long id);
 
     List<Partecipa> findByPartecipanteId(long id);
 

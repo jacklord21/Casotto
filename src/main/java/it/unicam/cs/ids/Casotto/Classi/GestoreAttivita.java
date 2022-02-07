@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestoreAttivita {
 
     @Autowired
@@ -28,37 +26,6 @@ public class GestoreAttivita {
 
     @Autowired
     GestoreAccount gestoreAccount;
-
-
-    public boolean cambiaNomeAttivita(Attivita attivita, String nome) {
-        Objects.requireNonNull(attivita); Objects.requireNonNull(nome);
-        if(!this.attivitaRepository.existsById(attivita.getId()))
-            return false;
-
-        attivita.setNome(nome);
-        this.attivitaRepository.save(attivita);
-        return true;
-    }
-
-    public boolean cambiaDataAttivita(Attivita attivita, LocalDate data) {
-        Objects.requireNonNull(attivita); Objects.requireNonNull(data);
-        if(!this.attivitaRepository.existsById(attivita.getId()))
-            return false;
-
-        attivita.setData(data);
-        this.attivitaRepository.save(attivita);
-        return true;
-    }
-
-    public boolean cambiaNumeroPartecipantiAttivita(Attivita attivita, int partecipanti) {
-        Objects.requireNonNull(attivita);
-        if(!this.attivitaRepository.existsById(attivita.getId()))
-            return false;
-
-        attivita.setNumeroposti(partecipanti);
-        this.attivitaRepository.save(attivita);
-        return true;
-    }
 
     public List<Attivita> getAllAttivitaOf(Account account){
         return partecipaRepository.findByPartecipanteId(account.getId())
@@ -85,12 +52,6 @@ public class GestoreAttivita {
 
     public List<Attivita> getAllAttivitaOf(LocalDate data){
         return attivitaRepository.findByData(data);
-    }
-
-    public List<Account> getAccountIscrittiTo(Attivita attivita){
-        return partecipaRepository.findByAttivitaId(attivita.getId())
-                .stream().map(iscr -> accountRepository.findByIscrizioniId(iscr.getId()))
-                .collect(Collectors.toList());
     }
 
     public int postiRimanenti(Attivita attivita){
@@ -133,35 +94,11 @@ public class GestoreAttivita {
         return true;
     }
 
-    private boolean haveOtherIscrizioniForToday(Account account){
+    private boolean haveOtherIscrizioniForToday(Account account) {
         return !this.getAllAttivitaForTodayOf(account).isEmpty();
     }
 
-    public boolean decrementaNumPartecipanti(Partecipa iscrizione, int partecipantiDaTogliere){
-        if(!partecipaRepository.existsById(iscrizione.getId())){
-            throw new IllegalArgumentException("L'iscrizone passata non esiste");
-        }
-        if(iscrizione.getNumPartecipanti() <= partecipantiDaTogliere){
-            return this.cancellaPrenotazione(iscrizione);
-        }
-        iscrizione.setNumPartecipanti(iscrizione.getNumPartecipanti() - partecipantiDaTogliere);
-        partecipaRepository.save(iscrizione);
-        return true;
-    }
-
-    public boolean incrementaNumPartecipanti(Partecipa iscrizione, int partecipantiDaAggiungere){
-        if(!partecipaRepository.existsById(iscrizione.getId())){
-            throw new IllegalArgumentException("L'iscrizone passata non esiste");
-        }
-        if(!this.canPrenotate(partecipantiDaAggiungere, attivitaRepository.findByPartecipantiId(iscrizione.getId()))){
-            return false;
-        }
-        iscrizione.setNumPartecipanti(iscrizione.getNumPartecipanti() + partecipantiDaAggiungere);
-        partecipaRepository.save(iscrizione);
-        return true;
-    }
-
-    public Attivita createAttivita(String nome, LocalDate data, int numPosti){
+    public Attivita createAttivita(String nome, LocalDate data, int numPosti) {
         return new Attivita(nome, data, numPosti);
     }
 
@@ -175,9 +112,8 @@ public class GestoreAttivita {
         return true;
     }
 
-    private void cancellaAttivita(Attivita attivita){
-        if(attivitaRepository.existsById(attivita.getId())){
+    private void cancellaAttivita(Attivita attivita) {
+        if(attivitaRepository.existsById(attivita.getId()))
             attivitaRepository.deleteById(attivita.getId());
-        }
     }
 }

@@ -7,21 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@SuppressWarnings("UnusedReturnValue")
 public class GestoreAcquisto {
 
     @Autowired
     private GestoreProdotti gestoreProdotti;
 
-
-    private List<Richiesta> richieste;
+    private final List<Richiesta> richieste;
 
     @Autowired
     private GestoreOrdinazione gestoreOrdinazione;
 
     public GestoreAcquisto() {
         this.richieste = new ArrayList<>();
-/*        this.gestoreProdotti = new GestoreProdotti();
-        this.gestoreOrdinazione = new GestoreOrdinazione();*/
     }
 
     public boolean addRichiesta(Prodotto prodotto, int quantita, String modifiche){
@@ -33,10 +31,6 @@ public class GestoreAcquisto {
         richiesta.setPrezzo(prodotto.getPrezzo()*quantita);
         richieste.add(richiesta);
         return true;
-    }
-
-    public Prodotto getProdottoOf(Richiesta richiesta){
-        return this.gestoreProdotti.getProdottoOf(richiesta);
     }
 
     public List<Richiesta> getAllRichieste(){
@@ -51,27 +45,6 @@ public class GestoreAcquisto {
         this.richieste.clear();
     }
 
-    public boolean decrementaProdotto(Richiesta richiesta, int quantita){
-        boolean remove = false;
-        for(Richiesta richiestaList: richieste){
-            if(richiestaList.equals(richiesta)){
-                if(richiestaList.getQuantita() <= quantita){
-                    remove = true;
-                    break;
-                }
-                if(richiestaList.getQuantita() > quantita){
-                    richiestaList.setQuantita(richiestaList.getQuantita() - quantita);
-                    richiestaList.setPrezzo(this.ricalcoloPrezzoRichiesta(richiestaList));
-                }
-                this.gestoreProdotti.incrementoQuantitaProdotto(richiestaList.getProdotto(), quantita);
-                return true;
-            }
-            break;
-        }
-        if(remove) this.richieste.remove(richiesta);
-        return false;
-    }
-
     public Ordinazione confirmOrdinazione(Ombrellone ombrellone){
         return this.gestoreOrdinazione.creaOrdinazione(richieste, ombrellone);
     }
@@ -84,9 +57,4 @@ public class GestoreAcquisto {
 
         return prezzoTotale;
     }
-
-    private double ricalcoloPrezzoRichiesta(Richiesta richiesta){
-        return gestoreProdotti.getProdottoOf(richiesta).getPrezzo() * richiesta.getQuantita();
-    }
-
 }

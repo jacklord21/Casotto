@@ -8,7 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
+/**
+ * Repository per l'entit&agrave; {@link Prodotto}
+ *
+ */
 @Repository
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface ProdottoRepository extends CrudRepository<Prodotto, Long> {
 
     Prodotto findById(long id);
@@ -20,8 +25,6 @@ public interface ProdottoRepository extends CrudRepository<Prodotto, Long> {
     List<Prodotto> findByTipo(Tipo tipo);
 
     boolean existsById(long id);
-
-    boolean existsByOggetto(String oggetto);
 
     void deleteById(long id);
 }

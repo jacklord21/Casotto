@@ -30,6 +30,7 @@ public class CasottoApplication {
 	}
 
 	@Bean
+	@SuppressWarnings("InfiniteLoopStatement")
 	public CommandLineRunner mappingDemo() {
 		return args -> {
 			int counter=0, indice = Integer.MIN_VALUE;

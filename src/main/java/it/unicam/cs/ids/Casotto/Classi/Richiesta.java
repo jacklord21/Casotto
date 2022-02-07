@@ -3,6 +3,7 @@ package it.unicam.cs.ids.Casotto.Classi;
 import javax.persistence.*;
 
 @Entity
+@SuppressWarnings("unused")
 public class Richiesta {
 
     @Id
@@ -23,11 +24,6 @@ public class Richiesta {
 
     public Richiesta() {
     }
-
-    public Richiesta(Prodotto prodotto, int quantita){
-        this(prodotto, quantita, null);
-    }
-
 
     public Richiesta(Prodotto prodotto, int quantita, String modifiche) {
         this.prodotto = prodotto;
@@ -59,10 +55,6 @@ public class Richiesta {
         return this.modifiche;
     }
 
-    public void setQuantita(int quantita) {
-        this.quantita = quantita;
-    }
-
     public void setOrdinazione(Ordinazione ordinazione) {
         this.ordinazione = ordinazione;
     }
@@ -70,11 +62,6 @@ public class Richiesta {
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;
     }
-
-    public void setModifiche(String modifiche) {
-        this.modifiche = modifiche;
-    }
-
 
     public String toString() {
 

@@ -12,6 +12,7 @@ import java.time.LocalDate;
  *
  */
 @Entity(name = "prenotazione")
+@SuppressWarnings( {"unused", "FieldMayBeFinal"} )
 public class Prenotazione {
 
     @Id

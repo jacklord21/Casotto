@@ -3,7 +3,6 @@ package it.unicam.cs.ids.Casotto.Classi;
 import it.unicam.cs.ids.Casotto.Repository.OmbrelloneRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrenotazioniRepository;
 import it.unicam.cs.ids.Casotto.Repository.PrezzoRepository;
-import org.hibernate.event.spi.AbstractPreDatabaseOperationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Classe che rappresenta un gestore spiaggia, che permette di effettuare le operazioni
@@ -43,14 +40,6 @@ public class Spiaggia {
     public void associaPrezzo(Prezzo prezzo, Ombrellone ombrellone) {
         ombrellone.addPrezzi(Set.of(prezzo));
         this.ombrelloneRepository.save(ombrellone);
-    }
-
-    public void eliminaPrezzo(Prezzo prezzo) {
-        this.prezzoRepository.deleteById(prezzo.getId());
-    }
-
-    public List<Prezzo> getAllPrezzi() {
-        return StreamSupport.stream(this.prezzoRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     /**
@@ -101,7 +90,7 @@ public class Spiaggia {
      * @param durata {@link Durata} temporale della prenotazione
      * @return una {@link List} contenente gli ombrelloni che risultano liberi in base ai parametri passati
      */
-    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata, int numPersone){
+    public List<Ombrellone> getOmbrelloniLiberi(LocalDate dataPrenotazione, Durata durata) {
         List<Ombrellone> ombrelloni = ombrelloneRepository.findAll();
         ombrelloni.removeIf(ombrellone -> this.notIsFree(ombrellone, dataPrenotazione, durata));
         return ombrelloni;

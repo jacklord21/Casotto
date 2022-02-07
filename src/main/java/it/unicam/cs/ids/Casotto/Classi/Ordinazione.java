@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@SuppressWarnings("unused")
 public class Ordinazione {
 
     @Id

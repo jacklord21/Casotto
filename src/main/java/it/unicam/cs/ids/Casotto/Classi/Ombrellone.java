@@ -12,6 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "ombrellone")
+@SuppressWarnings( {"all"} )
 public class Ombrellone {
 
     @Id

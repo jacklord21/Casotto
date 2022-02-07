@@ -10,6 +10,7 @@ import java.time.LocalDate;
  *
  */
 @Entity
+@SuppressWarnings( {"unused", "FieldMayBeFinal"} )
 public class Prezzo {
 
     @Id

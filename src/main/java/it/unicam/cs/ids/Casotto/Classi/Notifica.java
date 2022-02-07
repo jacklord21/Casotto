@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
+@SuppressWarnings( {"unused", "FieldCanBeLocal"} )
 public class Notifica {
 
     @Id
@@ -38,10 +39,6 @@ public class Notifica {
 
     public String getTesto() {
         return this.testo;
-    }
-
-    public Livello getGruppo() {
-        return this.gruppo;
     }
 
     public String toString() {
