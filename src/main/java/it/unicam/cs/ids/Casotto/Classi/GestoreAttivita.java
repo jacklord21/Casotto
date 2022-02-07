@@ -207,7 +207,7 @@ public class GestoreAttivita {
      *
      * @param attivita {@link Attivita} da modificare
      * @param cancella booleano che indica se l'{@link Attivita} vada cancellata o meno
-     * @return se l'{@link Attivita} &egrave; stata correttamente modificata
+     * @return true se l'{@link Attivita} &egrave; stata correttamente modificata
      */
     public boolean modificheAttivita(Attivita attivita, boolean cancella) {
         if(cancella) {
