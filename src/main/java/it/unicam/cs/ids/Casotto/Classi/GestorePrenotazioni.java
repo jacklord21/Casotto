@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Classe che rappresenta un gestore delle prenotazioni, che permette di effettuare le operazioni
+ * Classe che rappresenta un gestore delle {@link Prenotazione}, che permette di effettuare le operazioni
  * connesse (conoscere il costo, sapere lo storico delle prenotazioni di un'utente, ...)
  *
  */
@@ -57,6 +57,16 @@ public class GestorePrenotazioni {
     }
 
 
+    /**
+     * Controlla se un {@link Account} ha {@link Prenotazione} nella data e per la {@link Durata} indicata
+     *
+     * @param account {@link Account} del quale controllare la presenza di {@link Prenotazione}
+     * @param date {@link LocalDate} data nella quale controllare la presenza di {@link Prenotazione}
+     * @param durata {@link Durata} durata della {@link Prenotazione}
+     *
+     * @return true se un {@link Account} ha {@link Prenotazione} nella data e per la {@link Durata} indicata,
+     *         false altrimenti
+     */
     public boolean haPrenotazioni(Account account, LocalDate date, Durata durata) {
         List<Prenotazione> prenotazioni = this.pr.findByDataPrenotazione(date).stream()
                                                   .filter(p->p.getAccount().getId()==account.getId()).collect(Collectors.toList());

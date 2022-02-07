@@ -7,7 +7,8 @@ import java.util.HashSet;
 import javax.persistence.*;
 
 /**
- * Classe che rappresenta l'entit&agrave; 'Ombrellone'
+ * Classe che rappresenta l'entit&agrave; Ombrellone, il quale pu&ograve; essere associato a pi&ugrave; {@link Prezzo}
+ * e {@link Prenotazione}
  *
  */
 @Entity
@@ -49,7 +50,7 @@ public class Ombrellone {
     }
 
     /**
-     * Costruttore che inizializza un ombrellone con i parametri passati: questi NON possono essere nulli
+     * Costruttore che inizializza un ombrellone con i parametri passati
      *
      * @param numero numero dell'ombrellone
      * @param fila fila nella quale &egrave; posizionato l'ombrellone
@@ -97,6 +98,11 @@ public class Ombrellone {
         this.prezzi.addAll(prezzi);
     }
 
+    /**
+     * Restituisce una rappresentazione, sotto forma di {@link String}, dell'ombrellone
+     *
+     * @return una rappresentazione, sotto forma di {@link String}, dell'ombrellone
+     */
     @Override
     public String toString() {
         return "OMBRELLONE[Id: " + this.getId() + " -- Fila: " + this.getFila() + " -- Capienza: " + this.getNumero() + "]";

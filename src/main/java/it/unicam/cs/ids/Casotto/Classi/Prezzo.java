@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
- * Classe che rappresenta l'entit&agrave; 'Prezzo'
+ * Classe che rappresenta l'entit&agrave; Prezzo, che pu&ograve; essere associato a pi&ugrave; {@link Ombrellone}
  *
  */
 @Entity
@@ -115,7 +115,11 @@ public class Prezzo {
         return this.durata;
     }
 
-
+    /**
+     * Restituisce una rappresentazione, sotto forma di {@link String}, del prezzo
+     *
+     * @return una rappresentazione, sotto forma di {@link String}, del prezzo
+     */
     public String toString() {
         return "PREZZO" +
                 "\n\tId: " + this.getId() +

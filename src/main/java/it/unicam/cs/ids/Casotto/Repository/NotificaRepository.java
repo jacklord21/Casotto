@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository per l'entit&agrave; {@link Notifica}
+ *
+ */
 @Repository
 public interface NotificaRepository extends CrudRepository<Notifica, Long> {
 

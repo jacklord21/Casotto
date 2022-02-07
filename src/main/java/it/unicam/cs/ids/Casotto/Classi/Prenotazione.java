@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
- * Classe che rappresenta l'entit&agrave; 'Prenotazione'
+ * Classe che rappresenta l'entit&agrave; 'Prenotazione', che pu&ograve; essere associata a: 1 {@link Account}
+ * e a pi&ugrave; {@link Ombrellone}
  *
  */
 @Entity(name = "prenotazione")
@@ -163,7 +164,11 @@ public class Prenotazione {
         this.prezzo = prezzo;
     }
 
-
+    /**
+     * Restituisce una rappresentazione, sotto forma di {@link String}, della prenotazione
+     *
+     * @return una rappresentazione, sotto forma di {@link String}, della prenotazione;
+     */
     @Override
     public String toString() {
 
@@ -176,6 +181,13 @@ public class Prenotazione {
                 "\n\tSdraie: " + this.getSdraie() + "\n";
     }
 
+    /**
+     * Restituisce una rappresentazione personalizzata, sotto forma di {@link String}, degli {@link Ombrellone}
+     * associati alla prenotazione
+     *
+     * @return una rappresentazione personalizzata, sotto forma di {@link String}, degli {@link Ombrellone}
+     *         associati alla prenotazione
+     */
     private String getStringaOmbrelloni() {
         String ris = "";
 

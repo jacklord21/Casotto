@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Classe che rappresenta un gestore di {@link Prodotto}
+ *
+ */
 @Service
 @SuppressWarnings( {"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"} )
 public class GestoreProdotti {

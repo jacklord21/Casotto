@@ -26,7 +26,12 @@ public class GestoreAccount {
     @Autowired
     UtenteRepository utenteRepository;
 
-
+    /**
+     * Restituisce tutti gli {@link Account} presenti nel database
+     *
+     * @return una {@link List} contenente tutti gli {@link Account} presenti nel database, o vuota se nel database
+     *         non &egrave; presente alcun {@link Account}
+     */
     public List<Account> getAllAccount() {
         return StreamSupport.stream(this.accountRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
@@ -38,7 +43,6 @@ public class GestoreAccount {
      * @param psw password associata all'{@link Account}
      *
      * @throws NullPointerException se uno dei parametri passati &egrave; nullo
-     * @throws IllegalArgumentException se l'email passata come parametro non &egrave; associata a nessun account
      *
      * @return l'{@link Account} associato alle credenziali passate, o null se questo non esiste
      */
@@ -74,22 +78,67 @@ public class GestoreAccount {
         return true;
     }
 
+    /**
+     * Controlla se un'{@link Utente} sia presente (o meno) sul database
+     *
+     * @param u {@link Utente} del quale verificare la presenza sul database
+     * @return true se l'{@link Utente} risulta presente sul database, false altrimenti
+     */
     public boolean checkIfUserExists(Utente u) {
         return utenteRepository.existsByNomeAndCognomeAndDataNascita(u.getNome(), u.getCognome(), u.getDataNascita());
     }
 
+    /**
+     * Cambia il nome dell'{@link Utente} (assoociato all'{@link Account} passato come parametro) con il nome passato
+     * come parametro
+     *
+     * @param account {@link Account} del quale cambiare il nome dell'{@link Utente} associato
+     * @param nome nuovo nome dell'{@link Utente} associato all'{@link Account} passato come parametro
+     *
+     * @return true se il nome dell'{@link Utente} viene correttamente cambiato, false altrimenti
+     */
     public boolean changeUserName(Account account, String nome) {
         return this.aggiornaDatiUtente(account, nome, Utente::setNome);
     }
 
+    /**
+     * Cambia il cognome dell'{@link Utente} (assoociato all'{@link Account} passato come parametro) con il cognome
+     * passato come parametro
+     *
+     * @param account {@link Account} del quale cambiare il cognome dell'{@link Utente} associato
+     * @param cognome nuovo cognome dell'{@link Utente} associato all'{@link Account} passato come parametro
+     *
+     * @return true se il cognome dell'{@link Utente} viene correttamente cambiato, false altrimenti
+     */
     public boolean changeUserSurname(Account account, String cognome) {
         return this.aggiornaDatiUtente(account, cognome, Utente::setCognome);
     }
 
+    /**
+     * Cambia la data di nascita dell'{@link Utente} (assoociato all'{@link Account} passato come parametro) con la
+     * data passata come parametro
+     *
+     * @param account {@link Account} del quale cambiare la data di nascita dell'{@link Utente} associato
+     * @param data nuova {@link LocalDate} di nascita dell'{@link Utente} associato all'{@link Account} passato
+     *             come parametro
+     *
+     * @return true se la data di nascita dell'{@link Utente} viene correttamente cambiata, false altrimenti
+     */
     public boolean changeUserBirthdayDate(Account account, LocalDate data) {
         return this.aggiornaDatiUtente(account, data, Utente::setDataNascita);
     }
 
+    /**
+     * Metodo che permette di aggiornare un dato dell'{@link Utente} associato all'{@link Account} passato come
+     * parametro
+     *
+     * @param account del quale cambiare il dato dell'{@link Utente} associato
+     * @param valore nuovo valore del dato che si desidera cambiare
+     * @param consumerLocale {@link BiConsumer} che cambia il valore del dato nella memoria locale
+     * @param <T> tipo del dato che si desidera cambiare
+     *
+     * @return true se il dato dell'{@link Utente} viene correttamente cambiato, false altrimenti
+     */
     private <T> boolean aggiornaDatiUtente(Account account, T valore, BiConsumer<Utente, T> consumerLocale) {
         this.checkIsNull(account, valore);
         if(!accountRepository.existsById(account.getId())) return false;
@@ -100,6 +149,14 @@ public class GestoreAccount {
         return true;
     }
 
+    /**
+     * Cambia l'email dell'{@link Account} passato
+     *
+     * @param account {@link Account} del quale cambiare l'email
+     * @param email nuova email da associare all'{@link Account}
+     *
+     * @return true se l'email dell'{@link Account} viene correttamente cambiata, false altrimenti
+     */
     public boolean changeAccountEmail(Account account, String email) {
         this.checkIsNull(account, email);
         if(!accountRepository.existsById(account.getId())) return false;
@@ -169,6 +226,12 @@ public class GestoreAccount {
         return true;
     }
 
+    /**
+     * Restituisce l'{@link Account} che ha effettuato la {@link Prenotazione} passata come parametro
+     *
+     * @param prenotazione {@link Prenotazione} dalla quale estrarre l'{@link Account} che l'ha effettuata
+     * @return l'{@link Account} che ha effettuato la {@link Prenotazione}
+     */
     public Account getAccountOf(Prenotazione prenotazione) {
         return this.accountRepository.findByPrenotazioniId(prenotazione.getId());
     }
@@ -178,23 +241,29 @@ public class GestoreAccount {
      *
      * @param account {@link Account} del quale ottenere l'{@link Utente}
      *
-     * @throws IllegalArgumentException se l'{@link Account} passato non esiste
+     * @throws NullPointerException se il parametro account &egrave; nullo
      *
      * @return l'{@link Utente} associato all'account
      */
     public Utente getUtenteOf(Account account) {
         this.checkIsNull(account);
-        if(!accountRepository.existsById(account.getId())){
-            return null;
-         //   throw new IllegalArgumentException("L'account passato non esiste");
-        }
+        if(!accountRepository.existsById(account.getId())) return null;
+
         return utenteRepository.findByAccountId(account.getId());
     }
 
+    /**
+     * Controlla se i parametri passati sono nulli o meno. Se almeno un parametro risulta nullo, viene lanciata una
+     * {@link NullPointerException}
+     *
+     * @param objects parametri dei quali si verifica l'eventuale nullit&agrave;
+     *
+     * @exception NullPointerException se uno dei parametri passati &egrave; nullo
+     */
     private void checkIsNull(Object ... objects){
         for(Object obj: objects){
-            if(obj == null){
-                throw new NullPointerException("I paramentri passati sono nulli");
+            if(obj == null) {
+                throw new NullPointerException("I parametri passati sono nulli");
             }
         }
     }

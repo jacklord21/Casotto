@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
- * Classe che rappresenta l'entit&agrave; 'Utente'
+ * Classe che rappresenta l'entit&agrave; 'Utente', che viene associato ad 1 {@link Account}
  *
  */
 @Entity(name = "utente")
