@@ -52,7 +52,7 @@ public class Ombrellone {
     /**
      * Costruttore che inizializza un ombrellone con i parametri passati
      *
-     * @param numero numero dell'ombrellone
+     * @param numero capienza dell'ombrellone
      * @param fila fila nella quale &egrave; posizionato l'ombrellone
      */
     public Ombrellone(int numero, String fila) {
@@ -70,9 +70,9 @@ public class Ombrellone {
     }
 
     /**
-     * Restituisce il numero dell'ombrellone
+     * Restituisce la capienza dell'ombrellone
      *
-     * @return il numero dell'ombrellone
+     * @return la capienza dell'ombrellone
      */
     public int getNumero() {
         return this.numero;

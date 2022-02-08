@@ -33,7 +33,7 @@ public class Spiaggia {
     GestoreProdotti gestoreProdotti;
 
     /**
-     * Crea un nuovo {@link Prezzo} con i parametri passati}
+     * Crea e salva sul database un nuovo {@link Prezzo} con i parametri passati}
      *
      * @param prezzo prezzo della prenotazione
      * @param meseInizio mese d'inizio validit&agrave; del prezzo

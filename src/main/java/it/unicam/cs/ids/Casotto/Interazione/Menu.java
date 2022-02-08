@@ -20,7 +20,7 @@ public class Menu
 
 
     /**
-     * Metodo che permette di ottenere il Men&ugarve; iniziale del programma
+     * Metodo che permette di ottenere il Men&ugrave; iniziale del programma
      *
      * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
      * a esso come valore
@@ -36,7 +36,7 @@ public class Menu
     }
 
     /**
-     * Metodo che permette di ottenere il Men&ugarve; del cliente
+     * Metodo che permette di ottenere il Men&ugrave; del cliente
      *
      * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
      * a esso come valore
@@ -60,7 +60,7 @@ public class Menu
     }
 
     /**
-     * Metodo che permette di ottenere il Men&ugarve; dell'addetto spiaggia
+     * Metodo che permette di ottenere il Men&ugrave; dell'addetto spiaggia
      *
      * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
      * a esso come valore
@@ -78,7 +78,7 @@ public class Menu
     }
 
     /**
-     * Metodo che permette di ottenere il Men&ugarve; del barista
+     * Metodo che permette di ottenere il Men&ugrave; del barista
      *
      * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
      * a esso come valore
@@ -97,7 +97,7 @@ public class Menu
     }
 
     /**
-     * Metodo che permette di ottenere il Men&ugarve; del gestore
+     * Metodo che permette di ottenere il Men&ugrave; del gestore
      *
      * @return una {@link Map} contenente, per ogni metodo, una sua descrizione come chiave, e un riferimento
      * a esso come valore

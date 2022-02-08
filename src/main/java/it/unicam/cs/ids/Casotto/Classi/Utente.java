@@ -73,6 +73,11 @@ public class Utente
         return this.nome;
     }
 
+    /**
+     * Imposta come nome dell'utente il nome passato come parametro
+     *
+     * @param nome nome dell'utente
+     */
     public void setNome(String nome) {this.nome = nome;}
 
     /**
@@ -84,6 +89,11 @@ public class Utente
         return this.cognome;
     }
 
+    /**
+     * Imposta come cognome dell'utente il cognome passato come parametro
+     *
+     * @param cognome nome dell'utente
+     */
     public void setCognome(String cognome) {this.cognome = cognome;}
 
     /**
@@ -95,6 +105,11 @@ public class Utente
         return this.dataNascita;
     }
 
+    /**
+     * Imposta come data di nascita dell'utente la data passata come parametro
+     *
+     * @param dataNascita data di nascita dell'utente
+     */
     public void setDataNascita(LocalDate dataNascita) {this.dataNascita = dataNascita;}
 
     /**
