@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Ultimazione commenti">
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Modifiche file di configurazione">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AttivitaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/AttivitaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/NotificaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/NotificaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/OrdinazioneRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PartecipaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PartecipaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PrenotazioniRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/PrenotazioniRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ProdottoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/ProdottoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/RichiestaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/RichiestaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Repository/UtenteRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,20 +209,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1640181066337</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Modifiche file di configurazione">
-      <created>1643617231075</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1643617231075</updated>
-    </task>
-    <task id="LOCAL-00030" summary="Modifica FetchType da LAZY in EAGER">
-      <created>1643617261194</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1643617261194</updated>
     </task>
     <task id="LOCAL-00031" summary="Modifiche file di configurazione">
       <created>1643617271513</created>
@@ -545,7 +539,21 @@
       <option name="project" value="LOCAL" />
       <updated>1644271024498</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="Ultimazione commenti">
+      <created>1644271971377</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1644271971377</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Modifiche file di configurazione">
+      <created>1644271977520</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1644271977520</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -584,9 +592,9 @@
     <MESSAGE value="Eliminazione warnings" />
     <MESSAGE value="Correzione invocazione metodo getOmbrelloniLiberi di spiaggia" />
     <MESSAGE value="Modifiche commenti" />
-    <MESSAGE value="Modifiche file di configurazione" />
     <MESSAGE value="Ultimazione commenti" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ultimazione commenti" />
+    <MESSAGE value="Modifiche file di configurazione" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modifiche file di configurazione" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
