@@ -17,7 +17,7 @@ import java.util.List;
 public interface PrenotazioniRepository extends CrudRepository<Prenotazione, Long>
 {
         /**
-         * Query che estrae le prenotazioni, effettuate nella data indicata, con associato l'{@link Ombrellone}
+         * Query che estrae le {@link Prenotazione}, effettuate nella data indicata, con associato l'{@link Ombrellone}
          * identificato dall'id passato come parametro
          *
          * @param id identificativo dell'{@link Ombrellone}
@@ -28,7 +28,7 @@ public interface PrenotazioniRepository extends CrudRepository<Prenotazione, Lon
         List<Prenotazione> findByOmbrelloniIdAndDataPrenotazione(long id, LocalDate date);
 
         /**
-         * Query che estrae le prenotazioni con data uguale a quella indicata
+         * Query che estrae le {@link Prenotazione} con data uguale a quella indicata
          *
          * @param date data della prenotazione
          * @return una {@link List} contenente le prenotazioni con data uguale a quella indicata
@@ -46,7 +46,7 @@ public interface PrenotazioniRepository extends CrudRepository<Prenotazione, Lon
         Prenotazione findByAccountIdAndDataPrenotazione(long id, LocalDate date);
 
         /**
-         * Query che estrae le prenotazioni, con associata una data precedente a quella corrente, effettuate
+         * Query che estrae le {@link Prenotazione}, con associata una data precedente a quella corrente, effettuate
          * dall'{@link Account} identificato dall'id passato come parametro
          *
          * @param id id dell'{@link Account} del quale estrarre la {@link Prenotazione}
@@ -57,7 +57,7 @@ public interface PrenotazioniRepository extends CrudRepository<Prenotazione, Lon
         List<Prenotazione> findByAccountIdAndDataPrenotazioneBefore(long id, LocalDate date);
 
         /**
-         * Query che estrae le prenotazioni, con associata una data successiva a quella corrente, effettuate
+         * Query che estrae le {@link Prenotazione}, con associata una data successiva a quella corrente, effettuate
          * dall'{@link Account} identificato dall'id passato come parametro
          *
          * @param id id dell'{@link Account} del quale estrarre la {@link Prenotazione}

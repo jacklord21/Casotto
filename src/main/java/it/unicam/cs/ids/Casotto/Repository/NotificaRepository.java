@@ -14,5 +14,12 @@ import java.util.List;
 @Repository
 public interface NotificaRepository extends CrudRepository<Notifica, Long> {
 
+    /**
+     * Query che estrae tutte le {@link Notifica} associate al {@link Livello} indicato
+     *
+     * @param gruppo {@link Livello} del quale estrarre le notifiche associate
+     * @return una {@link List} contenente tutte le {@link Notifica} associate al {@link Livello} indicato, o vuota
+     *         se non ci sono {@link Notifica} associate al {@link Livello} indicato
+     */
     List<Notifica> findByGruppo(Livello gruppo);
 }
