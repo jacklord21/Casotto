@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Modifica workspace.xml">
+    <list default="true" id="e044db9b-05ef-4b90-a42d-06c9973a3058" name="Changes" comment="Correzione commenti">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Ombrellone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Spiaggia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Classi/Utente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/Interazione/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unicam/cs/ids/Casotto/CasottoApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,20 +201,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1640181066337</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Correzione grammatica metodo invioNotifica">
-      <created>1643617338212</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1643617338212</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Rimozione metodo per il calcolo del prezzo finale della prenotazione">
-      <created>1643617384901</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1643617384901</updated>
     </task>
     <task id="LOCAL-00035" summary="Rimozione strategy per la generazione dell'id">
       <created>1643617432460</created>
@@ -548,7 +531,21 @@
       <option name="project" value="LOCAL" />
       <updated>1644305973310</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="Modifica workspace.xml">
+      <created>1644306333018</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1644306333018</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Correzione commenti">
+      <created>1644306347795</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1644306347795</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -564,7 +561,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modifica nome metodo" />
     <MESSAGE value="Implementazione metodo per scoprire se un account ha prenotazioni in base alla data e durata indicata" />
     <MESSAGE value="Aggiunta al metodo pagamentoPrenotazione del settaggio del prezzo totale della prenotazione" />
     <MESSAGE value="Digitato invio" />
@@ -589,7 +585,8 @@
     <MESSAGE value="Modifiche file di configurazione" />
     <MESSAGE value="Ultimazione commenti" />
     <MESSAGE value="Modifica workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modifica workspace.xml" />
+    <MESSAGE value="Correzione commenti" />
+    <option name="LAST_COMMIT_MESSAGE" value="Correzione commenti" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
