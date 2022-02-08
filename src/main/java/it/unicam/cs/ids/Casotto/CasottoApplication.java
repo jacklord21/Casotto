@@ -25,10 +25,20 @@ public class CasottoApplication {
 	@Autowired
 	private Menu menu;
 
+	/**
+	 * Metodo main
+	 *
+	 * @param args argomenti per la riga di comando
+	 */
 	public static void main(String[] args)  {
 		SpringApplication.run(CasottoApplication.class, args);
 	}
 
+	/**
+	 * Metodo che rappresenta l'esecuzione del programma
+	 *
+	 * @return un {@link CommandLineRunner}
+	 */
 	@Bean
 	@SuppressWarnings("InfiniteLoopStatement")
 	public CommandLineRunner mappingDemo() {
